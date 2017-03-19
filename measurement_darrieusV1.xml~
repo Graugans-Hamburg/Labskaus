@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<measurement_file>
+	<variable>
+		  <name>darrieus_speed</name>
+		  <address>123456</address>
+		  <datatype>float</datatype>  
+		  <description>
+				<de>Akutelle Geschwindigkeit des Windrades</de>
+				<en>Measures the actual rotational speed of the wind turbine</en>
+	     </description>
+		  <unit>
+				<de>1/min</de>
+				<en>rpm</en>
+		  </unit>        
+	</variable>
+	<variable>
+		  <name>darrieus_angle</name>
+		  <address>15</address>
+		  <datatype>float</datatype>         
+	</variable>
+	<variable>
+		  <name>voltage_stm</name>
+		  <address>147</address>
+		  <datatype>uint8</datatype>         
+	</variable>
+	<variable>
+		  <name>sys_time</name>
+		  <address>0xE</address>
+		  <datatype>uint8</datatype>         
+	</variable>
+	<variable>
+		  <name>actl_angle</name>
+		  <address>0x0008ea012</address>
+		  <datatype>uint8</datatype>         
+	</variable>
+</measurement_file>
