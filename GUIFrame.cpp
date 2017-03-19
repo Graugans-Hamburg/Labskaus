@@ -42,6 +42,17 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	mbar->Append( helpMenu, wxT("&Help") );
 	
+	m_menu3 = new wxMenu();
+	wxMenuItem* m_OpenSerial;
+	m_OpenSerial = new wxMenuItem( m_menu3, wxID_ANY, wxString( wxT("Open Serial") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu3->Append( m_OpenSerial );
+	
+	wxMenuItem* m_CloseSerial;
+	m_CloseSerial = new wxMenuItem( m_menu3, wxID_ANY, wxString( wxT("Close Serial") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu3->Append( m_CloseSerial );
+	
+	mbar->Append( m_menu3, wxT("Communication") );
+	
 	this->SetMenuBar( mbar );
 	
 	statusBar = this->CreateStatusBar( 2, wxST_SIZEGRIP, wxID_ANY );
@@ -72,11 +83,11 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_buttonStart = new wxButton( this, wxID_ANY, wxT("Start"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3->Add( m_buttonStart, 0, wxALL, 5 );
+	m_StartMeas = new wxButton( this, wxID_ANY, wxT("Start"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3->Add( m_StartMeas, 0, wxALL, 5 );
 	
-	m_buttonStop = new wxButton( this, wxID_ANY, wxT("Stop"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3->Add( m_buttonStop, 0, wxALL, 5 );
+	m_StopMea = new wxButton( this, wxID_ANY, wxT("Stop"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3->Add( m_StopMea, 0, wxALL, 5 );
 	
 	bSizer2->Add( bSizer3, 1, wxEXPAND, 5 );
 	
@@ -96,7 +107,11 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	this->Connect( menuFileQuit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnQuit ) );
 	this->Connect( menu_file_open->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::open_load_dialog ) );
 	this->Connect( menuHelpAbout->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnAbout ) );
+	this->Connect( m_OpenSerial->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventOpenSerial ) );
+	this->Connect( m_CloseSerial->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventCloseSerial ) );
 	m_listBox1->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( GUIFrame::VarListSelected ), NULL, this );
+	m_StartMeas->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventStartMea ), NULL, this );
+	m_StopMea->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventStopMea ), NULL, this );
 }
 
 GUIFrame::~GUIFrame()
@@ -106,5 +121,9 @@ GUIFrame::~GUIFrame()
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnQuit ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::open_load_dialog ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnAbout ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventOpenSerial ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventCloseSerial ) );
 	m_listBox1->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( GUIFrame::VarListSelected ), NULL, this );
+	m_StartMeas->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventStartMea ), NULL, this );
+	m_StopMea->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventStopMea ), NULL, this );
 }

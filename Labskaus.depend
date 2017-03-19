@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1488393741 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausApp.cpp
+1489919671 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausApp.cpp
 	<iostream>
 	"wx_pch.h"
 	"LabskausApp.h"
@@ -581,12 +581,13 @@
 
 1425353624 /usr/include/wx-3.0/wx/gtk/app.h
 
-1489695250 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.h
+1489952713 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.h
 	"LabskausApp.h"
 	"ECU_VarListElement.h"
+	"serial.h"
 	"GUIFrame.h"
 
-1489697919 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/GUIFrame.h
+1489950436 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/GUIFrame.h
 	<wx/string.h>
 	<wx/bitmap.h>
 	<wx/image.h>
@@ -603,6 +604,7 @@
 	<wx/button.h>
 	<wx/sizer.h>
 	<wx/frame.h>
+	<wx/timer.h>
 
 1425353624 /usr/include/wx-3.0/wx/bitmap.h
 	"wx/string.h"
@@ -979,7 +981,7 @@
 
 1425353624 /usr/include/wx-3.0/wx/gtk/frame.h
 
-1489856611 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.cpp
+1489952685 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.cpp
 	"wx_pch.h"
 	<wx_pch.h>
 	<wx/wx.h>
@@ -989,8 +991,9 @@
 	<sstream>
 	"tinyxml2.h"
 	"ECU_VarListElement.h"
+	<wx/timer.h>
 
-1489700690 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/GUIFrame.cpp
+1489918502 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/GUIFrame.cpp
 	"wx/wxprec.h"
 	<wx/wx.h>
 	"GUIFrame.h"
@@ -1748,4 +1751,18 @@
 
 1425353625 /usr/include/wx-3.0/wx/gtk/statline.h
 	"wx/defs.h"
+
+1489920073 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/serial.cpp
+	"serial.h"
+	<termios.h>
+	<fcntl.h>
+	<unistd.h>
+	<iostream>
+
+1489919924 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/serial.h
+
+1489947080 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/CCP_driver.cpp
+	"CCP_driver.h"
+
+1489947045 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/CCP_driver.h
 

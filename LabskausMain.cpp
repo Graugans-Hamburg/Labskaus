@@ -27,6 +27,7 @@
 #include <sstream>
 #include "tinyxml2.h"
 #include "ECU_VarListElement.h"
+#include <wx/timer.h>
 
 //helper functions
 enum wxbuildinfoformat {
@@ -68,6 +69,8 @@ LabskausFrame::LabskausFrame(wxFrame *frame)
     MatzeListe = new ECU_VarListElement();
     MatzeListe->SetnxtVarListElement(NULL);
     MatzeListe->SetpreVarListElement(NULL);
+    SerialPort = new serial();
+    recTimer = NULL;
 
 }
 
@@ -235,5 +238,47 @@ void LabskausFrame::VarListSelected(wxCommandEvent &event)
     m_VarInfoField->SetLabel(stream.str());
 }
 
+void LabskausFrame::EventOpenSerial(wxCommandEvent &event)
+{
+    SerialPort->open_port(4); //TODO Number inside the code
+
+    if(recTimer)
+    {
+        std::cerr << "recTimer is already existing" << std::endl;
+    }
+    else
+    {
+        recTimer = new wxTimer(this, Rec_Timer);
+        recTimer->Start(interval);
+        this->Connect( recTimer->GetId(), wxEVT_TIMER, wxTimerEventHandler( LabskausFrame::OnRecTimer ) );
+    }
+
+}
+
+void LabskausFrame::EventCloseSerial(wxCommandEvent &event)
+{
+    SerialPort->close_port();
+
+    if(recTimer)
+    {
+        this->Disconnect(wxID_ANY, wxEVT_TIMER,wxTimerEventHandler( LabskausFrame::OnRecTimer ));
+        delete(recTimer);
+        recTimer = NULL;
+    }
+    else
+    {
+        std::cerr << "There is no Object which could be deleted" << std::endl;
+    }
 
 
+}
+
+
+void LabskausFrame::OnRecTimer(wxTimerEvent& event)
+{
+    static int timer_counter= 0;
+    std::cout << "Timer : " << timer_counter++ << std::endl;
+
+
+
+}

@@ -178,6 +178,41 @@
                         <event name="OnUpdateUI"></event>
                     </object>
                 </object>
+                <object class="wxMenu" expanded="1">
+                    <property name="label">Communication</property>
+                    <property name="name">m_menu3</property>
+                    <property name="permission">protected</property>
+                    <object class="wxMenuItem" expanded="1">
+                        <property name="bitmap"></property>
+                        <property name="checked">0</property>
+                        <property name="enabled">1</property>
+                        <property name="help"></property>
+                        <property name="id">wxID_ANY</property>
+                        <property name="kind">wxITEM_NORMAL</property>
+                        <property name="label">Open Serial</property>
+                        <property name="name">m_OpenSerial</property>
+                        <property name="permission">none</property>
+                        <property name="shortcut"></property>
+                        <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">EventOpenSerial</event>
+                        <event name="OnUpdateUI"></event>
+                    </object>
+                    <object class="wxMenuItem" expanded="1">
+                        <property name="bitmap"></property>
+                        <property name="checked">0</property>
+                        <property name="enabled">1</property>
+                        <property name="help"></property>
+                        <property name="id">wxID_ANY</property>
+                        <property name="kind">wxITEM_NORMAL</property>
+                        <property name="label">Close Serial</property>
+                        <property name="name">m_CloseSerial</property>
+                        <property name="permission">none</property>
+                        <property name="shortcut"></property>
+                        <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">EventCloseSerial</event>
+                        <event name="OnUpdateUI"></event>
+                    </object>
+                </object>
             </object>
             <object class="wxStatusBar" expanded="1">
                 <property name="bg"></property>
@@ -484,7 +519,7 @@
                                         <property name="label">Start</property>
                                         <property name="maximum_size"></property>
                                         <property name="minimum_size"></property>
-                                        <property name="name">m_buttonStart</property>
+                                        <property name="name">m_StartMeas</property>
                                         <property name="permission">protected</property>
                                         <property name="pos"></property>
                                         <property name="size"></property>
@@ -498,7 +533,7 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <event name="OnButtonClick"></event>
+                                        <event name="OnButtonClick">EventStartMea</event>
                                         <event name="OnChar"></event>
                                         <event name="OnEnterWindow"></event>
                                         <event name="OnEraseBackground"></event>
@@ -540,7 +575,7 @@
                                         <property name="label">Stop</property>
                                         <property name="maximum_size"></property>
                                         <property name="minimum_size"></property>
-                                        <property name="name">m_buttonStop</property>
+                                        <property name="name">m_StopMea</property>
                                         <property name="permission">protected</property>
                                         <property name="pos"></property>
                                         <property name="size"></property>
@@ -554,7 +589,7 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <event name="OnButtonClick"></event>
+                                        <event name="OnButtonClick">EventStopMea</event>
                                         <event name="OnChar"></event>
                                         <event name="OnEnterWindow"></event>
                                         <event name="OnEraseBackground"></event>
