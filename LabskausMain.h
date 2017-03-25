@@ -15,7 +15,7 @@
 #include "LabskausApp.h"
 #include "ECU_VarListElement.h"
 #include "serial.h"
-
+#include "CCP_driver.h"
 
 #include "GUIFrame.h"
 
@@ -32,6 +32,7 @@ class LabskausFrame: public GUIFrame
         ECU_VarListElement* MatzeListe;
         serial* SerialPort;
         wxTimer* recTimer; // declaration of Timer object
+        CCP_driver* CCP_Master;
         ~LabskausFrame();
 
     private:
@@ -43,6 +44,7 @@ class LabskausFrame: public GUIFrame
         virtual void EventOpenSerial(wxCommandEvent& event);
         virtual void EventCloseSerial(wxCommandEvent& event);
         virtual void OnRecTimer(wxTimerEvent& event);
+        virtual void EventStartMea(wxCommandEvent &event);
 };
 
 #endif // LABSKAUSMAIN_H

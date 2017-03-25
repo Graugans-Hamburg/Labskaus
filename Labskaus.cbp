@@ -51,9 +51,11 @@
 		<Unit filename="LabskausMain.cpp" />
 		<Unit filename="LabskausMain.h" />
 		<Unit filename="WxWizFrame.fbp" />
+		<Unit filename="include/CCP_Frame.h" />
 		<Unit filename="include/CCP_driver.h" />
 		<Unit filename="include/serial.h" />
 		<Unit filename="include/xmlECUfile.h" />
+		<Unit filename="src/CCP_Frame.cpp" />
 		<Unit filename="src/CCP_driver.cpp" />
 		<Unit filename="src/serial.cpp" />
 		<Unit filename="src/xmlECUfile.cpp" />

@@ -4,11 +4,16 @@
 #include <unistd.h>
 #include <iostream>
 
+#include <stdio.h>
+
 
 
 serial::serial()
 {
     //ctor
+    ptr_read_buffer = &serial_input_buffer[0];
+    ptr_write_buffer = &serial_input_buffer[0];
+    vec_input_buffer.clear();
 }
 
 serial::~serial()
@@ -84,9 +89,97 @@ serial::~serial()
 }
 
 
-void serial::bytes_read(void)
+void serial::AnalyzeBytesRead(void)
 {
-    read(fd, serial_input_buffer, 200);
+    unsigned char tmp_input_buffer[200];
+
+    int bytes_read = read(fd, tmp_input_buffer, 200);
+    if(bytes_read > 0)
+    {
+        for(int index = 0; index < bytes_read; index++)
+        {
+            vec_input_buffer.push_back(tmp_input_buffer[index]);
+        }
+    }
+
+    //Lösche alles bis auf das erst B0
+    cleanVector2FirstCCPSign();
+    //Schaue nach ob mindestens 9 Zeichen über sind und baue einen Frame hieraus
+    createReceivedCCPFrame();
 }
 
+void serial::transmit_CCP_Frame(CCP_Frame* CCP_Msg)
+{
+    unsigned char Serial_CCP_Frame[9];
+
+    Serial_CCP_Frame[0] = 0xB0;
+    Serial_CCP_Frame[1] = CCP_Msg->GetByte1();
+    Serial_CCP_Frame[2] = CCP_Msg->GetByte2();
+    Serial_CCP_Frame[3] = CCP_Msg->GetByte3();
+    Serial_CCP_Frame[4] = CCP_Msg->GetByte4();
+    Serial_CCP_Frame[5] = CCP_Msg->GetByte5();
+    Serial_CCP_Frame[6] = CCP_Msg->GetByte6();
+    Serial_CCP_Frame[7] = CCP_Msg->GetByte7();
+    Serial_CCP_Frame[8] = CCP_Msg->GetByte8();
+
+    int results = write(fd, Serial_CCP_Frame, sizeof(Serial_CCP_Frame));
+    /*  DEBUGSHIT
+        stcd::cout << "somethings on" << std::endl;
+        time_t now = CCP_Msg->getCCPFrameTime();
+        std::cout << "Fucking Time"<<static_cast<long int> (now) << std::endl;
+        DEBUGSHIT
+    */
+    if (results == -1)
+    {
+        std::cerr << "The requested Frame had not been written to the serial interface." << std::endl;
+    }
+    delete(CCP_Msg);
+}
+
+
+void serial::cleanVector2FirstCCPSign(void)
+{
+    //Lösche alles bis auf das erst B0
+    while(vec_input_buffer.size())
+    {
+        if(vec_input_buffer[0] == 0xB0)
+        {
+            break;
+        }
+        else
+        {
+            vec_input_buffer.erase(vec_input_buffer.begin());
+        }
+    }
+}
+
+void serial::createReceivedCCPFrame(void)
+{
+    // Erstelle einen CCP Frame und schicke ihn auf die Reise
+    if(vec_input_buffer.size() > 8 )
+    {
+        CCP_Frame* ReceivedCCP = new CCP_Frame;
+
+        ReceivedCCP->SetByte1(vec_input_buffer[1]);
+        ReceivedCCP->SetByte2(vec_input_buffer[2]);
+        ReceivedCCP->SetByte3(vec_input_buffer[3]);
+        ReceivedCCP->SetByte4(vec_input_buffer[4]);
+        ReceivedCCP->SetByte5(vec_input_buffer[5]);
+        ReceivedCCP->SetByte6(vec_input_buffer[6]);
+        ReceivedCCP->SetByte7(vec_input_buffer[7]);
+        ReceivedCCP->SetByte8(vec_input_buffer[8]);
+        ReceivedCCP->setCCPFrameTime();
+            //* DEBUGSHIT
+            std::cout << "Size: " << vec_input_buffer.size() << std::endl;
+            for (unsigned i=0; i < vec_input_buffer.size(); i++)
+            {
+                std::cout <<" 0x" << std::uppercase << std::hex << (int)vec_input_buffer[i];
+            }
+            std::cout << std::endl;
+            // DEBUGSHIT //
+        // Lösche den aktuellen Frame aus dem in buffer
+        vec_input_buffer.erase(vec_input_buffer.begin(),vec_input_buffer.begin()+9);
+        delete ReceivedCCP;
+    }
+}
 

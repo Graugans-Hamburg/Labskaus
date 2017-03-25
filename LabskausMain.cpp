@@ -25,9 +25,13 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <wx/timer.h>
+
+
 #include "tinyxml2.h"
 #include "ECU_VarListElement.h"
-#include <wx/timer.h>
+#include "serial.h"
+#include "CCP_driver.h"
 
 //helper functions
 enum wxbuildinfoformat {
@@ -70,6 +74,7 @@ LabskausFrame::LabskausFrame(wxFrame *frame)
     MatzeListe->SetnxtVarListElement(NULL);
     MatzeListe->SetpreVarListElement(NULL);
     SerialPort = new serial();
+    CCP_Master = new CCP_driver();
     recTimer = NULL;
 
 }
@@ -276,9 +281,12 @@ void LabskausFrame::EventCloseSerial(wxCommandEvent &event)
 
 void LabskausFrame::OnRecTimer(wxTimerEvent& event)
 {
-    static int timer_counter= 0;
-    std::cout << "Timer : " << timer_counter++ << std::endl;
 
+    SerialPort->AnalyzeBytesRead();
+}
 
+void LabskausFrame::EventStartMea(wxCommandEvent &event)
+{
+    CCP_Master->Connect(SerialPort);
 
 }
