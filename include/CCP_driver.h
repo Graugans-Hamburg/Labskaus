@@ -1,7 +1,12 @@
 #ifndef CCP_DRIVER_H
 #define CCP_DRIVER_H
 
+#include <vector>
+#include <iostream>
+#include <iomanip>
 #include "serial.h"
+#include "CCP_Frame.h"
+#include "CCP_Drive_List_Element.h"
 
 #define NOT_CONNECTED				 0x00
 #define CONNECTED					 0x01
@@ -69,6 +74,7 @@
 #define CRC_RESOURCE_FUNC_NOT_AVAIL  0x36
 
 
+#define PLOT_COMMUNICATION_TO_TERMINAL TRUE
 
 
 class CCP_driver
@@ -79,11 +85,15 @@ class CCP_driver
         void SendCCPFrame();
         void AnalyzeCCPFrame();
         void Connect(serial* Serial_Port);
+        void Analyze(CCP_Frame& recieved_CCP_frame);
+        void CCP_drv_state_machine(void);
     protected:
     private:
         bool CommunicationChannel_Active;
         bool Device_Available;
         unsigned char MessageCounter;
+        std::vector<CCP_Drive_List_Element> Action_Plan;
+        std::vector<CCP_Frame> CCP_Msg_Buffer;
 };
 
 #endif // CCP_DRIVER_H

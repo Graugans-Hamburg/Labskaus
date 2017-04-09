@@ -24,3 +24,7 @@ void CCP_Frame::setCCPFrameTime(void)
     CCPFrameTime = time(0);
 }
 
+void CCP_Frame::setCCPFrameTime(time_t in_FrameTime)
+{
+    CCPFrameTime = in_FrameTime;
+}

@@ -76,6 +76,7 @@ LabskausFrame::LabskausFrame(wxFrame *frame)
     SerialPort = new serial();
     CCP_Master = new CCP_driver();
     recTimer = NULL;
+    data_acquisition_timer = NULL;
 
 }
 
@@ -258,6 +259,17 @@ void LabskausFrame::EventOpenSerial(wxCommandEvent &event)
         this->Connect( recTimer->GetId(), wxEVT_TIMER, wxTimerEventHandler( LabskausFrame::OnRecTimer ) );
     }
 
+    if( data_acquisition_timer)
+    {
+        std::cerr << "data_acquisition_timer is already existing" << std::endl;
+    }
+    else
+    {
+        data_acquisition_timer = new wxTimer(this, wxID_ANY);
+        data_acquisition_timer->Start(data_acq_list_timer_ms);
+        this->Connect( data_acquisition_timer->GetId(), wxEVT_TIMER, wxTimerEventHandler( LabskausFrame::DA_List_Timer ) );
+    }
+
 }
 
 void LabskausFrame::EventCloseSerial(wxCommandEvent &event)
@@ -275,18 +287,43 @@ void LabskausFrame::EventCloseSerial(wxCommandEvent &event)
         std::cerr << "There is no Object which could be deleted" << std::endl;
     }
 
+    if(data_acquisition_timer)
+    {
+        this->Disconnect(wxID_ANY, wxEVT_TIMER,wxTimerEventHandler( LabskausFrame::DA_List_Timer ));
+        delete(data_acquisition_timer);
+        data_acquisition_timer = NULL;
+    }
+    else
+    {
+        std::cerr << "There is no Object which could be deleted" << std::endl;
+    }
 
 }
 
 
 void LabskausFrame::OnRecTimer(wxTimerEvent& event)
 {
-
-    SerialPort->AnalyzeBytesRead();
+    CCP_Frame* ptr_CCP_frame;
+    ptr_CCP_frame = SerialPort->AnalyzeBytesRead();
+    if(ptr_CCP_frame)
+    {/* Falls der Zeiger nicht null ist muss er analysiert werden */
+       CCP_Master->Analyze(*ptr_CCP_frame);
+    }
 }
+
+
+void LabskausFrame::DA_List_Timer(wxTimerEvent& event)
+{
+
+    //std::cout << "Buja, checking the list" << std::endl;
+
+}
+
 
 void LabskausFrame::EventStartMea(wxCommandEvent &event)
 {
     CCP_Master->Connect(SerialPort);
+
+
 
 }

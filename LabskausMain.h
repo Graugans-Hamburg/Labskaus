@@ -22,8 +22,11 @@
 enum // Timer events IDs
 {
     Rec_Timer = wxID_HIGHEST,
+    DAL_Timer = wxID_HIGHEST -1,
 };
+
 const int interval = 100;
+const int data_acq_list_timer_ms = 100;
 
 class LabskausFrame: public GUIFrame
 {
@@ -32,6 +35,7 @@ class LabskausFrame: public GUIFrame
         ECU_VarListElement* MatzeListe;
         serial* SerialPort;
         wxTimer* recTimer; // declaration of Timer object
+        wxTimer* data_acquisition_timer;
         CCP_driver* CCP_Master;
         ~LabskausFrame();
 
@@ -44,6 +48,7 @@ class LabskausFrame: public GUIFrame
         virtual void EventOpenSerial(wxCommandEvent& event);
         virtual void EventCloseSerial(wxCommandEvent& event);
         virtual void OnRecTimer(wxTimerEvent& event);
+        virtual void DA_List_Timer(wxTimerEvent& event);
         virtual void EventStartMea(wxCommandEvent &event);
 };
 

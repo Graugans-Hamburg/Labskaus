@@ -26,6 +26,7 @@ class CCP_Frame
         unsigned char GetByte7(void){return Data[6];}
         unsigned char GetByte8(void){return Data[7];}
         void setCCPFrameTime(void);
+        void setCCPFrameTime(time_t);
         time_t getCCPFrameTime(void){return CCPFrameTime;}
     protected:
     private:

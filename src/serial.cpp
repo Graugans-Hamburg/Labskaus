@@ -3,8 +3,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <iostream>
-
 #include <stdio.h>
+
 
 
 
@@ -89,7 +89,7 @@ serial::~serial()
 }
 
 
-void serial::AnalyzeBytesRead(void)
+CCP_Frame* serial::AnalyzeBytesRead(void)
 {
     unsigned char tmp_input_buffer[200];
 
@@ -104,8 +104,7 @@ void serial::AnalyzeBytesRead(void)
 
     //Lösche alles bis auf das erst B0
     cleanVector2FirstCCPSign();
-    //Schaue nach ob mindestens 9 Zeichen über sind und baue einen Frame hieraus
-    createReceivedCCPFrame();
+    return createReceivedCCPFrame();
 }
 
 void serial::transmit_CCP_Frame(CCP_Frame* CCP_Msg)
@@ -153,7 +152,7 @@ void serial::cleanVector2FirstCCPSign(void)
     }
 }
 
-void serial::createReceivedCCPFrame(void)
+CCP_Frame* serial::createReceivedCCPFrame(void)
 {
     // Erstelle einen CCP Frame und schicke ihn auf die Reise
     if(vec_input_buffer.size() > 8 )
@@ -169,17 +168,24 @@ void serial::createReceivedCCPFrame(void)
         ReceivedCCP->SetByte7(vec_input_buffer[7]);
         ReceivedCCP->SetByte8(vec_input_buffer[8]);
         ReceivedCCP->setCCPFrameTime();
-            //* DEBUGSHIT
+            /* DEBUGSHIT
             std::cout << "Size: " << vec_input_buffer.size() << std::endl;
             for (unsigned i=0; i < vec_input_buffer.size(); i++)
             {
                 std::cout <<" 0x" << std::uppercase << std::hex << (int)vec_input_buffer[i];
             }
             std::cout << std::endl;
-            // DEBUGSHIT //
+            // DEBUGSHIT */
         // Lösche den aktuellen Frame aus dem in buffer
         vec_input_buffer.erase(vec_input_buffer.begin(),vec_input_buffer.begin()+9);
-        delete ReceivedCCP;
+
+        return ReceivedCCP;
     }
+
+    return NULL;
 }
 
+void serial::set_ptr_CCPDriver(void)
+{
+    //ptr2CCP_Driver = in_ptr_CCPDriver;
+}
