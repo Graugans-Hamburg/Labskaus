@@ -21,10 +21,13 @@ CCP_Frame::~CCP_Frame()
 
 void CCP_Frame::setCCPFrameTime(void)
 {
-    CCPFrameTime = time(0);
-}
-
-void CCP_Frame::setCCPFrameTime(time_t in_FrameTime)
-{
-    CCPFrameTime = in_FrameTime;
+     if( clock_gettime(CLOCK_REALTIME,&CCPFrameTime))
+     {
+        std::cerr << "Die Systemzeit konnte nicht geholt werden" << std::endl;
+     }
+     else
+     {
+        std::cout << "Empfangen " << std::dec <<CCPFrameTime.tv_sec << ","
+                  << std::dec << std::setw(9) << std::setfill('0') << CCPFrameTime.tv_nsec << " Sekunden" << std::endl;
+     }
 }

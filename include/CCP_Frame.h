@@ -2,6 +2,9 @@
 #define CCP_FRAME_H
 
 #include <ctime>
+#include <time.h>
+#include <iostream>
+#include <iomanip>
 
 
 class CCP_Frame
@@ -26,12 +29,12 @@ class CCP_Frame
         unsigned char GetByte7(void){return Data[6];}
         unsigned char GetByte8(void){return Data[7];}
         void setCCPFrameTime(void);
-        void setCCPFrameTime(time_t);
-        time_t getCCPFrameTime(void){return CCPFrameTime;}
+
+        time_t getCCPFrameTime(void){return CCPFrameTime.tv_sec;}
     protected:
     private:
         unsigned char Data[8];
-        time_t CCPFrameTime;
+        struct timespec CCPFrameTime;
 
 };
 
