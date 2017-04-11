@@ -25,9 +25,11 @@ void CCP_Frame::setCCPFrameTime(void)
      {
         std::cerr << "Die Systemzeit konnte nicht geholt werden" << std::endl;
      }
+     /*  Only if you want to display when the time had been received
      else
      {
         std::cout << "Empfangen " << std::dec <<CCPFrameTime.tv_sec << ","
                   << std::dec << std::setw(9) << std::setfill('0') << CCPFrameTime.tv_nsec << " Sekunden" << std::endl;
      }
+     */
 }

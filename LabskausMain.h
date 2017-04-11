@@ -33,7 +33,6 @@ class LabskausFrame: public GUIFrame
     public:
         LabskausFrame(wxFrame *frame);
         ECU_VarListElement* MatzeListe;
-        serial* SerialPort;
         wxTimer* recTimer; // declaration of Timer object
         wxTimer* data_acquisition_timer;
         CCP_driver* CCP_Master;

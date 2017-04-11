@@ -73,7 +73,6 @@ LabskausFrame::LabskausFrame(wxFrame *frame)
     MatzeListe = new ECU_VarListElement();
     MatzeListe->SetnxtVarListElement(NULL);
     MatzeListe->SetpreVarListElement(NULL);
-    SerialPort = new serial();
     CCP_Master = new CCP_driver();
     recTimer = NULL;
     data_acquisition_timer = NULL;
@@ -246,7 +245,7 @@ void LabskausFrame::VarListSelected(wxCommandEvent &event)
 
 void LabskausFrame::EventOpenSerial(wxCommandEvent &event)
 {
-    SerialPort->open_port(4); //TODO Number inside the code
+    CCP_Master->open_communication_port();
 
     if(recTimer)
     {
@@ -274,7 +273,7 @@ void LabskausFrame::EventOpenSerial(wxCommandEvent &event)
 
 void LabskausFrame::EventCloseSerial(wxCommandEvent &event)
 {
-    SerialPort->close_port();
+    CCP_Master->close_communication_port();
 
     if(recTimer)
     {
@@ -303,12 +302,9 @@ void LabskausFrame::EventCloseSerial(wxCommandEvent &event)
 
 void LabskausFrame::OnRecTimer(wxTimerEvent& event)
 {
-    CCP_Frame* ptr_CCP_frame;
-    ptr_CCP_frame = SerialPort->AnalyzeBytesRead();
-    if(ptr_CCP_frame)
-    {/* Falls der Zeiger nicht null ist muss er analysiert werden */
-       CCP_Master->Analyze(*ptr_CCP_frame);
-    }
+
+    CCP_Master->periodic_check();
+
 }
 
 
@@ -322,8 +318,5 @@ void LabskausFrame::DA_List_Timer(wxTimerEvent& event)
 
 void LabskausFrame::EventStartMea(wxCommandEvent &event)
 {
-    CCP_Master->Connect(SerialPort);
-
-
-
+    CCP_Master->Connect();
 }

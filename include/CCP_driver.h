@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
+#include <time.h>
 #include "serial.h"
 #include "CCP_Frame.h"
 #include "CCP_Drive_List_Element.h"
@@ -84,14 +85,23 @@ class CCP_driver
         virtual ~CCP_driver();
         void SendCCPFrame();
         void AnalyzeCCPFrame();
-        void Connect(serial* Serial_Port);
+        void Connect();
         void Analyze(CCP_Frame& recieved_CCP_frame);
         void CCP_drv_state_machine(void);
+        void CRO_check_time_out(void);
+        void CRO_Tx(CCP_Frame& CCP_Tx_Frame);
+        void open_communication_port(void);
+        void close_communication_port(void);
+        void periodic_check(void);
     protected:
     private:
+        serial SerialPort;
         bool CommunicationChannel_Active;
         bool Device_Available;
         unsigned char MessageCounter;
+        struct timespec CRO_last_request_time;
+        unsigned char    CRO_last_request_MessageCounter;
+        bool            CRO_waiting_for_request;
         std::vector<CCP_Drive_List_Element> Action_Plan;
         std::vector<CCP_Frame> CCP_Msg_Buffer;
 };

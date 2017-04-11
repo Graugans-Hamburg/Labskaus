@@ -2,7 +2,6 @@
 #define SERIAL_H
 
 #include <vector>
-
 #include "CCP_Frame.h"
 
 
@@ -21,7 +20,6 @@ class serial
         CCP_Frame* AnalyzeBytesRead(void);
         void transmit_CCP_Frame(CCP_Frame* CCP_Msg);
         void set_ptr_CCPDriver(void);
-
     protected:
     private:
         int fd;
@@ -33,6 +31,7 @@ class serial
         unsigned char serial_output_buffer[SERIAL_BUFFERSIZE];
         unsigned char * ptr_read_buffer;
         unsigned char * ptr_write_buffer;
+        serial* SerialPort;
 
 };
 
