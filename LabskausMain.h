@@ -10,11 +10,8 @@
 #ifndef LABSKAUSMAIN_H
 #define LABSKAUSMAIN_H
 
-
-
 #include "LabskausApp.h"
 #include "ECU_VarListElement.h"
-#include "serial.h"
 #include "CCP_driver.h"
 
 #include "GUIFrame.h"

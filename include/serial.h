@@ -32,7 +32,6 @@ class serial
         unsigned char * ptr_read_buffer;
         unsigned char * ptr_write_buffer;
         serial* SerialPort;
-
 };
 
 #endif // SERIAL_H

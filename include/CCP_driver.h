@@ -77,6 +77,19 @@
 
 #define PLOT_COMMUNICATION_TO_TERMINAL TRUE
 
+enum DTO_types
+{
+    DTO_type_CRM = 0xFF,
+    DTO_type_Event = 0xFE
+};
+
+enum CCP_driver_states
+{
+    SM_Init,
+    SM_Connect,
+    SM_CCP_Version,
+};
+
 
 class CCP_driver
 {
@@ -85,23 +98,36 @@ class CCP_driver
         virtual ~CCP_driver();
         void SendCCPFrame();
         void AnalyzeCCPFrame();
-        void Connect();
-        void Analyze(CCP_Frame& recieved_CCP_frame);
+        void TxCRO_Connect();
+        void TxCRO_GetCCP_Version();
+        void Analyze(CCP_Frame& received_CCP_frame);
         void CCP_drv_state_machine(void);
         void CRO_check_time_out(void);
         void CRO_Tx(CCP_Frame& CCP_Tx_Frame);
         void open_communication_port(void);
         void close_communication_port(void);
         void periodic_check(void);
+        void Set_SMT_req_establish_connection(void){SMT_req_establish_connection = true;}
+        void SM_run_state_machine(void);
     protected:
     private:
         serial SerialPort;
-        bool CommunicationChannel_Active;
+        bool            ECU_Connected; /*Connect Cmd, positive Antwort */
+        unsigned char   ECU_CCP_Version_Main;
+        unsigned char   ECU_CCP_Version_Release;
+
         bool Device_Available;
         unsigned char MessageCounter;
+
         struct timespec CRO_last_request_time;
-        unsigned char    CRO_last_request_MessageCounter;
+        unsigned char   CRO_last_request_MessageCounter;
+        unsigned char   CRO_last_CRO_Command_type;
         bool            CRO_waiting_for_request;
+
+        unsigned int    SM_actl_state;
+        bool            SM_enterleave_state;
+        bool            SMT_req_establish_connection; /*State machine transition*/
+
         std::vector<CCP_Drive_List_Element> Action_Plan;
         std::vector<CCP_Frame> CCP_Msg_Buffer;
 };

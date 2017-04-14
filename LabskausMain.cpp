@@ -318,5 +318,5 @@ void LabskausFrame::DA_List_Timer(wxTimerEvent& event)
 
 void LabskausFrame::EventStartMea(wxCommandEvent &event)
 {
-    CCP_Master->Connect();
+    CCP_Master->Set_SMT_req_establish_connection();
 }
