@@ -10,6 +10,10 @@ CCP_driver::CCP_driver()
     Device_Available = false;
     MessageCounter = 0;
     SM_actl_state = 0;
+    SMT_req_get_i16_value = false;
+    SMT_req_establish_connection = false;
+    ECU_MTA_Number1 = 0;
+    ECU_MTA_Number2 = 0;
 }
 
 CCP_driver::~CCP_driver()
@@ -42,7 +46,6 @@ void CCP_driver::periodic_check(void)
     SM_run_state_machine();
 }
 
-
 /*
  * Send the Connect Command
  *
@@ -71,7 +74,7 @@ void CCP_driver::TxCRO_Connect()
 
     CRO_Tx(*CCP_Connect_Cmd);
 
-    #if PLOT_COMMUNICATION_TO_TERMINAL == TRUE
+    #ifdef PLOT_COMMUNICATION_TO_TERMINAL
     std::cout << " Tx: 0x"
               << " " << std::setw(2) << std::uppercase <<std::hex << (int)CCP_Msg_Buffer.back().GetByte1()
               << " " << std::setw(2) << std::uppercase << std::hex << (int)CCP_Msg_Buffer.back().GetByte2()
@@ -87,10 +90,9 @@ void CCP_driver::TxCRO_Connect()
 }
 
 /*
- * Send the Connect to get the CCP Version
+ * Send the command to get the CCP Version.
  *
- * Description: It shall be tested if the microcontroller is reacting on the test command. And if
- * all the bytes from the answer that is send by the microcontoller are filled out correctly.
+ * Description:
  *
  * Message that will be send over:
  *    Byte1   : 0x1B  Command code for the GET_CCP_VERSION command
@@ -114,6 +116,59 @@ void CCP_driver::TxCRO_GetCCP_Version(void)
 }
 
 /*
+ * Send the command to set the MTA (memory transfer adress)
+ *
+ * Description:
+ *
+ * Message that will be send over:
+ *    Byte1   : 0x02  Command code for the GET_CCP_VERSION command
+ *    Byte2   : 0x??  Command Counter ctr
+ *    Byte3,4 : 0x02 0x01  Requested CCP Version 2.1
+ *    Byte5-8 : doesn't matter
+ */
+void CCP_driver::TxCRO_SetMTA(uint8_t MTA_number, uint8_t AdressExtention, uint32_t MTA_adress)
+{
+    CCP_Frame* CCP_Connect_Cmd = new CCP_Frame();
+    CCP_Connect_Cmd->SetByte1(COMMAND_SET_MTA);
+    CCP_Connect_Cmd->SetByte2(++MessageCounter);
+    CCP_Connect_Cmd->SetByte3(MTA_number);   /* Request the CCP Version 2 */
+    CCP_Connect_Cmd->SetByte4(AdressExtention);   /* Request the CCP Release 1 */
+    CCP_Connect_Cmd->SetByte5(uint8_t(MTA_adress >> 24));
+    CCP_Connect_Cmd->SetByte6(uint8_t((MTA_adress & 0x00FFFFFF) >> 16));
+    CCP_Connect_Cmd->SetByte7(uint8_t((MTA_adress & 0x0000FFFF) >> 8));
+    CCP_Connect_Cmd->SetByte8(uint8_t(MTA_adress & 0x00000FF));
+    CCP_Connect_Cmd->setCCPFrameTime();
+    CRO_Tx(*CCP_Connect_Cmd);
+}
+
+
+/*
+ * Send the command to Upload data from the ECU to the CCP_driver
+ *
+ * Description:
+ *
+ * Message that will be send over:
+ *    Byte1   : 0x04  Command code for the GET_CCP_VERSION command
+ *    Byte2   : 0x??  Command Counter ctr
+ *    Byte3   : 0x??  Size of the data block
+ *    Byte4-8 : doesn't matter
+ */
+void CCP_driver::TxCRO_Upload(uint8_t num_of_bytes)
+{
+    CCP_Frame* CCP_Connect_Cmd = new CCP_Frame();
+    CCP_Connect_Cmd->SetByte1(COMMAND_UPLOAD);
+    CCP_Connect_Cmd->SetByte2(++MessageCounter);
+    CCP_Connect_Cmd->SetByte3(num_of_bytes);   /* Request the CCP Version 2 */
+    CCP_Connect_Cmd->SetByte4(0);   /* Request the CCP Release 1 */
+    CCP_Connect_Cmd->SetByte5(0);
+    CCP_Connect_Cmd->SetByte6(0);
+    CCP_Connect_Cmd->SetByte7(0);
+    CCP_Connect_Cmd->SetByte8(0);
+    CCP_Connect_Cmd->setCCPFrameTime();
+    CRO_Tx(*CCP_Connect_Cmd);
+}
+
+/*
  *  The state machine controls which action shall be taken as the next step.
  *
  *  State: Init
@@ -125,7 +180,7 @@ void CCP_driver::SM_run_state_machine(void)
 
     switch(SM_actl_state)
     {
-        case SM_Init:
+        case SM_Init:{
             ECU_Connected = false;
             ECU_CCP_Version_Main = 0;
             ECU_CCP_Version_Release = 0;
@@ -136,7 +191,8 @@ void CCP_driver::SM_run_state_machine(void)
                 SM_enterleave_state = true;
             }
             break;
-        case SM_Connect:
+            }
+        case SM_Connect:{
             if(SM_enterleave_state == true)
             { /* Enter the state */
                 TxCRO_Connect();
@@ -159,7 +215,8 @@ void CCP_driver::SM_run_state_machine(void)
                 break;
             }
             break;
-        case SM_CCP_Version:
+            }
+        case SM_CCP_Version:{
             if(SM_enterleave_state == true)
             { /* Enter the state */
                 TxCRO_GetCCP_Version();
@@ -170,8 +227,8 @@ void CCP_driver::SM_run_state_machine(void)
             if(CRO_waiting_for_request == false &&
                ECU_CCP_Version_Main != 0)
             {  /* Exit the state, Connection established */
-                //SM_actl_state = SM_CCP_Version;
-                //SM_enterleave_state = true;
+                SM_actl_state = SM_Wait;
+                SM_enterleave_state = true;
                 break;
             }
             if(CRO_waiting_for_request == false &&
@@ -183,7 +240,60 @@ void CCP_driver::SM_run_state_machine(void)
                 break;
             }
             break;
+            }
+        case SM_Wait:
+            if(SM_enterleave_state == true)
+            { /* Enter the state */
+                SM_enterleave_state = false;
+                break;
+            }
 
+            if(SMT_req_get_i16_value)
+            {  /* Exit the state, Connection established */
+                SM_actl_state = SM_Get_int16_SetMTA;
+                SMT_req_get_i16_value = false;
+                SM_enterleave_state = true;
+                break;
+            }
+            break;
+        case SM_Get_int16_SetMTA:
+            if(SM_enterleave_state == true)
+            { /* Enter the state */
+                TxCRO_SetMTA(0,0,0xA42A0020);
+                SM_enterleave_state = false;
+                break;
+            }
+
+            if(CRO_waiting_for_request == false &&
+               CRM_ErrorCode_last_received == CRC_ACKNOWLEGE)
+            {  /* Exit the state, MTA is positioned */
+                SM_actl_state = SM_Get_int16_DataUpload;
+                SM_enterleave_state = true;
+                break;
+            }
+            if(CRO_waiting_for_request == false &&
+               CRM_ErrorCode_last_received != CRC_ACKNOWLEGE)
+            {  /* Exit the state, MTA is positioned */
+                SM_actl_state = SM_Wait;
+                SM_enterleave_state = true;
+                break;
+            }
+            break;
+        case SM_Get_int16_DataUpload:
+            if(SM_enterleave_state == true)
+            { /* Enter the state */
+                TxCRO_Upload(4);
+                SM_enterleave_state = false;
+                break;
+            }
+
+            if(CRO_waiting_for_request == false)
+            {  /* Exit the state, Everything received */
+                SM_actl_state = SM_Wait;
+                SM_enterleave_state = true;
+                break;
+            }
+            break;
         default:
             std::cerr << "The CCP driver state machine is trapped in a unknown state." << std::endl
             << "The state number is:" << SM_actl_state << std::endl;
@@ -203,7 +313,7 @@ void CCP_driver::Analyze(CCP_Frame& received_CCP_frame)
 
     CCP_Msg_Buffer.push_back(received_CCP_frame);
 
-    #if PLOT_COMMUNICATION_TO_TERMINAL == TRUE
+    #ifdef PLOT_COMMUNICATION_TO_TERMINAL
     std::cout << " Rx: 0x"
               << " " << std::setw(2) << std::uppercase <<std::hex << (int)CCP_Msg_Buffer.back().GetByte1()
               << " " << std::setw(2) << std::uppercase << std::hex << (int)CCP_Msg_Buffer.back().GetByte2()
@@ -230,6 +340,7 @@ void CCP_driver::Analyze(CCP_Frame& received_CCP_frame)
             }
             else
             {
+            CRM_ErrorCode_last_received    = received_CCP_frame.GetByte2();
                 /*
                  * Der folgende Teil wird über die switch Anweisung wissen wie die Antwort
                  * auszuwerten ist. Der CCP Treiber hat sich gemerkt welchen Kommandotyp an
@@ -264,9 +375,38 @@ void CCP_driver::Analyze(CCP_Frame& received_CCP_frame)
                             std::cerr << "ECU did not ACK the Command to get the CCP version" <<
                             std::endl;
                         }
+                        break;
+                    case COMMAND_SET_MTA:
+                        if(received_CCP_frame.GetByte2() == CRC_ACKNOWLEGE)
+                        {
+
+                        }
+                        else
+                        {
+                            std::cerr << "ECU did not ACK the Command to set the MTA" <<
+                            std::endl;
+                        }
+                        break;
+                    case COMMAND_UPLOAD:
+                        if(received_CCP_frame.GetByte2() == CRC_ACKNOWLEGE)
+                        {
+                          std::cout << "Also alles ausgelesen und: 0x"
+                          << " " << std::setw(2) << std::uppercase << std::hex << (int)received_CCP_frame.GetByte4()
+                          << " " << std::setw(2) << std::uppercase << std::hex << (int)received_CCP_frame.GetByte5()
+                          << " " << std::setw(2) << std::uppercase << std::hex << (int)received_CCP_frame.GetByte6()
+                          << " " << std::setw(2) << std::uppercase << std::hex << (int)received_CCP_frame.GetByte7()
+                          << " ist die Antwort"
+                          << std::endl;
+                        }
+                        else
+                        {
+                            std::cerr << "ECU did not ACK the Command to Upload" <<
+                            std::endl;
+                        }
+                        break;
                     default:
                         std::cerr << "CRM empfangen aber es ist keine Auswertefunktion bekannt"
-                        << "CRO Command Code:" << CRO_last_CRO_Command_type << std::endl;
+                        << "CRO Command Code:" << (int)CRO_last_CRO_Command_type << std::endl;
                         break;
                 }
             }

@@ -268,6 +268,7 @@ void LabskausFrame::EventOpenSerial(wxCommandEvent &event)
         data_acquisition_timer->Start(data_acq_list_timer_ms);
         this->Connect( data_acquisition_timer->GetId(), wxEVT_TIMER, wxTimerEventHandler( LabskausFrame::DA_List_Timer ) );
     }
+    CCP_Master->Set_SMT_req_establish_connection();
 
 }
 
@@ -296,7 +297,7 @@ void LabskausFrame::EventCloseSerial(wxCommandEvent &event)
     {
         std::cerr << "There is no Object which could be deleted" << std::endl;
     }
-
+    CCP_Master->SM_reset_state_machine();
 }
 
 
@@ -318,5 +319,5 @@ void LabskausFrame::DA_List_Timer(wxTimerEvent& event)
 
 void LabskausFrame::EventStartMea(wxCommandEvent &event)
 {
-    CCP_Master->Set_SMT_req_establish_connection();
+    CCP_Master->Set_SMT_req_get_i16_value();
 }

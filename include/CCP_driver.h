@@ -5,6 +5,7 @@
 #include <iostream>
 #include <iomanip>
 #include <time.h>
+#include <cstdint>
 #include "serial.h"
 #include "CCP_Frame.h"
 #include "CCP_Drive_List_Element.h"
@@ -75,7 +76,7 @@
 #define CRC_RESOURCE_FUNC_NOT_AVAIL  0x36
 
 
-#define PLOT_COMMUNICATION_TO_TERMINAL TRUE
+//#define PLOT_COMMUNICATION_TO_TERMINAL
 
 enum DTO_types
 {
@@ -88,6 +89,9 @@ enum CCP_driver_states
     SM_Init,
     SM_Connect,
     SM_CCP_Version,
+    SM_Wait,
+    SM_Get_int16_SetMTA,
+    SM_Get_int16_DataUpload,
 };
 
 
@@ -100,7 +104,11 @@ class CCP_driver
         void AnalyzeCCPFrame();
         void TxCRO_Connect();
         void TxCRO_GetCCP_Version();
+        void TxCRO_SetMTA(uint8_t MTA_number, uint8_t AdressExtention, uint32_t MTA_adress);
+        void TxCRO_Upload(uint8_t num_of_bytes);
         void Analyze(CCP_Frame& received_CCP_frame);
+        void ECU_SetECU_MTA_Number1(uint32_t val){ECU_MTA_Number1 = val;}
+        void ECU_SetECU_MTA_Number2(uint32_t val){ECU_MTA_Number2 = val;}
         void CCP_drv_state_machine(void);
         void CRO_check_time_out(void);
         void CRO_Tx(CCP_Frame& CCP_Tx_Frame);
@@ -108,25 +116,32 @@ class CCP_driver
         void close_communication_port(void);
         void periodic_check(void);
         void Set_SMT_req_establish_connection(void){SMT_req_establish_connection = true;}
+        void Set_SMT_req_get_i16_value(void){SMT_req_get_i16_value = true;}
         void SM_run_state_machine(void);
+        void SM_reset_state_machine(void){SM_actl_state = SM_Init;}
     protected:
     private:
         serial SerialPort;
-        bool            ECU_Connected; /*Connect Cmd, positive Antwort */
-        unsigned char   ECU_CCP_Version_Main;
-        unsigned char   ECU_CCP_Version_Release;
+        bool      ECU_Connected; /*Connect Cmd, positive Antwort */
+        uint8_t   ECU_CCP_Version_Main;
+        uint8_t   ECU_CCP_Version_Release;
+        uint32_t  ECU_MTA_Number1; /* Shows the last set position of the MTA1 */
+        uint32_t  ECU_MTA_Number2; /* Shows the last set position of the MTA1 */
+
 
         bool Device_Available;
-        unsigned char MessageCounter;
+        uint8_t MessageCounter;
 
-        struct timespec CRO_last_request_time;
-        unsigned char   CRO_last_request_MessageCounter;
-        unsigned char   CRO_last_CRO_Command_type;
-        bool            CRO_waiting_for_request;
+        struct    timespec CRO_last_request_time;
+        uint8_t   CRO_last_request_MessageCounter;
+        uint8_t   CRO_last_CRO_Command_type;
+        bool      CRO_waiting_for_request;
+        uint8_t   CRM_ErrorCode_last_received;
 
-        unsigned int    SM_actl_state;
-        bool            SM_enterleave_state;
-        bool            SMT_req_establish_connection; /*State machine transition*/
+        uint16_t  SM_actl_state;
+        bool      SM_enterleave_state;
+        bool      SMT_req_establish_connection; /*State machine transition*/
+        bool      SMT_req_get_i16_value; /*State machine transition*/
 
         std::vector<CCP_Drive_List_Element> Action_Plan;
         std::vector<CCP_Frame> CCP_Msg_Buffer;
