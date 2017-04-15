@@ -9,6 +9,7 @@
 #include "serial.h"
 #include "CCP_Frame.h"
 #include "CCP_Drive_List_Element.h"
+#include "type_definition.h"
 
 #define NOT_CONNECTED				 0x00
 #define CONNECTED					 0x01
@@ -94,17 +95,6 @@ enum CCP_driver_states
     SM_read_variable_DataUpload,
 };
 
-enum Datatypes
-{
-    DT_uint8,
-    DT_sint8,
-    DT_uint16,
-    DT_sint16,
-    DT_uint32,
-    DT_sint32,
-    DT_float32,
-};
-
 enum endian
 {
     big_endian,
@@ -135,6 +125,7 @@ class CCP_driver
         void Set_SMT_req_establish_connection(void){SMT_req_establish_connection = true;}
         void SM_run_state_machine(void);
         void SM_reset_state_machine(void){SM_actl_state = SM_Init;}
+        int  GetCCPLogSize(void){return CCP_Msg_Buffer.size();}
         /* Following functions are only for testing */
         void test_read_variable(void);
     protected:
@@ -164,8 +155,8 @@ class CCP_driver
         bool      SMT_read_variable; /*When this Transition is set to true and the information from
         the variables SMI_read_variable_type and SMI_read_variable_address will used. They define
         the datatype and the address. */
-        Datatypes SMI_read_variable_type;
-        bool      SMI_read_variable_successfull;
+        EnumDataType  SMI_read_variable_type;
+        bool          SMI_read_variable_successfull;
 
         uint8_t   SMI_read_variable_uint8;
         int8_t    SMI_read_variable_sint8;

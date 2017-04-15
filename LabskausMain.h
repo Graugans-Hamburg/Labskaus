@@ -10,6 +10,7 @@
 #ifndef LABSKAUSMAIN_H
 #define LABSKAUSMAIN_H
 
+#include <streambuf>
 #include "LabskausApp.h"
 #include "ECU_VarListElement.h"
 #include "CCP_driver.h"

@@ -1,20 +1,8 @@
 #ifndef ECU_VARIABLE_H
 #define ECU_VARIABLE_H
 #include <string>
+#include "type_definition.h"
 
-enum EnumDataType
-{
-    type_unknown,
-    type_u8,
-    type_i8,
-    type_u16,
-    type_i16,
-    type_i32,
-    type_u32,
-    type_f32,
-    type_f64
-
-};
 
 class ECU_variable
 {

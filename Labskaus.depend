@@ -581,7 +581,8 @@
 
 1425353624 /usr/include/wx-3.0/wx/gtk/app.h
 
-1491946344 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.h
+1492251174 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.h
+	<streambuf>
 	"LabskausApp.h"
 	"ECU_VarListElement.h"
 	"CCP_driver.h"
@@ -981,7 +982,7 @@
 
 1425353624 /usr/include/wx-3.0/wx/gtk/frame.h
 
-1492214727 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.cpp
+1492251591 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.cpp
 	"wx_pch.h"
 	<wx_pch.h>
 	<wx/wx.h>
@@ -990,6 +991,7 @@
 	<string>
 	<sstream>
 	<wx/timer.h>
+	<streambuf>
 	"tinyxml2.h"
 	"ECU_VarListElement.h"
 	"serial.h"
@@ -1696,8 +1698,9 @@
 	"ECU_variable.h"
 	<cstring>
 
-1489854030 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/ECU_variable.h
+1492258618 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/ECU_variable.h
 	<string>
+	"type_definition.h"
 
 1489853776 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/ECU_VarListElement.cpp
 	"ECU_VarListElement.h"
@@ -1766,10 +1769,10 @@
 	<vector>
 	"CCP_Frame.h"
 
-1492219807 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/CCP_driver.cpp
+1492250546 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/CCP_driver.cpp
 	"CCP_driver.h"
 
-1492219809 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/CCP_driver.h
+1492258880 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/CCP_driver.h
 	<vector>
 	<iostream>
 	<iomanip>
@@ -1778,6 +1781,7 @@
 	"serial.h"
 	"CCP_Frame.h"
 	"CCP_Drive_List_Element.h"
+	"type_definition.h"
 
 1491944421 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/CCP_Frame.cpp
 	"CCP_Frame.h"
@@ -1793,4 +1797,6 @@
 
 1490900718 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/CCP_Drive_List_Element.h
 	"../ECU_variable.h"
+
+1492258618 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/type_definition.h
 

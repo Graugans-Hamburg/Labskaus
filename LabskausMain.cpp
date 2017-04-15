@@ -26,6 +26,7 @@
 #include <string>
 #include <sstream>
 #include <wx/timer.h>
+#include <streambuf>
 
 
 #include "tinyxml2.h"
@@ -96,7 +97,7 @@ void LabskausFrame::OnQuit(wxCommandEvent &event)
 void LabskausFrame::OnAbout(wxCommandEvent &event)
 {
     wxString msg = wxbuildinfo(long_f);
-    wxMessageBox(msg, _("Welcome to Tines Demonstator"));
+    wxMessageBox(msg, _("Labskaus"));
 }
 
 void LabskausFrame::open_load_dialog(wxCommandEvent &event)
@@ -311,8 +312,11 @@ void LabskausFrame::OnRecTimer(wxTimerEvent& event)
 
 void LabskausFrame::DA_List_Timer(wxTimerEvent& event)
 {
-
-    //std::cout << "Buja, checking the list" << std::endl;
+    std::string tmp;
+    tmp.append("Rx+Tx Frames = ");
+    tmp.append(std::to_string(CCP_Master->GetCCPLogSize()));
+    statusBar->SetStatusText(_(tmp), 0);
+    statusBar->SetStatusText(wxbuildinfo(short_f), 1);
 
 }
 

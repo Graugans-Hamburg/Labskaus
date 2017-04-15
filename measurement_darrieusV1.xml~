@@ -33,4 +33,14 @@
 		  <address>0x0008ea012</address>
 		  <datatype>uint8</datatype>         
 	</variable>
+	<variable>
+		  <name>global_pain</name>
+		  <address>0x20002aa8</address>
+		  <datatype>sint32</datatype>         
+	</variable>
+	<variable>
+		  <name>darrieus_speed</name>
+		  <address>0x20002aa4</address>
+		  <datatype>sint32</datatype>         
+	</variable>
 </measurement_file>

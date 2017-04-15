@@ -13,8 +13,19 @@ CCP_driver::CCP_driver()
     SMT_req_establish_connection = false;
     ECU_MTA_Number1 = 0;
     ECU_MTA_Number2 = 0;
+
+    /* find out the byte order */
     ECU_byte_order = little_endian;
-    PC_byte_order = little_endian;
+    union
+    {
+        int  i;
+        char b[sizeof(int)];
+    } u;
+    u.i = 0x01020304;
+    (u.b[0] == 0x01) ? PC_byte_order = big_endian : PC_byte_order = little_endian;
+
+    /* reserve some memory for the frames */
+    CCP_Msg_Buffer.reserve(100000);
 }
 
 CCP_driver::~CCP_driver()
@@ -283,12 +294,12 @@ void CCP_driver::SM_run_state_machine(void)
         case SM_read_variable_DataUpload:
             if(SM_enterleave_state == true)
             { /* Enter the state */
-                if(SMI_read_variable_type == DT_uint8)TxCRO_Upload(1);
-                if(SMI_read_variable_type == DT_sint8)TxCRO_Upload(1);
-                if(SMI_read_variable_type == DT_uint16)TxCRO_Upload(2);
-                if(SMI_read_variable_type == DT_sint16)TxCRO_Upload(2);
-                if(SMI_read_variable_type == DT_uint32)TxCRO_Upload(4);
-                if(SMI_read_variable_type == DT_sint32)TxCRO_Upload(4);
+                if(SMI_read_variable_type == type_u8)TxCRO_Upload(1);
+                if(SMI_read_variable_type == type_i8)TxCRO_Upload(1);
+                if(SMI_read_variable_type == type_u16)TxCRO_Upload(2);
+                if(SMI_read_variable_type == type_i16)TxCRO_Upload(2);
+                if(SMI_read_variable_type == type_u32)TxCRO_Upload(4);
+                if(SMI_read_variable_type == type_i32)TxCRO_Upload(4);
                 SM_enterleave_state = false;
                 break;
             }
@@ -480,31 +491,31 @@ void CCP_driver::analyze_CRM_Upload(CCP_Frame& received_CCP_frame)
 {
     if(ECU_byte_order == PC_byte_order)
     {
-        if(SMI_read_variable_type == DT_uint8)
+        if(SMI_read_variable_type == type_u8)
         {
             SMI_read_variable_uint8 = received_CCP_frame.GetByte4();
         }
-        if(SMI_read_variable_type == DT_sint8)
+        if(SMI_read_variable_type == type_i8)
         {
             uint8_t tmp = received_CCP_frame.GetByte4();
             uint8_t* ptr_tmp = &tmp;
             SMI_read_variable_sint8 = *((int8_t*)ptr_tmp);
         }
-        if(SMI_read_variable_type == DT_uint16)
+        if(SMI_read_variable_type == type_u16)
         {
             uint8_t ptr_tmp[2];
             ptr_tmp[0] = received_CCP_frame.GetByte4();
             ptr_tmp[1] = received_CCP_frame.GetByte5();
             SMI_read_variable_uint16 = *((uint16_t*)ptr_tmp);
         }
-        if(SMI_read_variable_type == DT_sint16)
+        if(SMI_read_variable_type == type_i16)
         {
             uint8_t ptr_tmp[2];
             ptr_tmp[0] = received_CCP_frame.GetByte4();
             ptr_tmp[1] = received_CCP_frame.GetByte5();
             SMI_read_variable_sint16 = *((int16_t*)ptr_tmp);
         }
-        if(SMI_read_variable_type == DT_uint32)
+        if(SMI_read_variable_type == type_u32)
         {
             uint8_t ptr_tmp[4];
             ptr_tmp[0] = received_CCP_frame.GetByte4();
@@ -513,7 +524,7 @@ void CCP_driver::analyze_CRM_Upload(CCP_Frame& received_CCP_frame)
             ptr_tmp[3] = received_CCP_frame.GetByte7();
             SMI_read_variable_uint32 = *((uint32_t*)ptr_tmp);
         }
-        if(SMI_read_variable_type == DT_sint32)
+        if(SMI_read_variable_type == type_i32)
         {
 
             uint8_t ptr_tmp[4];
@@ -526,31 +537,31 @@ void CCP_driver::analyze_CRM_Upload(CCP_Frame& received_CCP_frame)
     }
     else
     {
-        if(SMI_read_variable_type == DT_uint8)
+        if(SMI_read_variable_type == type_u8)
         {
             SMI_read_variable_uint8 = received_CCP_frame.GetByte4();
         }
-        if(SMI_read_variable_type == DT_sint8)
+        if(SMI_read_variable_type == type_i8)
         {
             uint8_t tmp = received_CCP_frame.GetByte4();
             uint8_t* ptr_tmp = &tmp;
             SMI_read_variable_sint8 = *((int8_t*)ptr_tmp);
         }
-        if(SMI_read_variable_type == DT_uint16)
+        if(SMI_read_variable_type == type_u16)
         {
             uint8_t ptr_tmp[2];
             ptr_tmp[0] = received_CCP_frame.GetByte5();
             ptr_tmp[1] = received_CCP_frame.GetByte4();
             SMI_read_variable_uint16 = *((uint16_t*)ptr_tmp);
         }
-        if(SMI_read_variable_type == DT_sint16)
+        if(SMI_read_variable_type == type_i16)
         {
             uint8_t ptr_tmp[2];
             ptr_tmp[0] = received_CCP_frame.GetByte5();
             ptr_tmp[1] = received_CCP_frame.GetByte4();
             SMI_read_variable_sint16 = *((int16_t*)ptr_tmp);
         }
-        if(SMI_read_variable_type == DT_uint32)
+        if(SMI_read_variable_type == type_u32)
         {
             uint8_t ptr_tmp[4];
             ptr_tmp[0] = received_CCP_frame.GetByte7();
@@ -559,7 +570,7 @@ void CCP_driver::analyze_CRM_Upload(CCP_Frame& received_CCP_frame)
             ptr_tmp[3] = received_CCP_frame.GetByte4();
             SMI_read_variable_uint32 = *((uint32_t*)ptr_tmp);
         }
-        if(SMI_read_variable_type == DT_sint32)
+        if(SMI_read_variable_type == type_i32)
         {
 
             uint8_t ptr_tmp[4];
@@ -571,10 +582,10 @@ void CCP_driver::analyze_CRM_Upload(CCP_Frame& received_CCP_frame)
         }
     }
 }
-
+ // only for testing
 void CCP_driver::test_read_variable(void)
 {
-    SMI_read_variable_type = DT_sint32;
+    SMI_read_variable_type = type_i32;
     SMI_read_variable_address = 0x20002aa4;
     SMI_read_address_extention = 0;
     SMT_read_variable = true;
