@@ -321,6 +321,15 @@ void CCP_driver::SM_run_state_machine(void)
 
                 SM_actl_state = SM_Wait;
                 SMI_read_variable_successfull = true;
+                log_database.add_new_value(SMI_read_variable_address,
+                                            SMI_read_variable_type,
+                                            SMI_read_variable_uint8,
+                                            SMI_read_variable_sint8,
+                                            SMI_read_variable_uint16,
+                                            SMI_read_variable_sint16,
+                                            SMI_read_variable_uint32,
+                                            SMI_read_variable_sint32,
+                                            time_of_last_received_CRM);
                 SM_enterleave_state = true;
                 break;
             }
@@ -368,6 +377,7 @@ void CCP_driver::Analyze(CCP_Frame& received_CCP_frame)
 
     // Check what kind of data object is received
     unsigned char CCP_Msg_DTO_type = received_CCP_frame.GetByte1();
+    //time_of_last_received_CRM = received_CCP_frame.GetCCPFrameTimestruct();
     switch (CCP_Msg_DTO_type)
     {
         case DTO_type_CRM:
@@ -585,8 +595,17 @@ void CCP_driver::analyze_CRM_Upload(CCP_Frame& received_CCP_frame)
  // only for testing
 void CCP_driver::test_read_variable(void)
 {
-    SMI_read_variable_type = type_i32;
-    SMI_read_variable_address = 0x20002aa4;
+    if (SMI_read_variable_type == type_unknown)
+    {
+        std::cout << "Variable can not be read because of a unknown datatype" << std::endl;
+        return;
+    }
+    if (SMI_read_variable_address == 0x00)
+    {
+        std::cout << "Read out value at address 0x0, I don't think that this is a good idea"
+        << std::endl;
+        return;
+    }
     SMI_read_address_extention = 0;
     SMT_read_variable = true;
 }

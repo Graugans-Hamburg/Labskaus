@@ -31,6 +31,7 @@ class CCP_Frame
         void setCCPFrameTime(void);
 
         time_t getCCPFrameTime(void){return CCPFrameTime.tv_sec;}
+         struct timespec GetCCPFrameTimestruct(void){return CCPFrameTime;}
     protected:
     private:
         unsigned char Data[8];

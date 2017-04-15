@@ -2,6 +2,7 @@
 #define ECU_VARIABLE_H
 #include <string>
 #include "type_definition.h"
+#include <stdint.h>
 
 
 class ECU_variable
@@ -9,8 +10,8 @@ class ECU_variable
     public:
         ECU_variable();
         virtual ~ECU_variable();
-        unsigned int GetAddress() { return Address; }
-        void SetAddress(unsigned int val) { Address = val; }
+        uint32_t GetAddress() { return Address; }
+        void SetAddress(uint32_t val) { Address = val; }
         EnumDataType GetDataType() { return Datatype; }
         void SetDataType(EnumDataType val) { Datatype = val; }
         std::string GetName() { return Name; }
@@ -21,7 +22,7 @@ class ECU_variable
         std::string GetDatatypAsString(void);
     protected:
     private:
-        unsigned int Address;
+        uint32_t Address;
         EnumDataType Datatype;
         std::string Name;
         std::string Description;

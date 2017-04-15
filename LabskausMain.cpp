@@ -242,6 +242,10 @@ void LabskausFrame::VarListSelected(wxCommandEvent &event)
     stream << "Desc: " << std::endl;
 
     m_VarInfoField->SetLabel(stream.str());
+
+    CCP_Master->SetSMI_read_variable_type(Ptr2SelectedElement->GetDataType());
+    CCP_Master->SetSMI_read_variable_address(Ptr2SelectedElement->GetAddress());
+
 }
 
 void LabskausFrame::EventOpenSerial(wxCommandEvent &event)
@@ -315,8 +319,11 @@ void LabskausFrame::DA_List_Timer(wxTimerEvent& event)
     std::string tmp;
     tmp.append("Rx+Tx Frames = ");
     tmp.append(std::to_string(CCP_Master->GetCCPLogSize()));
+    tmp.append(" Logged variables: ");
+    tmp.append(std::to_string(CCP_Master->log_database.GetNmOfLogVariables()));
     statusBar->SetStatusText(_(tmp), 0);
     statusBar->SetStatusText(wxbuildinfo(short_f), 1);
+    CCP_Master->test_read_variable();
 
 }
 

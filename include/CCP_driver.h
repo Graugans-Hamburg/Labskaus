@@ -10,6 +10,7 @@
 #include "CCP_Frame.h"
 #include "CCP_Drive_List_Element.h"
 #include "type_definition.h"
+#include "History_Log.h"
 
 #define NOT_CONNECTED				 0x00
 #define CONNECTED					 0x01
@@ -126,11 +127,16 @@ class CCP_driver
         void SM_run_state_machine(void);
         void SM_reset_state_machine(void){SM_actl_state = SM_Init;}
         int  GetCCPLogSize(void){return CCP_Msg_Buffer.size();}
+        void SetSMI_read_variable_type(EnumDataType val){SMI_read_variable_type = val;}
+        void SetSMI_read_variable_address(uint32_t val){SMI_read_variable_address = val;}
         /* Following functions are only for testing */
         void test_read_variable(void);
+        // Public variable
+        History_Log log_database;
     protected:
     private:
         serial SerialPort;
+
 
         bool      ECU_Connected; /*Connect Cmd, positive Antwort */
         uint8_t   ECU_CCP_Version_Main;
@@ -143,7 +149,8 @@ class CCP_driver
         bool Device_Available;
         uint8_t MessageCounter;
 
-        struct    timespec CRO_last_request_time;
+        struct timespec CRO_last_request_time;
+        struct timespec time_of_last_received_CRM;
         uint8_t   CRO_last_request_MessageCounter;
         uint8_t   CRO_last_CRO_Command_type;
         bool      CRO_waiting_for_request;
@@ -156,6 +163,8 @@ class CCP_driver
         the variables SMI_read_variable_type and SMI_read_variable_address will used. They define
         the datatype and the address. */
         EnumDataType  SMI_read_variable_type;
+        uint32_t      SMI_read_variable_address;
+        uint8_t       SMI_read_address_extention;
         bool          SMI_read_variable_successfull;
 
         uint8_t   SMI_read_variable_uint8;
@@ -165,10 +174,6 @@ class CCP_driver
         uint32_t  SMI_read_variable_uint32;
         int32_t   SMI_read_variable_sint32;
         float     SMI_read_variable_float;
-
-        uint32_t  SMI_read_variable_address;
-        uint8_t   SMI_read_address_extention;
-
 
         std::vector<CCP_Drive_List_Element> Action_Plan;
         std::vector<CCP_Frame> CCP_Msg_Buffer;
