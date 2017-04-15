@@ -319,5 +319,5 @@ void LabskausFrame::DA_List_Timer(wxTimerEvent& event)
 
 void LabskausFrame::EventStartMea(wxCommandEvent &event)
 {
-    CCP_Master->Set_SMT_req_get_i16_value();
+    CCP_Master->test_read_variable();
 }

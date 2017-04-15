@@ -76,7 +76,7 @@
 #define CRC_RESOURCE_FUNC_NOT_AVAIL  0x36
 
 
-//#define PLOT_COMMUNICATION_TO_TERMINAL
+#define PLOT_COMMUNICATION_TO_TERMINAL
 
 enum DTO_types
 {
@@ -90,10 +90,26 @@ enum CCP_driver_states
     SM_Connect,
     SM_CCP_Version,
     SM_Wait,
-    SM_Get_int16_SetMTA,
-    SM_Get_int16_DataUpload,
+    SM_read_variable_SetMTA,
+    SM_read_variable_DataUpload,
 };
 
+enum Datatypes
+{
+    DT_uint8,
+    DT_sint8,
+    DT_uint16,
+    DT_sint16,
+    DT_uint32,
+    DT_sint32,
+    DT_float32,
+};
+
+enum endian
+{
+    big_endian,
+    little_endian,
+};
 
 class CCP_driver
 {
@@ -107,6 +123,7 @@ class CCP_driver
         void TxCRO_SetMTA(uint8_t MTA_number, uint8_t AdressExtention, uint32_t MTA_adress);
         void TxCRO_Upload(uint8_t num_of_bytes);
         void Analyze(CCP_Frame& received_CCP_frame);
+        void analyze_CRM_Upload(CCP_Frame& received_CCP_frame);
         void ECU_SetECU_MTA_Number1(uint32_t val){ECU_MTA_Number1 = val;}
         void ECU_SetECU_MTA_Number2(uint32_t val){ECU_MTA_Number2 = val;}
         void CCP_drv_state_machine(void);
@@ -116,18 +133,21 @@ class CCP_driver
         void close_communication_port(void);
         void periodic_check(void);
         void Set_SMT_req_establish_connection(void){SMT_req_establish_connection = true;}
-        void Set_SMT_req_get_i16_value(void){SMT_req_get_i16_value = true;}
         void SM_run_state_machine(void);
         void SM_reset_state_machine(void){SM_actl_state = SM_Init;}
+        /* Following functions are only for testing */
+        void test_read_variable(void);
     protected:
     private:
         serial SerialPort;
+
         bool      ECU_Connected; /*Connect Cmd, positive Antwort */
         uint8_t   ECU_CCP_Version_Main;
         uint8_t   ECU_CCP_Version_Release;
         uint32_t  ECU_MTA_Number1; /* Shows the last set position of the MTA1 */
         uint32_t  ECU_MTA_Number2; /* Shows the last set position of the MTA1 */
-
+        endian    ECU_byte_order;
+        endian    PC_byte_order;
 
         bool Device_Available;
         uint8_t MessageCounter;
@@ -141,7 +161,23 @@ class CCP_driver
         uint16_t  SM_actl_state;
         bool      SM_enterleave_state;
         bool      SMT_req_establish_connection; /*State machine transition*/
-        bool      SMT_req_get_i16_value; /*State machine transition*/
+        bool      SMT_read_variable; /*When this Transition is set to true and the information from
+        the variables SMI_read_variable_type and SMI_read_variable_address will used. They define
+        the datatype and the address. */
+        Datatypes SMI_read_variable_type;
+        bool      SMI_read_variable_successfull;
+
+        uint8_t   SMI_read_variable_uint8;
+        int8_t    SMI_read_variable_sint8;
+        uint16_t  SMI_read_variable_uint16;
+        int16_t   SMI_read_variable_sint16;
+        uint32_t  SMI_read_variable_uint32;
+        int32_t   SMI_read_variable_sint32;
+        float     SMI_read_variable_float;
+
+        uint32_t  SMI_read_variable_address;
+        uint8_t   SMI_read_address_extention;
+
 
         std::vector<CCP_Drive_List_Element> Action_Plan;
         std::vector<CCP_Frame> CCP_Msg_Buffer;

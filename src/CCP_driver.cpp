@@ -10,10 +10,11 @@ CCP_driver::CCP_driver()
     Device_Available = false;
     MessageCounter = 0;
     SM_actl_state = 0;
-    SMT_req_get_i16_value = false;
     SMT_req_establish_connection = false;
     ECU_MTA_Number1 = 0;
     ECU_MTA_Number2 = 0;
+    ECU_byte_order = little_endian;
+    PC_byte_order = little_endian;
 }
 
 CCP_driver::~CCP_driver()
@@ -248,18 +249,18 @@ void CCP_driver::SM_run_state_machine(void)
                 break;
             }
 
-            if(SMT_req_get_i16_value)
+            if(SMT_read_variable)
             {  /* Exit the state, Connection established */
-                SM_actl_state = SM_Get_int16_SetMTA;
-                SMT_req_get_i16_value = false;
+                SM_actl_state = SM_read_variable_SetMTA;
+                SMT_read_variable = false;
                 SM_enterleave_state = true;
                 break;
             }
             break;
-        case SM_Get_int16_SetMTA:
+        case SM_read_variable_SetMTA:
             if(SM_enterleave_state == true)
             { /* Enter the state */
-                TxCRO_SetMTA(0,0,0xA42A0020);
+                TxCRO_SetMTA(0,SMI_read_address_extention,SMI_read_variable_address);
                 SM_enterleave_state = false;
                 break;
             }
@@ -267,7 +268,7 @@ void CCP_driver::SM_run_state_machine(void)
             if(CRO_waiting_for_request == false &&
                CRM_ErrorCode_last_received == CRC_ACKNOWLEGE)
             {  /* Exit the state, MTA is positioned */
-                SM_actl_state = SM_Get_int16_DataUpload;
+                SM_actl_state = SM_read_variable_DataUpload;
                 SM_enterleave_state = true;
                 break;
             }
@@ -279,17 +280,44 @@ void CCP_driver::SM_run_state_machine(void)
                 break;
             }
             break;
-        case SM_Get_int16_DataUpload:
+        case SM_read_variable_DataUpload:
             if(SM_enterleave_state == true)
             { /* Enter the state */
-                TxCRO_Upload(4);
+                if(SMI_read_variable_type == DT_uint8)TxCRO_Upload(1);
+                if(SMI_read_variable_type == DT_sint8)TxCRO_Upload(1);
+                if(SMI_read_variable_type == DT_uint16)TxCRO_Upload(2);
+                if(SMI_read_variable_type == DT_sint16)TxCRO_Upload(2);
+                if(SMI_read_variable_type == DT_uint32)TxCRO_Upload(4);
+                if(SMI_read_variable_type == DT_sint32)TxCRO_Upload(4);
                 SM_enterleave_state = false;
                 break;
             }
 
-            if(CRO_waiting_for_request == false)
+            if(CRO_waiting_for_request == false &&
+               CRM_ErrorCode_last_received == CRC_ACKNOWLEGE)
+            {  /* Exit the state, Everything received */
+
+                #ifdef PLOT_COMMUNICATION_TO_TERMINAL
+                std::cout << "Empfangene Werte:" << std::endl
+                          << "u8  : " << std::dec<< (int)SMI_read_variable_uint8  << std::endl
+                          << "s8  : " << std::dec<< (int)SMI_read_variable_sint8  << std::endl
+                          << "u16 : " << std::dec<< SMI_read_variable_uint16 << std::endl
+                          << "s16 : " << std::dec<< SMI_read_variable_sint16 << std::endl
+                          << "u32 : " << std::dec<< SMI_read_variable_uint32 << std::endl
+                          << "s32 : " << std::dec <<SMI_read_variable_sint32 << std::endl;
+                #endif /* PLOT_COMMUNICATION_TO_TERMINAL*/
+
+
+                SM_actl_state = SM_Wait;
+                SMI_read_variable_successfull = true;
+                SM_enterleave_state = true;
+                break;
+            }
+            if(CRO_waiting_for_request == false &&
+               CRM_ErrorCode_last_received != CRC_ACKNOWLEGE)
             {  /* Exit the state, Everything received */
                 SM_actl_state = SM_Wait;
+                SMI_read_variable_successfull = false;
                 SM_enterleave_state = true;
                 break;
             }
@@ -390,13 +418,7 @@ void CCP_driver::Analyze(CCP_Frame& received_CCP_frame)
                     case COMMAND_UPLOAD:
                         if(received_CCP_frame.GetByte2() == CRC_ACKNOWLEGE)
                         {
-                          std::cout << "Also alles ausgelesen und: 0x"
-                          << " " << std::setw(2) << std::uppercase << std::hex << (int)received_CCP_frame.GetByte4()
-                          << " " << std::setw(2) << std::uppercase << std::hex << (int)received_CCP_frame.GetByte5()
-                          << " " << std::setw(2) << std::uppercase << std::hex << (int)received_CCP_frame.GetByte6()
-                          << " " << std::setw(2) << std::uppercase << std::hex << (int)received_CCP_frame.GetByte7()
-                          << " ist die Antwort"
-                          << std::endl;
+                          analyze_CRM_Upload(received_CCP_frame);
                         }
                         else
                         {
@@ -452,4 +474,108 @@ void CCP_driver::CRO_Tx(CCP_Frame& CCP_Tx_Frame)
     CRO_last_CRO_Command_type = CCP_Tx_Frame.GetByte1();
     SerialPort.transmit_CCP_Frame(&CCP_Tx_Frame);
     CCP_Msg_Buffer.push_back(CCP_Tx_Frame);
+}
+
+void CCP_driver::analyze_CRM_Upload(CCP_Frame& received_CCP_frame)
+{
+    if(ECU_byte_order == PC_byte_order)
+    {
+        if(SMI_read_variable_type == DT_uint8)
+        {
+            SMI_read_variable_uint8 = received_CCP_frame.GetByte4();
+        }
+        if(SMI_read_variable_type == DT_sint8)
+        {
+            uint8_t tmp = received_CCP_frame.GetByte4();
+            uint8_t* ptr_tmp = &tmp;
+            SMI_read_variable_sint8 = *((int8_t*)ptr_tmp);
+        }
+        if(SMI_read_variable_type == DT_uint16)
+        {
+            uint8_t ptr_tmp[2];
+            ptr_tmp[0] = received_CCP_frame.GetByte4();
+            ptr_tmp[1] = received_CCP_frame.GetByte5();
+            SMI_read_variable_uint16 = *((uint16_t*)ptr_tmp);
+        }
+        if(SMI_read_variable_type == DT_sint16)
+        {
+            uint8_t ptr_tmp[2];
+            ptr_tmp[0] = received_CCP_frame.GetByte4();
+            ptr_tmp[1] = received_CCP_frame.GetByte5();
+            SMI_read_variable_sint16 = *((int16_t*)ptr_tmp);
+        }
+        if(SMI_read_variable_type == DT_uint32)
+        {
+            uint8_t ptr_tmp[4];
+            ptr_tmp[0] = received_CCP_frame.GetByte4();
+            ptr_tmp[1] = received_CCP_frame.GetByte5();
+            ptr_tmp[2] = received_CCP_frame.GetByte6();
+            ptr_tmp[3] = received_CCP_frame.GetByte7();
+            SMI_read_variable_uint32 = *((uint32_t*)ptr_tmp);
+        }
+        if(SMI_read_variable_type == DT_sint32)
+        {
+
+            uint8_t ptr_tmp[4];
+            ptr_tmp[0] = received_CCP_frame.GetByte4();
+            ptr_tmp[1] = received_CCP_frame.GetByte5();
+            ptr_tmp[2] = received_CCP_frame.GetByte6();
+            ptr_tmp[3] = received_CCP_frame.GetByte7();
+            SMI_read_variable_sint32 = *((int32_t*)ptr_tmp);
+        }
+    }
+    else
+    {
+        if(SMI_read_variable_type == DT_uint8)
+        {
+            SMI_read_variable_uint8 = received_CCP_frame.GetByte4();
+        }
+        if(SMI_read_variable_type == DT_sint8)
+        {
+            uint8_t tmp = received_CCP_frame.GetByte4();
+            uint8_t* ptr_tmp = &tmp;
+            SMI_read_variable_sint8 = *((int8_t*)ptr_tmp);
+        }
+        if(SMI_read_variable_type == DT_uint16)
+        {
+            uint8_t ptr_tmp[2];
+            ptr_tmp[0] = received_CCP_frame.GetByte5();
+            ptr_tmp[1] = received_CCP_frame.GetByte4();
+            SMI_read_variable_uint16 = *((uint16_t*)ptr_tmp);
+        }
+        if(SMI_read_variable_type == DT_sint16)
+        {
+            uint8_t ptr_tmp[2];
+            ptr_tmp[0] = received_CCP_frame.GetByte5();
+            ptr_tmp[1] = received_CCP_frame.GetByte4();
+            SMI_read_variable_sint16 = *((int16_t*)ptr_tmp);
+        }
+        if(SMI_read_variable_type == DT_uint32)
+        {
+            uint8_t ptr_tmp[4];
+            ptr_tmp[0] = received_CCP_frame.GetByte7();
+            ptr_tmp[1] = received_CCP_frame.GetByte6();
+            ptr_tmp[2] = received_CCP_frame.GetByte5();
+            ptr_tmp[3] = received_CCP_frame.GetByte4();
+            SMI_read_variable_uint32 = *((uint32_t*)ptr_tmp);
+        }
+        if(SMI_read_variable_type == DT_sint32)
+        {
+
+            uint8_t ptr_tmp[4];
+            ptr_tmp[0] = received_CCP_frame.GetByte7();
+            ptr_tmp[1] = received_CCP_frame.GetByte6();
+            ptr_tmp[2] = received_CCP_frame.GetByte5();
+            ptr_tmp[3] = received_CCP_frame.GetByte4();
+            SMI_read_variable_sint32 = *((int32_t*)ptr_tmp);
+        }
+    }
+}
+
+void CCP_driver::test_read_variable(void)
+{
+    SMI_read_variable_type = DT_sint32;
+    SMI_read_variable_address = 0x20002aa4;
+    SMI_read_address_extention = 0;
+    SMT_read_variable = true;
 }
