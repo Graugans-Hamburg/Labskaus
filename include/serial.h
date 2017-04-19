@@ -18,7 +18,7 @@ class serial
         void open_port(int port);
         void close_port();
         CCP_Frame* AnalyzeBytesRead(void);
-        void transmit_CCP_Frame(CCP_Frame* CCP_Msg);
+        void transmit_CCP_Frame(CCP_Frame& CCP_Msg);
         void set_ptr_CCPDriver(void);
     protected:
     private:

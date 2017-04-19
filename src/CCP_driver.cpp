@@ -377,10 +377,12 @@ void CCP_driver::Analyze(CCP_Frame& received_CCP_frame)
 
     // Check what kind of data object is received
     unsigned char CCP_Msg_DTO_type = received_CCP_frame.GetByte1();
+
     //time_of_last_received_CRM = received_CCP_frame.GetCCPFrameTimestruct();
     switch (CCP_Msg_DTO_type)
     {
         case DTO_type_CRM:
+            time_of_last_received_CRM = received_CCP_frame.GetCCPFrameTimestruct();
             if(received_CCP_frame.GetByte3() != CRO_last_request_MessageCounter)
             {
                 std::cerr << "Die CRO Antwort hatte den Falschen Message Counter" << std::endl
@@ -489,11 +491,12 @@ void CCP_driver::CRO_check_time_out(void)
 
 void CCP_driver::CRO_Tx(CCP_Frame& CCP_Tx_Frame)
 {
+
     CRO_last_request_MessageCounter = MessageCounter;
-    clock_gettime(CLOCK_REALTIME,&CRO_last_request_time);
     CRO_waiting_for_request = true;
     CRO_last_CRO_Command_type = CCP_Tx_Frame.GetByte1();
-    SerialPort.transmit_CCP_Frame(&CCP_Tx_Frame);
+    SerialPort.transmit_CCP_Frame(CCP_Tx_Frame);
+    CRO_last_request_time = CCP_Tx_Frame.GetCCPFrameTimestruct();
     CCP_Msg_Buffer.push_back(CCP_Tx_Frame);
 }
 
@@ -608,4 +611,74 @@ void CCP_driver::test_read_variable(void)
     }
     SMI_read_address_extention = 0;
     SMT_read_variable = true;
+}
+
+
+
+void CCP_driver::SetMeasurementStartTime(void)
+{
+     if( clock_gettime(CLOCK_REALTIME,&start_time_measurement))
+     {
+        std::cerr << "Die Systemzeit konnte nicht geholt werden" << std::endl;
+     }
+}
+
+
+void CCP_driver::saveCCPFrameLogLastmeasurement(void)
+{
+ /*
+     *Determine the file name
+     */
+
+    std::ofstream logfile("CCPFramelog.csv");
+    if ( ! logfile)
+    {
+        std::cerr << "[Error001] Logfile for CCP frames could not be opened" << std::endl;
+        return;
+    }
+
+    if (CCP_Msg_Buffer.empty())
+    {
+        logfile << "% Datafile is empty!" << std::endl;
+    }
+    else
+    {
+        /*
+         *  Log the files. It follows a example how it should look like.
+         *
+         *   Tx oder Rx , unix timestap s, ns, d1, d2, d3, d4, d5, d6, d7, d8;
+         */
+        logfile << "Direction, Unix timestamp UTC0, nanosec, Byte1, Byte2, Byte3, Byte4,"
+                << "Byte5, Byte6, Byte7, Byte8" << std::endl;
+         uint64_t idx_i = 0;
+         struct timespec ptr_tmp_timespec;
+         for(idx_i = 0; idx_i < CCP_Msg_Buffer.size(); idx_i++)
+         {
+            /*  Select the first variable log*/
+            CCP_Frame* tmp_CCP_Frame;
+            tmp_CCP_Frame = &CCP_Msg_Buffer.at(idx_i);
+            ptr_tmp_timespec = tmp_CCP_Frame->GetCCPFrameTimestruct();
+            // Direction
+            if (tmp_CCP_Frame->GetCCPDirection() == dir_Tx){logfile << "Tx ,";}
+            if (tmp_CCP_Frame->GetCCPDirection() == dir_Rx){logfile << "Rx ,";}
+            if (tmp_CCP_Frame->GetCCPDirection() == dir_unknown){logfile << "unknown ,";}
+
+            //unix timestamp in s and the ns
+
+            logfile << std::dec << ptr_tmp_timespec.tv_sec << ",";
+            logfile << std::dec << ptr_tmp_timespec.tv_nsec << ",";
+
+            logfile << "0x" << std::uppercase << std::setfill('0') << std::setw(2) << std::hex << (int)tmp_CCP_Frame->GetByte1() << ",";
+            logfile << "0x" << std::uppercase << std::setfill('0') << std::setw(2) << std::hex << (int)tmp_CCP_Frame->GetByte2() << ",";
+            logfile << "0x" << std::uppercase << std::setfill('0') << std::setw(2) << std::hex << (int)tmp_CCP_Frame->GetByte3() << ",";
+            logfile << "0x" << std::uppercase << std::setfill('0') << std::setw(2) << std::hex << (int)tmp_CCP_Frame->GetByte4() << ",";
+            logfile << "0x" << std::uppercase << std::setfill('0') << std::setw(2) << std::hex << (int)tmp_CCP_Frame->GetByte5() << ",";
+            logfile << "0x" << std::uppercase << std::setfill('0') << std::setw(2) << std::hex << (int)tmp_CCP_Frame->GetByte6() << ",";
+            logfile << "0x" << std::uppercase << std::setfill('0') << std::setw(2) << std::hex << (int)tmp_CCP_Frame->GetByte7() << ",";
+            logfile << "0x" << std::uppercase << std::setfill('0') << std::setw(2) << std::hex << (int)tmp_CCP_Frame->GetByte8() ;
+
+            logfile << std::endl;
+         }
+         logfile << std::endl;
+    }
 }

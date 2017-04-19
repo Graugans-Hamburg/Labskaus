@@ -14,6 +14,7 @@
 				<Option use_console_runner="0" />
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
+					<Add option="-std=c++11" />
 					<Add option="-g" />
 					<Add directory="include" />
 				</Compiler>
@@ -54,11 +55,16 @@
 		<Unit filename="include/CCP_Drive_List_Element.h" />
 		<Unit filename="include/CCP_Frame.h" />
 		<Unit filename="include/CCP_driver.h" />
+		<Unit filename="include/Data_Row.h" />
+		<Unit filename="include/History_Log.h" />
 		<Unit filename="include/serial.h" />
+		<Unit filename="include/type_definition.h" />
 		<Unit filename="include/xmlECUfile.h" />
 		<Unit filename="src/CCP_Drive_List_Element.cpp" />
 		<Unit filename="src/CCP_Frame.cpp" />
 		<Unit filename="src/CCP_driver.cpp" />
+		<Unit filename="src/Data_Row.cpp" />
+		<Unit filename="src/History_Log.cpp" />
 		<Unit filename="src/serial.cpp" />
 		<Unit filename="src/xmlECUfile.cpp" />
 		<Unit filename="tinyxml2.cpp" />

@@ -107,20 +107,21 @@ CCP_Frame* serial::AnalyzeBytesRead(void)
     return createReceivedCCPFrame();
 }
 
-void serial::transmit_CCP_Frame(CCP_Frame* CCP_Msg)
+void serial::transmit_CCP_Frame(CCP_Frame& CCP_Msg)
 {
     unsigned char Serial_CCP_Frame[9];
 
     Serial_CCP_Frame[0] = 0xB0;
-    Serial_CCP_Frame[1] = CCP_Msg->GetByte1();
-    Serial_CCP_Frame[2] = CCP_Msg->GetByte2();
-    Serial_CCP_Frame[3] = CCP_Msg->GetByte3();
-    Serial_CCP_Frame[4] = CCP_Msg->GetByte4();
-    Serial_CCP_Frame[5] = CCP_Msg->GetByte5();
-    Serial_CCP_Frame[6] = CCP_Msg->GetByte6();
-    Serial_CCP_Frame[7] = CCP_Msg->GetByte7();
-    Serial_CCP_Frame[8] = CCP_Msg->GetByte8();
-
+    Serial_CCP_Frame[1] = CCP_Msg.GetByte1();
+    Serial_CCP_Frame[2] = CCP_Msg.GetByte2();
+    Serial_CCP_Frame[3] = CCP_Msg.GetByte3();
+    Serial_CCP_Frame[4] = CCP_Msg.GetByte4();
+    Serial_CCP_Frame[5] = CCP_Msg.GetByte5();
+    Serial_CCP_Frame[6] = CCP_Msg.GetByte6();
+    Serial_CCP_Frame[7] = CCP_Msg.GetByte7();
+    Serial_CCP_Frame[8] = CCP_Msg.GetByte8();
+    CCP_Msg.SetCCPDirection_Tx();
+    CCP_Msg.setCCPFrameTime();
     int results = write(fd, Serial_CCP_Frame, sizeof(Serial_CCP_Frame));
     /*  DEBUGSHIT
         stcd::cout << "somethings on" << std::endl;
@@ -132,7 +133,6 @@ void serial::transmit_CCP_Frame(CCP_Frame* CCP_Msg)
     {
         std::cerr << "The requested Frame had not been written to the serial interface." << std::endl;
     }
-    delete(CCP_Msg);
 }
 
 
@@ -168,6 +168,7 @@ CCP_Frame* serial::createReceivedCCPFrame(void)
         ReceivedCCP->SetByte7(vec_input_buffer[7]);
         ReceivedCCP->SetByte8(vec_input_buffer[8]);
         ReceivedCCP->setCCPFrameTime();
+        ReceivedCCP->SetCCPDirection_Rx();
             /* DEBUGSHIT
             std::cout << "Size: " << vec_input_buffer.size() << std::endl;
             for (unsigned i=0; i < vec_input_buffer.size(); i++)

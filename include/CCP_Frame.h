@@ -6,6 +6,13 @@
 #include <iostream>
 #include <iomanip>
 
+enum Enum_direction
+{
+    dir_unknown,
+    dir_Tx,
+    dir_Rx
+};
+
 
 class CCP_Frame
 {
@@ -29,12 +36,15 @@ class CCP_Frame
         unsigned char GetByte7(void){return Data[6];}
         unsigned char GetByte8(void){return Data[7];}
         void setCCPFrameTime(void);
-
+        void SetCCPDirection_Tx(void){direction = dir_Tx;}
+        void SetCCPDirection_Rx(void){direction = dir_Rx;}
+        Enum_direction GetCCPDirection(void){return direction;}
         time_t getCCPFrameTime(void){return CCPFrameTime.tv_sec;}
-         struct timespec GetCCPFrameTimestruct(void){return CCPFrameTime;}
+        struct timespec GetCCPFrameTimestruct(void){return CCPFrameTime;}
     protected:
     private:
         unsigned char Data[8];
+        Enum_direction direction;
         struct timespec CCPFrameTime;
 
 };

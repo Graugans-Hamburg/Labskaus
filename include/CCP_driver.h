@@ -78,7 +78,7 @@
 #define CRC_RESOURCE_FUNC_NOT_AVAIL  0x36
 
 
-#define PLOT_COMMUNICATION_TO_TERMINAL
+//#define PLOT_COMMUNICATION_TO_TERMINAL
 
 enum DTO_types
 {
@@ -129,6 +129,9 @@ class CCP_driver
         int  GetCCPLogSize(void){return CCP_Msg_Buffer.size();}
         void SetSMI_read_variable_type(EnumDataType val){SMI_read_variable_type = val;}
         void SetSMI_read_variable_address(uint32_t val){SMI_read_variable_address = val;}
+        void SetMeasurementStartTime(void);
+        struct timespec Get_time_measurement_started(void){return start_time_measurement;}
+        void saveCCPFrameLogLastmeasurement(void);
         /* Following functions are only for testing */
         void test_read_variable(void);
         // Public variable
@@ -151,6 +154,7 @@ class CCP_driver
 
         struct timespec CRO_last_request_time;
         struct timespec time_of_last_received_CRM;
+        struct timespec start_time_measurement;
         uint8_t   CRO_last_request_MessageCounter;
         uint8_t   CRO_last_CRO_Command_type;
         bool      CRO_waiting_for_request;
@@ -175,7 +179,6 @@ class CCP_driver
         int32_t   SMI_read_variable_sint32;
         float     SMI_read_variable_float;
 
-        std::vector<CCP_Drive_List_Element> Action_Plan;
         std::vector<CCP_Frame> CCP_Msg_Buffer;
 };
 

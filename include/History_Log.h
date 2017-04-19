@@ -2,6 +2,7 @@
 #define HISTORY_LOG_H
 
 #include <iostream>
+#include <fstream>
 #include "Data_Row.h"
 #include "type_definition.h"
 
@@ -20,6 +21,7 @@ class History_Log
                            int32_t val_i32,
                            struct timespec time_point);
         uint32_t GetNmOfLogVariables(void){return log_data_base.size();}
+        void saveLogFile(struct timespec time_measurement_started);
     protected:
     private:
         std::vector<Data_Row> log_data_base;

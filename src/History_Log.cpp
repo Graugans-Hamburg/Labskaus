@@ -67,3 +67,57 @@ void History_Log::add_new_value(uint32_t var_add,EnumDataType var_type, uint8_t 
     }
 
 }
+
+
+void History_Log::saveLogFile(struct timespec time_measurement_started)
+{
+    /*
+     *Determine the file name
+     */
+
+    std::ofstream logfile("data.m");
+    if ( ! logfile)
+    {
+        std::cerr << "Logfile could not be opened" << std::endl;
+        return;
+    }
+    /*
+     *  Write some header information
+     */
+    logfile << "%Blaesshuehner, attacke!!!!!" << std::endl;
+    if (log_data_base.empty())
+    {
+        logfile << "% Datafile is empty!" << std::endl;
+    }
+    else
+    {
+        /*
+         *  Log the files. It follows a example how it should look like.
+         *
+         *   var(1).name = 'darrieus_speed';
+         *   var(1).unit = 'omega';
+         *   var(1).value = [0,0.1,0.2];
+         *   var(1).time = [0,1,2];
+         *
+         */
+
+         uint64_t idx_i = 0;
+         for(idx_i = 0; idx_i < log_data_base.size(); idx_i++)
+         {
+            uint64_t one_based_idx = idx_i + 1;
+            /*  Select the first variable log*/
+            Data_Row* tmp_variable_datarow;
+            tmp_variable_datarow = &log_data_base.at(idx_i);
+
+            logfile << "var" << "(" << one_based_idx << ").value = [";
+            tmp_variable_datarow->plot_values_csv(logfile);
+            logfile << "];" << std::endl;
+
+            logfile << "var" << "(" << one_based_idx << ").time  = [";
+            tmp_variable_datarow->plot_time_csv(logfile, time_measurement_started);
+            logfile << "];" << std::endl;
+
+            logfile << std::endl;
+         }
+    }
+}

@@ -11,6 +11,8 @@ CCP_Frame::CCP_Frame()
     Data[5] = 0;
     Data[6] = 0;
     Data[7] = 0;
+
+    direction = dir_unknown;
 }
 
 CCP_Frame::~CCP_Frame()
