@@ -134,6 +134,8 @@ class CCP_driver
         void saveCCPFrameLogLastmeasurement(void);
         /* Following functions are only for testing */
         void test_read_variable(void);
+        void SetNext_variable_address2read(uint32_t val){next_variable_address2read = val;}
+        void SetNext_variable_type(EnumDataType val){Next_variable_type = val;}
         // Public variable
         History_Log log_database;
     protected:
@@ -180,6 +182,11 @@ class CCP_driver
         float     SMI_read_variable_float;
 
         std::vector<CCP_Frame> CCP_Msg_Buffer;
+
+        //only for testing
+         uint32_t   next_variable_address2read;
+         EnumDataType Next_variable_type;
+
 };
 
 #endif // CCP_DRIVER_H

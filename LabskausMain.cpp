@@ -243,8 +243,8 @@ void LabskausFrame::VarListSelected(wxCommandEvent &event)
 
     m_VarInfoField->SetLabel(stream.str());
 
-    CCP_Master->SetSMI_read_variable_type(Ptr2SelectedElement->GetDataType());
-    CCP_Master->SetSMI_read_variable_address(Ptr2SelectedElement->GetAddress());
+    CCP_Master->SetNext_variable_type(Ptr2SelectedElement->GetDataType());
+    CCP_Master->SetNext_variable_address2read(Ptr2SelectedElement->GetAddress());
 
 }
 

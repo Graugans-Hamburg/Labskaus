@@ -262,6 +262,10 @@ void CCP_driver::SM_run_state_machine(void)
 
             if(SMT_read_variable)
             {  /* Exit the state, Connection established */
+                SMI_read_variable_address = next_variable_address2read;
+                SMI_read_variable_type = Next_variable_type;
+                // TODO remove line after testing (line above). Die intention war zu beschützen das niemand diese
+                // variable manipuliert während the read vorgang läuft.
                 SM_actl_state = SM_read_variable_SetMTA;
                 SMT_read_variable = false;
                 SM_enterleave_state = true;
@@ -598,12 +602,12 @@ void CCP_driver::analyze_CRM_Upload(CCP_Frame& received_CCP_frame)
  // only for testing
 void CCP_driver::test_read_variable(void)
 {
-    if (SMI_read_variable_type == type_unknown)
+    if (Next_variable_type == type_unknown)
     {
         std::cout << "Variable can not be read because of a unknown datatype" << std::endl;
         return;
     }
-    if (SMI_read_variable_address == 0x00)
+    if (next_variable_address2read == 0x00)
     {
         std::cout << "Read out value at address 0x0, I don't think that this is a good idea"
         << std::endl;

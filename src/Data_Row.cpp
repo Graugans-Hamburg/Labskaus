@@ -155,7 +155,7 @@ void Data_Row::plot_time_csv(std::ofstream& logfile, struct timespec time_measur
         else
         {
         logfile << std::to_string(ptr_timespec->tv_sec - time_measurement_started.tv_sec -1) << "."
-                << std::to_string(1000000000 - ptr_timespec->tv_nsec + time_measurement_started.tv_nsec);
+                << std::to_string(1000000000 - time_measurement_started.tv_nsec + ptr_timespec->tv_nsec);
         }
 
         if(idx_i < timerow.size() - 1 )
