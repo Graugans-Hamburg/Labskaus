@@ -36,11 +36,11 @@
 	<variable>
 		  <name>global_pain</name>
 		  <address>0x20002aa8</address>
-		  <datatype>sint32</datatype>         
+		  <datatype>int32</datatype>         
 	</variable>
 	<variable>
 		  <name>darrieus_speed</name>
 		  <address>0x20002aa4</address>
-		  <datatype>sint32</datatype>         
+		  <datatype>int32</datatype>         
 	</variable>
 </measurement_file>

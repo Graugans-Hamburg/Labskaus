@@ -5,9 +5,6 @@
 #include <iostream>
 #include <stdio.h>
 
-
-
-
 serial::serial()
 {
     //ctor
