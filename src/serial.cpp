@@ -63,6 +63,7 @@ serial::~serial()
      options.c_oflag &= ~OPOST;
      options.c_cc[VMIN] =0;			/* warten auf mindestens 0 Zeichen */
      options.c_cc[VTIME] = 0;
+     options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
      tcflush(fd,TCIOFLUSH);
      if (tcsetattr(fd, TCSAFLUSH, &options) != 0)
      {
@@ -147,6 +148,7 @@ void serial::cleanVector2FirstCCPSign(void)
         }
         else
         {
+            std::cout << (char)(vec_input_buffer.at(0));
             vec_input_buffer.erase(vec_input_buffer.begin());
         }
     }
@@ -169,7 +171,7 @@ CCP_Frame* serial::createReceivedCCPFrame(void)
         ReceivedCCP->SetByte8(vec_input_buffer[8]);
         ReceivedCCP->setCCPFrameTime();
         ReceivedCCP->SetCCPDirection_Rx();
-            /* DEBUGSHIT
+            /* // DEBUGSHIT
             std::cout << "Size: " << vec_input_buffer.size() << std::endl;
             for (unsigned i=0; i < vec_input_buffer.size(); i++)
             {
