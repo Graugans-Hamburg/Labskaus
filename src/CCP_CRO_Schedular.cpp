@@ -23,10 +23,17 @@ void CCP_CRO_Schedular::addvariable2ActionPlan(ECU_variable& var2add)
     {
     /* check something else */
         CCP_Schedular_List_Element* ptr_tmp_list_element;
-        for(uint32_t idx = 0 : ActionTable.size())
+        uint32_t idx;
+        for(idx = 0; idx < ActionTable.size(); idx++)
         {
             ptr_tmp_list_element = &ActionTable.at(idx);
-            if(ptr_tmp_list_element->GetAddress() != var2add.GetAddress())
+            if(ptr_tmp_list_element->GetAddress() == var2add.GetAddress())
+            {
+                add_variable2list = false;
+                std::cerr << "Die Variable befindet sich bereits einmal in der Liste" << std::endl;
+                break;
+            }
+            else
             {
                 add_variable2list = true;
             }

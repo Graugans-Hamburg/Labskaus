@@ -15,7 +15,7 @@
 #include "LabskausApp.h"
 #include "ECU_variable.h"
 #include "CCP_driver.h"
-
+#include "wx/timer.h"
 #include "GUIFrame.h"
 
 enum // Timer events IDs
@@ -47,7 +47,7 @@ class LabskausFrame: public GUIFrame
         virtual void EventCloseSerial(wxCommandEvent& event);
         virtual void OnRecTimer(wxTimerEvent& event);
         virtual void DA_List_Timer(wxTimerEvent& event);
-        virtual void EventStartMea(wxCommandEvent &event);
+        virtual void EventAddVar2List(wxCommandEvent &event);
 };
 
 #endif // LABSKAUSMAIN_H

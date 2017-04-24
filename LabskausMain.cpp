@@ -235,6 +235,7 @@ void LabskausFrame::VarListSelected(wxCommandEvent &event)
 
         CCP_Master->SetNext_variable_type(Ptr2SelectedElement->GetDataType());
         CCP_Master->SetNext_variable_address2read(Ptr2SelectedElement->GetAddress());
+
     }
 }
 
@@ -321,7 +322,15 @@ void LabskausFrame::DA_List_Timer(wxTimerEvent& event)
 }
 
 
-void LabskausFrame::EventStartMea(wxCommandEvent &event)
+void LabskausFrame::EventAddVar2List(wxCommandEvent &event)
 {
-    CCP_Master->test_read_variable();
+    if(XML_list.empty())
+    {
+        std::cerr << "There is no variable to log. First load a xml file."<< std::endl;
+    }
+    else
+    {
+        CCP_Master->m_Schedular.addvariable2ActionPlan(XML_list.at(m_listBox1->GetSelection()));
+    }
+
 }
