@@ -165,16 +165,19 @@ void Data_Row::plot_time_csv(std::ofstream& logfile, struct timespec time_measur
     for(uint64_t idx_i = 0; idx_i < timerow.size(); idx_i++)
     {
         struct timespec* ptr_timespec= &timerow.at(idx_i);
+
         if (ptr_timespec->tv_nsec - time_measurement_started.tv_nsec >= 0)
         {
         logfile << std::to_string(ptr_timespec->tv_sec - time_measurement_started.tv_sec) << "."
-                << std::to_string(ptr_timespec->tv_nsec - time_measurement_started.tv_nsec);
+                << std::setfill('0') << std::setw(9)<< std::to_string(ptr_timespec->tv_nsec - time_measurement_started.tv_nsec);
         }
         else
         {
         logfile << std::to_string(ptr_timespec->tv_sec - time_measurement_started.tv_sec -1) << "."
-                << std::to_string(1000000000 - time_measurement_started.tv_nsec + ptr_timespec->tv_nsec);
+                << std::setfill('0') << std::setw(9)<< std::to_string(1000000000 - time_measurement_started.tv_nsec + ptr_timespec->tv_nsec);
         }
+
+
 
         if(idx_i < timerow.size() - 1 )
         {

@@ -23,8 +23,8 @@ enum // Timer events IDs
     DAL_Timer = wxID_HIGHEST -1,
 };
 
-const int interval = 100;
-const int data_acq_list_timer_ms = 100;
+const int interval = 10;
+const int data_acq_list_timer_ms = 10;
 
 class LabskausFrame: public GUIFrame
 {
