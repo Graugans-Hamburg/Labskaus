@@ -11,6 +11,7 @@
 #include "CCP_Drive_List_Element.h"
 #include "type_definition.h"
 #include "History_Log.h"
+#include "CCP_CRO_Schedular.h"
 
 #define NOT_CONNECTED				 0x00
 #define CONNECTED					 0x01
@@ -138,6 +139,7 @@ class CCP_driver
         void SetNext_variable_type(EnumDataType val){Next_variable_type = val;}
         // Public variable
         History_Log log_database;
+        CCP_CRO_Schedular m_Schedular;
     protected:
     private:
         serial SerialPort;

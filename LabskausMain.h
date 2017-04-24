@@ -11,8 +11,9 @@
 #define LABSKAUSMAIN_H
 
 #include <streambuf>
+#include <vector>
 #include "LabskausApp.h"
-#include "ECU_VarListElement.h"
+#include "ECU_variable.h"
 #include "CCP_driver.h"
 
 #include "GUIFrame.h"
@@ -30,7 +31,7 @@ class LabskausFrame: public GUIFrame
 {
     public:
         LabskausFrame(wxFrame *frame);
-        ECU_VarListElement* MatzeListe;
+        std::vector<ECU_variable> XML_list;
         wxTimer* recTimer; // declaration of Timer object
         wxTimer* data_acquisition_timer;
         CCP_driver* CCP_Master;

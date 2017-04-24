@@ -71,9 +71,6 @@ LabskausFrame::LabskausFrame(wxFrame *frame)
     statusBar->SetStatusText(wxbuildinfo(short_f), 1);
 #endif
 
-    MatzeListe = new ECU_VarListElement();
-    MatzeListe->SetnxtVarListElement(NULL);
-    MatzeListe->SetpreVarListElement(NULL);
     CCP_Master = new CCP_driver();
     recTimer = NULL;
     data_acquisition_timer = NULL;
@@ -202,50 +199,43 @@ void LabskausFrame::open_load_dialog(wxCommandEvent &event)
         postn = postn +1;
         m_listBox1->Append(var_name);
 
-        ECU_variable tmp_var_element;
-        tmp_var_element.SetName(var_name);
+        ECU_variable* tmp_var_element = new(ECU_variable);
+        tmp_var_element->SetName(var_name);
         unsigned int x;
         std::stringstream ss;
         ss << std::hex << var_address;
         ss >> x;
-        tmp_var_element.SetAddress(x);
-        tmp_var_element.ParseDatatyp(var_type);
-        MatzeListe->addListElement(&tmp_var_element);
+        tmp_var_element->SetAddress(x);
+        tmp_var_element->ParseDatatyp(var_type);
+        XML_list.push_back(*tmp_var_element);
 
         variable = variable->NextSiblingElement();
     }while(variable);
-
-    ECU_VarListElement* tmpptr = MatzeListe;
-
-
-    do{
-        cout << "ENr: " << tmpptr->GetPostnListElemnt() << "     Variable Name: ";
-        cout << tmpptr->GetName() << endl;
-        tmpptr = tmpptr->GetnxtVarListElement();
-    }while(tmpptr != NULL);
 
 }
 
 
 void LabskausFrame::VarListSelected(wxCommandEvent &event)
 {
-    ECU_VarListElement* Ptr2SelectedElement = MatzeListe->getPtr2ListElement(m_listBox1->GetSelection()+1);
-    if(!Ptr2SelectedElement)
+    if(!XML_list.empty())
     {
-        std::cerr << "Error the Positon was not found inside the List" << std::endl;
-        return;
+        ECU_variable* Ptr2SelectedElement = &XML_list.at(m_listBox1->GetSelection());
+        if(!Ptr2SelectedElement)
+        {
+            std::cerr << "Error the Positon was not found inside the List" << std::endl;
+            return;
+        }
+        std::stringstream stream;
+        stream << "Name: " << Ptr2SelectedElement->GetName() << std::endl;
+        stream << "Addr: 0x" << std::uppercase << std::hex << Ptr2SelectedElement->GetAddress() << std::endl;
+        stream << "Type: " << Ptr2SelectedElement->GetDatatypAsString() << std::endl;
+        stream << "Desc: " << std::endl;
+
+        m_VarInfoField->SetLabel(stream.str());
+
+        CCP_Master->SetNext_variable_type(Ptr2SelectedElement->GetDataType());
+        CCP_Master->SetNext_variable_address2read(Ptr2SelectedElement->GetAddress());
     }
-    std::stringstream stream;
-    stream << "Name: " << Ptr2SelectedElement->GetName() << std::endl;
-    stream << "Addr: 0x" << std::uppercase << std::hex << Ptr2SelectedElement->GetAddress() << std::endl;
-    stream << "Type: " << Ptr2SelectedElement->GetDatatypAsString() << std::endl;
-    stream << "Desc: " << std::endl;
-
-    m_VarInfoField->SetLabel(stream.str());
-
-    CCP_Master->SetNext_variable_type(Ptr2SelectedElement->GetDataType());
-    CCP_Master->SetNext_variable_address2read(Ptr2SelectedElement->GetAddress());
-
 }
 
 void LabskausFrame::EventOpenSerial(wxCommandEvent &event)
