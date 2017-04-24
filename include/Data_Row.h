@@ -27,6 +27,7 @@ class Data_Row
         void Append_s16(int16_t val, struct timespec time_point);
         void Append_u32(uint32_t val, struct timespec time_point);
         void Append_s32(int32_t val, struct timespec time_point);
+        void Append_f32(float val, struct timespec time_point);
     protected:
     private:
         std::string variable_name;
@@ -38,6 +39,7 @@ class Data_Row
         std::vector<int16_t> datarow_s16;
         std::vector<uint32_t> datarow_u32;
         std::vector<int32_t> datarow_s32;
+        std::vector<float> datarow_f32;
         std::vector<struct timespec> timerow;
 };
 

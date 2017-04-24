@@ -47,6 +47,12 @@ void Data_Row::Append_s32(int32_t val, struct timespec time_point)
     timerow.push_back(time_point);
 }
 
+void Data_Row::Append_f32(float val, struct timespec time_point)
+{
+    datarow_f32.push_back(val);
+    timerow.push_back(time_point);
+}
+
 void Data_Row::plot_values_csv(std::ofstream& logfile)
 {
      /*
@@ -122,6 +128,18 @@ void Data_Row::plot_values_csv(std::ofstream& logfile)
         {
             logfile << std::to_string(datarow_s32.at(idx_i));
             if(idx_i < datarow_s32.size()-1)
+            {
+                 logfile << ",";
+            }
+        }
+    }
+    if(!datarow_f32.empty())
+    {
+        number_of_non_empty_structs++;
+        for(uint64_t idx_i = 0; idx_i < datarow_f32.size(); idx_i++)
+        {
+            logfile << std::to_string(datarow_f32.at(idx_i));
+            if(idx_i < datarow_f32.size()-1)
             {
                  logfile << ",";
             }

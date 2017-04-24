@@ -179,7 +179,8 @@ class CCP_driver
         int16_t   SMI_read_variable_sint16;
         uint32_t  SMI_read_variable_uint32;
         int32_t   SMI_read_variable_sint32;
-        float     SMI_read_variable_float;
+        float     SMI_read_variable_f32;
+        double    SMI_read_variable_f64;
 
         std::vector<CCP_Frame> CCP_Msg_Buffer;
 

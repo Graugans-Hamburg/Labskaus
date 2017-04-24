@@ -39,6 +39,11 @@
 		  <datatype>int32</datatype>         
 	</variable>
 	<variable>
+		  <name>f_test_value</name>
+		  <address>0x20002ac0</address>
+		  <datatype>float</datatype>         
+	</variable>
+	<variable>
 		  <name>ADC_measurementCH1</name>
 		  <address>0x20002aaa</address>
 		  <datatype>uint16</datatype>         

@@ -304,6 +304,7 @@ void CCP_driver::SM_run_state_machine(void)
                 if(SMI_read_variable_type == type_i16)TxCRO_Upload(2);
                 if(SMI_read_variable_type == type_u32)TxCRO_Upload(4);
                 if(SMI_read_variable_type == type_i32)TxCRO_Upload(4);
+                if(SMI_read_variable_type == type_f32)TxCRO_Upload(4);
                 SM_enterleave_state = false;
                 break;
             }
@@ -333,6 +334,7 @@ void CCP_driver::SM_run_state_machine(void)
                                             SMI_read_variable_sint16,
                                             SMI_read_variable_uint32,
                                             SMI_read_variable_sint32,
+                                            SMI_read_variable_f32,
                                             time_of_last_received_CRM);
                 SM_enterleave_state = true;
                 break;
@@ -551,6 +553,15 @@ void CCP_driver::analyze_CRM_Upload(CCP_Frame& received_CCP_frame)
             ptr_tmp[3] = received_CCP_frame.GetByte7();
             SMI_read_variable_sint32 = *((int32_t*)ptr_tmp);
         }
+        if(SMI_read_variable_type == type_f32)
+        {
+            uint8_t ptr_tmp[4];
+            ptr_tmp[0] = received_CCP_frame.GetByte4();
+            ptr_tmp[1] = received_CCP_frame.GetByte5();
+            ptr_tmp[2] = received_CCP_frame.GetByte6();
+            ptr_tmp[3] = received_CCP_frame.GetByte7();
+            SMI_read_variable_f32 = *((float*)ptr_tmp);
+        }
     }
     else
     {
@@ -596,6 +607,16 @@ void CCP_driver::analyze_CRM_Upload(CCP_Frame& received_CCP_frame)
             ptr_tmp[2] = received_CCP_frame.GetByte5();
             ptr_tmp[3] = received_CCP_frame.GetByte4();
             SMI_read_variable_sint32 = *((int32_t*)ptr_tmp);
+        }
+        if(SMI_read_variable_type == type_f32)
+        {
+
+            uint8_t ptr_tmp[4];
+            ptr_tmp[0] = received_CCP_frame.GetByte7();
+            ptr_tmp[1] = received_CCP_frame.GetByte6();
+            ptr_tmp[2] = received_CCP_frame.GetByte5();
+            ptr_tmp[3] = received_CCP_frame.GetByte4();
+            SMI_read_variable_f32 = *((float*)ptr_tmp);
         }
     }
 }

@@ -13,7 +13,7 @@ History_Log::~History_Log()
 
 void History_Log::add_new_value(uint32_t var_add,EnumDataType var_type, uint8_t val_u8,
                                 int8_t val_i8, uint16_t val_u16, int16_t val_i16, uint32_t val_u32,
-                                int32_t val_i32, struct timespec time_point)
+                                int32_t val_i32,float val_f32, struct timespec time_point)
 {
     bool datarow_found = false;
     uint64_t i = 0;
@@ -59,6 +59,9 @@ void History_Log::add_new_value(uint32_t var_add,EnumDataType var_type, uint8_t 
             break;
         case type_i32:
             tmp_data_row->Append_s32(val_i32,time_point);
+            break;
+        case type_f32:
+            tmp_data_row->Append_f32(val_f32,time_point);
             break;
         default:
             std::cerr << "Unknown dlsdjfo23u" << std::cerr;

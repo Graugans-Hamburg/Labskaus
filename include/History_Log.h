@@ -19,6 +19,7 @@ class History_Log
                            int16_t val_i16,
                           uint32_t val_u32,
                            int32_t val_i32,
+                           float   val_f32,
                            struct timespec time_point);
         uint32_t GetNmOfLogVariables(void){return log_data_base.size();}
         void saveLogFile(struct timespec time_measurement_started);
