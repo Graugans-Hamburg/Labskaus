@@ -132,7 +132,8 @@ class CCP_driver
         void SetSMI_read_variable_address(uint32_t val){SMI_read_variable_address = val;}
         void SetMeasurementStartTime(void);
         struct timespec Get_time_measurement_started(void){return start_time_measurement;}
-        void saveCCPFrameLogLastmeasurement(void);
+        void Messagebuffer_export(void);
+        void Messagebuffer_clear(void);
         /* Following functions are only for testing */
         void test_read_variable(void);
         // Public variable

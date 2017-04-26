@@ -72,7 +72,7 @@ void History_Log::add_new_value(uint32_t var_add,EnumDataType var_type, uint8_t 
 }
 
 
-void History_Log::saveLogFile(struct timespec time_measurement_started)
+void History_Log::VariableLog_export(struct timespec time_measurement_started)
 {
     /*
      *Determine the file name
@@ -123,4 +123,9 @@ void History_Log::saveLogFile(struct timespec time_measurement_started)
             logfile << std::endl;
          }
     }
+}
+
+void History_Log::VariableLog_clear(void)
+{
+    log_data_base.clear();
 }

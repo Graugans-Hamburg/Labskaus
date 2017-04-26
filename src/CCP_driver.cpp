@@ -207,6 +207,9 @@ void CCP_driver::SM_run_state_machine(void)
         case SM_Connect:{
             if(SM_enterleave_state == true)
             { /* Enter the state */
+                Messagebuffer_clear();
+                log_database.VariableLog_clear();
+                SetMeasurementStartTime();
                 TxCRO_Connect();
                 SM_enterleave_state = false;
                 break;
@@ -263,7 +266,6 @@ void CCP_driver::SM_run_state_machine(void)
             if(SMT_read_variable == true)
             {  /* Exit the state, Connection established */
                 SM_actl_state = SM_read_variable_SetMTA;
-                SMT_read_variable = false;
                 SM_enterleave_state = true;
                 break;
             }
@@ -646,7 +648,7 @@ void CCP_driver::SetMeasurementStartTime(void)
 }
 
 
-void CCP_driver::saveCCPFrameLogLastmeasurement(void)
+void CCP_driver::Messagebuffer_export(void)
 {
  /*
      *Determine the file name
@@ -705,6 +707,10 @@ void CCP_driver::saveCCPFrameLogLastmeasurement(void)
     }
 }
 
+void CCP_driver::Messagebuffer_clear(void)
+{
+    CCP_Msg_Buffer.clear();
+}
 
 void CCP_driver::addvariable2ActionPlan(ECU_variable& var2add)
 {
@@ -767,7 +773,4 @@ void CCP_driver::updateSchedular(void)
         SMT_read_variable = true;
 
     }
-
-
-
 }

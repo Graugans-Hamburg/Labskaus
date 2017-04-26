@@ -292,8 +292,8 @@ void LabskausFrame::EventCloseSerial(wxCommandEvent &event)
         std::cerr << "There is no Object which could be deleted" << std::endl;
     }
     CCP_Master->SM_reset_state_machine();
-    CCP_Master->log_database.saveLogFile(CCP_Master->Get_time_measurement_started());
-    CCP_Master->saveCCPFrameLogLastmeasurement();
+    CCP_Master->log_database.VariableLog_export(CCP_Master->Get_time_measurement_started());
+    CCP_Master->Messagebuffer_export();
 }
 
 
