@@ -233,9 +233,6 @@ void LabskausFrame::VarListSelected(wxCommandEvent &event)
 
         m_VarInfoField->SetLabel(stream.str());
 
-        CCP_Master->SetNext_variable_type(Ptr2SelectedElement->GetDataType());
-        CCP_Master->SetNext_variable_address2read(Ptr2SelectedElement->GetAddress());
-
     }
 }
 
@@ -317,8 +314,6 @@ void LabskausFrame::DA_List_Timer(wxTimerEvent& event)
     tmp.append(std::to_string(CCP_Master->log_database.GetNmOfLogVariables()));
     statusBar->SetStatusText(_(tmp), 0);
     statusBar->SetStatusText(wxbuildinfo(short_f), 1);
-    CCP_Master->test_read_variable();
-
 }
 
 
@@ -330,7 +325,7 @@ void LabskausFrame::EventAddVar2List(wxCommandEvent &event)
     }
     else
     {
-        CCP_Master->m_Schedular.addvariable2ActionPlan(XML_list.at(m_listBox1->GetSelection()));
+        CCP_Master->addvariable2ActionPlan(XML_list.at(m_listBox1->GetSelection()));
     }
 
 }

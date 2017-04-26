@@ -48,3 +48,20 @@ void CCP_CRO_Schedular::addvariable2ActionPlan(ECU_variable& var2add)
         ActionTable.push_back(*tmp);
     }
 }
+
+
+void CCP_CRO_Schedular::updateSchedular(void)
+{
+    static uint32_t memory_list_element = 0;
+    // simple command to just take the next element inside the list
+    if (!ActionTable.empty())
+    {
+        if(memory_list_element > ActionTable.size())
+        {
+            memory_list_element = 0;
+        }
+    }
+
+
+}
+

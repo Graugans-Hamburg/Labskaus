@@ -11,7 +11,7 @@
 #include "CCP_Drive_List_Element.h"
 #include "type_definition.h"
 #include "History_Log.h"
-#include "CCP_CRO_Schedular.h"
+#include "CCP_Schedular_List_Element.h"
 
 #define NOT_CONNECTED				 0x00
 #define CONNECTED					 0x01
@@ -135,11 +135,15 @@ class CCP_driver
         void saveCCPFrameLogLastmeasurement(void);
         /* Following functions are only for testing */
         void test_read_variable(void);
-        void SetNext_variable_address2read(uint32_t val){next_variable_address2read = val;}
-        void SetNext_variable_type(EnumDataType val){Next_variable_type = val;}
         // Public variable
         History_Log log_database;
-        CCP_CRO_Schedular m_Schedular;
+
+
+        // CCP Treiber
+        void addvariable2ActionPlan(ECU_variable& var2add);
+        void updateSchedular(void);
+        void SetNext_variable_address2read(uint32_t val){next_variable_address2read = val;}
+        void SetNext_variable_type(EnumDataType val){Next_variable_type = val;}
     protected:
     private:
         serial SerialPort;
@@ -186,9 +190,10 @@ class CCP_driver
 
         std::vector<CCP_Frame> CCP_Msg_Buffer;
 
-        //only for testing
-         uint32_t   next_variable_address2read;
-         EnumDataType Next_variable_type;
+
+        std::vector<CCP_Schedular_List_Element> ActionTable;
+        uint32_t   next_variable_address2read;
+        EnumDataType Next_variable_type;
 
 };
 

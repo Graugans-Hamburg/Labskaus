@@ -259,13 +259,9 @@ void CCP_driver::SM_run_state_machine(void)
                 SM_enterleave_state = false;
                 break;
             }
-
-            if(SMT_read_variable)
+            updateSchedular();
+            if(SMT_read_variable == true)
             {  /* Exit the state, Connection established */
-                SMI_read_variable_address = next_variable_address2read;
-                SMI_read_variable_type = Next_variable_type;
-                // TODO remove line after testing (line above). Die intention war zu beschützen das niemand diese
-                // variable manipuliert während the read vorgang läuft.
                 SM_actl_state = SM_read_variable_SetMTA;
                 SMT_read_variable = false;
                 SM_enterleave_state = true;
@@ -277,6 +273,7 @@ void CCP_driver::SM_run_state_machine(void)
             { /* Enter the state */
                 TxCRO_SetMTA(0,SMI_read_address_extention,SMI_read_variable_address);
                 SM_enterleave_state = false;
+                SMT_read_variable = false;
                 break;
             }
 
@@ -706,4 +703,71 @@ void CCP_driver::saveCCPFrameLogLastmeasurement(void)
          }
          logfile << std::endl;
     }
+}
+
+
+void CCP_driver::addvariable2ActionPlan(ECU_variable& var2add)
+{
+    bool add_variable2list = false;
+
+    /*What to do if the list is empty?, Add a new element */
+    if(ActionTable.empty())
+    {
+        add_variable2list = true;
+    }
+    else
+    {
+    /* check something else */
+        CCP_Schedular_List_Element* ptr_tmp_list_element;
+        uint32_t idx;
+        for(idx = 0; idx < ActionTable.size(); idx++)
+        {
+            ptr_tmp_list_element = &ActionTable.at(idx);
+            if(ptr_tmp_list_element->GetAddress() == var2add.GetAddress())
+            {
+                add_variable2list = false;
+                std::cerr << "Die Variable befindet sich bereits einmal in der Liste" << std::endl;
+                break;
+            }
+            else
+            {
+                add_variable2list = true;
+            }
+        }
+    }
+
+    if(add_variable2list == true)
+    {
+        CCP_Schedular_List_Element* tmp = new(CCP_Schedular_List_Element);
+        tmp->SetAddress(var2add.GetAddress());
+        tmp->SetDataType(var2add.GetDataType());
+        ActionTable.push_back(*tmp);
+    }
+}
+
+
+void CCP_driver::updateSchedular(void)
+{
+    static uint32_t memory_list_element = 0;
+    // simple command to just take the next element inside the list
+    if (!ActionTable.empty())
+    {
+        // Select the next List element
+        memory_list_element++;
+
+        if(memory_list_element >= ActionTable.size())
+        {
+            memory_list_element = 0;
+        }
+        CCP_Schedular_List_Element* ptr_tabel_element= &ActionTable.at(memory_list_element);
+        SMI_read_variable_address = ptr_tabel_element->GetAddress();
+        SMI_read_variable_type = ptr_tabel_element->GetDataType();
+
+        // Gebe der Statemachine den Auftrag die nächste variable zu lesen
+        SMT_read_variable = true;
+
+    }
+
+
+
 }
