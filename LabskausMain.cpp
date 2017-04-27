@@ -137,6 +137,8 @@ void LabskausFrame::open_load_dialog(wxCommandEvent &event)
 
 void LabskausFrame::Read_XML_file(void)
 {
+    // remove the content of the last XML file
+    XML_list.clear();
 
 	// Disconnect Events
     std::cout << ECU_XML_full_Path << std::endl;
