@@ -99,10 +99,32 @@ void LabskausFrame::OnAbout(wxCommandEvent &event)
 
 void LabskausFrame::open_load_dialog(wxCommandEvent &event)
 {
-	// Disconnect Events
-    std::cout << "Gost awoken" << std::endl;
+    wxFileDialog* OpenDialog = new wxFileDialog(
+		this, _("Choose a ECU-xml file"), wxEmptyString, wxEmptyString,
+		_("XML-files (*.xml)|*.xml"),
+		wxFD_OPEN, wxDefaultPosition);
 
-    std::ifstream xmlfile("measurement_darrieusV1.xml");
+	// Creates a "open file" dialog with 4 file types
+	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
+	{
+		ECU_XML_full_Path = OpenDialog->GetPath();
+		ECU_XML_file_dir = OpenDialog->GetDirectory();
+		ECU_XML_file_name =OpenDialog->GetFilename();
+	}
+	else
+	{
+        std::cout << "XML read canceled;" << std::endl;
+        return;
+	}
+	// Clean up after ourselves
+	OpenDialog->Destroy();
+
+	// Disconnect Events
+    std::cout << ECU_XML_full_Path << std::endl;
+    std::cout << ECU_XML_file_dir << std::endl;
+    std::cout << ECU_XML_file_name << std::endl;
+
+    std::ifstream xmlfile(ECU_XML_full_Path);
     if ( ! xmlfile)
     {
         std::cerr << "File measurement_darrieusV1.xml existiert nicht" << std::endl;
@@ -215,6 +237,26 @@ void LabskausFrame::open_load_dialog(wxCommandEvent &event)
 }
 
 
+void LabskausFrame::open_log_dialog(wxCommandEvent &event)
+{
+    wxDirDialog* OpenDialog = new wxDirDialog(
+		this, _("Choose a folder for the log files"), wxEmptyString, wxFD_OPEN,
+		 wxDefaultPosition);
+
+	// Creates a "open file" dialog with 4 file types
+	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
+	{
+		LOG_dir = OpenDialog->GetPath();
+
+	}
+	else
+	{
+        std::cout << "Get log folder canceled;" << std::endl;
+        return;
+	}
+
+}
+
 void LabskausFrame::VarListSelected(wxCommandEvent &event)
 {
     if(!XML_list.empty())
@@ -325,7 +367,15 @@ void LabskausFrame::EventAddVar2List(wxCommandEvent &event)
     }
     else
     {
-        CCP_Master->addvariable2ActionPlan(XML_list.at(m_listBox1->GetSelection()));
+        if(m_listBox1->GetSelection() == wxNOT_FOUND)
+        {
+            std::cerr << "A variable should have been added to the measurement list but"
+            << "no variable was selected so nothing was added to the list" << std::endl;
+        }
+        else
+        {
+            CCP_Master->addvariable2ActionPlan(XML_list.at(m_listBox1->GetSelection()));
+        }
     }
 
 }

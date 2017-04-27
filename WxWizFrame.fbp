@@ -157,6 +157,21 @@
                         <event name="OnMenuSelection">open_load_dialog</event>
                         <event name="OnUpdateUI"></event>
                     </object>
+                    <object class="wxMenuItem" expanded="1">
+                        <property name="bitmap"></property>
+                        <property name="checked">0</property>
+                        <property name="enabled">1</property>
+                        <property name="help">Define the folder where to save the results.</property>
+                        <property name="id">wxID_ANY</property>
+                        <property name="kind">wxITEM_NORMAL</property>
+                        <property name="label">Log folder</property>
+                        <property name="name">menuSelectLogFolder</property>
+                        <property name="permission">none</property>
+                        <property name="shortcut"></property>
+                        <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">open_log_dialog</event>
+                        <event name="OnUpdateUI"></event>
+                    </object>
                 </object>
                 <object class="wxMenu" expanded="1">
                     <property name="label">&amp;Help</property>
@@ -189,7 +204,7 @@
                         <property name="help"></property>
                         <property name="id">wxID_ANY</property>
                         <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Open Serial</property>
+                        <property name="label">Start Measurement</property>
                         <property name="name">m_OpenSerial</property>
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
@@ -204,7 +219,7 @@
                         <property name="help"></property>
                         <property name="id">wxID_ANY</property>
                         <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Close Serial</property>
+                        <property name="label">Stop Measurement</property>
                         <property name="name">m_CloseSerial</property>
                         <property name="permission">none</property>
                         <property name="shortcut"></property>

@@ -13,6 +13,7 @@
 #include "History_Log.h"
 #include "CCP_Schedular_List_Element.h"
 
+
 #define NOT_CONNECTED				 0x00
 #define CONNECTED					 0x01
 #define BYTE_POSITION_CRC            0x01
@@ -190,6 +191,7 @@ class CCP_driver
         double    SMI_read_variable_f64;
 
         std::vector<CCP_Frame> CCP_Msg_Buffer;
+
 
 
         std::vector<CCP_Schedular_List_Element> ActionTable;

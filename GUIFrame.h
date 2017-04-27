@@ -54,6 +54,7 @@ class GUIFrame : public wxFrame
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void open_load_dialog( wxCommandEvent& event ) { event.Skip(); }
+		virtual void open_log_dialog( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAbout( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventOpenSerial( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventCloseSerial( wxCommandEvent& event ) { event.Skip(); }

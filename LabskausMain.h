@@ -35,6 +35,10 @@ class LabskausFrame: public GUIFrame
         wxTimer* recTimer; // declaration of Timer object
         wxTimer* data_acquisition_timer;
         CCP_driver* CCP_Master;
+        wxString ECU_XML_full_Path;
+        wxString ECU_XML_file_dir;
+        wxString ECU_XML_file_name;
+        wxString LOG_dir;
         ~LabskausFrame();
 
     private:
@@ -42,6 +46,7 @@ class LabskausFrame: public GUIFrame
         virtual void OnQuit(wxCommandEvent& event);
         virtual void OnAbout(wxCommandEvent& event);
         virtual void open_load_dialog(wxCommandEvent& event);
+        virtual void open_log_dialog(wxCommandEvent& event);
         virtual void VarListSelected(wxCommandEvent& event);
         virtual void EventOpenSerial(wxCommandEvent& event);
         virtual void EventCloseSerial(wxCommandEvent& event);
