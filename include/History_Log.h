@@ -22,7 +22,7 @@ class History_Log
                            float   val_f32,
                            struct timespec time_point);
         uint32_t GetNmOfLogVariables(void){return log_data_base.size();}
-        void VariableLog_export(struct timespec time_measurement_started);
+        void VariableLog_export(struct timespec time_measurement_started, std::string log_folder);
         void VariableLog_clear(void);
     protected:
     private:

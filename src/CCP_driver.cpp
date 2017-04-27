@@ -653,8 +653,20 @@ void CCP_driver::Messagebuffer_export(void)
     /*
      *Determine the file name
      */
+    std::string file_name;
 
-    std::ofstream logfile("CCPFramelog.csv");
+    if(log_folder.empty() == true)
+    {
+        file_name = "CCPFramelog.csv";
+    }
+    else
+    {
+        file_name = log_folder;
+        file_name.append("/CCPFramelog.csv");
+    }
+
+
+    std::ofstream logfile(file_name);
     if ( ! logfile)
     {
         std::cerr << "[Error001] Logfile for CCP frames could not be opened" << std::endl;
@@ -773,4 +785,10 @@ void CCP_driver::updateSchedular(void)
         SMT_read_variable = true;
 
     }
+}
+
+
+void CCP_driver::VariableLog_export(void)
+{
+    log_database.VariableLog_export(Get_time_measurement_started(),log_folder);
 }

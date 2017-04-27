@@ -72,13 +72,25 @@ void History_Log::add_new_value(uint32_t var_add,EnumDataType var_type, uint8_t 
 }
 
 
-void History_Log::VariableLog_export(struct timespec time_measurement_started)
+void History_Log::VariableLog_export(struct timespec time_measurement_started, std::string log_folder)
 {
     /*
      *Determine the file name
      */
 
-    std::ofstream logfile("data.m");
+    std::string file_name;
+
+    if(log_folder.empty() == true)
+    {
+        file_name = "data.m";
+    }
+    else
+    {
+        file_name = log_folder;
+        file_name.append("/data.m");
+    }
+
+    std::ofstream logfile(file_name);
     if ( ! logfile)
     {
         std::cerr << "Logfile could not be opened" << std::endl;

@@ -74,6 +74,7 @@ LabskausFrame::LabskausFrame(wxFrame *frame)
     CCP_Master = new CCP_driver();
     recTimer = NULL;
     data_acquisition_timer = NULL;
+    read_last_config();
 
 }
 
@@ -88,6 +89,19 @@ void LabskausFrame::OnClose(wxCloseEvent &event)
 
 void LabskausFrame::OnQuit(wxCommandEvent &event)
 {
+
+    // Save the lastest settings and pathes
+
+    std::ofstream logfile("config_last_session.txt");
+    if ( ! logfile)
+    {
+        std::cerr << "Logfile could not be opened" << std::endl;
+    }
+    logfile << ECU_XML_full_Path << std::endl;
+    logfile << ECU_XML_file_dir << std::endl;
+    logfile << ECU_XML_file_name << std::endl;
+    logfile << LOG_dir << std::endl;
+    logfile.close();
     Destroy();
 }
 
@@ -118,6 +132,11 @@ void LabskausFrame::open_load_dialog(wxCommandEvent &event)
 	}
 	// Clean up after ourselves
 	OpenDialog->Destroy();
+    Read_XML_file();
+}
+
+void LabskausFrame::Read_XML_file(void)
+{
 
 	// Disconnect Events
     std::cout << ECU_XML_full_Path << std::endl;
@@ -135,16 +154,10 @@ void LabskausFrame::open_load_dialog(wxCommandEvent &event)
     std::string one_line_from_xml_file;
     std::getline(xmlfile, one_line_from_xml_file);
 
-    std::cout << "Line: " << one_line_from_xml_file << std::endl;
-
     if(xmlfile.is_open())
     {
         xmlfile.close();
     }
-
-    // Probiere mal eine neues item hinzuzufügen
-
-
 
 
     /*********************************************************************************
@@ -167,17 +180,17 @@ void LabskausFrame::open_load_dialog(wxCommandEvent &event)
         cout << string("bad root: Wrong xml? ") + root->Value( ) << endl;
         }
     else{
-        cout << "Found the element "<< root->Value() <<" in line "<<root->GetLineNum() << endl;
+        //cout << "Found the element "<< root->Value() <<" in line "<<root->GetLineNum() << endl;
         }
     XMLNode* variable = root->FirstChildElement();
     if (strcmp(variable->Value( ), "variable") != 0) {
         cout << string("bad root: Wrong XML? ") + variable->Value( ) << endl;
         }
     else{
-        cout << "Found the element "<< variable->Value() <<" in line "<<variable->GetLineNum() << endl;
+        //cout << "Found the element "<< variable->Value() <<" in line "<<variable->GetLineNum() << endl;
         }
     do{
-    cout << "---------------------" << endl;
+    //cout << "---------------------" << endl;
         XMLElement* varelement = variable->FirstChildElement();
         const char* var_name;
         const char* var_address;
@@ -189,27 +202,28 @@ void LabskausFrame::open_load_dialog(wxCommandEvent &event)
             else{
                 const char* str = varelement->GetText();
                 if(str){
-                    cout << "Found the element "<< varelement->Value() <<" in line "<<varelement->GetLineNum() <<
-                    " Content: "<< str <<endl;
+                    /*cout << "Found the element "<< varelement->Value() <<" in line "<<varelement->GetLineNum() <<
+                    " Content: "<< str <<endl;*/
 
                     if(strcmp(varelement->Value(),"name")== 0)
                         {
-                            cout << "Name found" << endl;
+                            /*cout << "Name found" << endl;*/
                             var_name = str;
                         }
                     if(strcmp(varelement->Value(),"address")== 0)
                         {
-                            cout << "Address found" << endl;
+                            /*cout << "Address found" << endl;*/
                             var_address = str;
                         }
                     if(strcmp(varelement->Value(),"datatype")==0)
                         {
-                            cout << "Datatype found" << endl;
+                            /*cout << "Datatype found" << endl;*/
                             var_type = str;
                         }
                     }
                 else{
-                    cout << "Found the element "<< varelement->Value() <<" in line "<<varelement->GetLineNum() << " has more children" << endl;
+                    /* cout << "Found the element "<< varelement->Value() <<" in line "
+                    << varelement->GetLineNum() << " has more children" << endl; */
                     }
                 }
 
@@ -247,6 +261,7 @@ void LabskausFrame::open_log_dialog(wxCommandEvent &event)
 	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
 	{
 		LOG_dir = OpenDialog->GetPath();
+		CCP_Master->SetLogFolder(std::string(LOG_dir.mb_str()));
 
 	}
 	else
@@ -334,7 +349,7 @@ void LabskausFrame::EventCloseSerial(wxCommandEvent &event)
         std::cerr << "There is no Object which could be deleted" << std::endl;
     }
     CCP_Master->SM_reset_state_machine();
-    CCP_Master->log_database.VariableLog_export(CCP_Master->Get_time_measurement_started());
+    CCP_Master->VariableLog_export();
     CCP_Master->Messagebuffer_export();
 }
 
@@ -378,4 +393,33 @@ void LabskausFrame::EventAddVar2List(wxCommandEvent &event)
         }
     }
 
+}
+
+void LabskausFrame::read_last_config(void)
+{
+    std::ifstream logfile("config_last_session.txt");
+    if ( ! logfile)
+    {
+        std::cerr << "No latest configuration found" << std::endl;
+    }
+    std::string tmp;
+    std::getline(logfile,tmp);
+    wxString wxStr_ECU_XML_full_Path(tmp);
+    ECU_XML_full_Path =wxStr_ECU_XML_full_Path;
+
+    std::getline(logfile,tmp);
+    wxString wxStr_ECU_XML_file_dir(tmp);
+    ECU_XML_file_dir = wxStr_ECU_XML_file_dir;
+
+    std::getline(logfile,tmp);
+    wxString wxStr_ECU_XML_file_name(tmp);
+    ECU_XML_file_name = wxStr_ECU_XML_file_name;
+
+    std::getline(logfile,tmp);
+    wxString wxStr_LOG_dir(tmp);
+    LOG_dir = wxStr_LOG_dir;
+
+    CCP_Master->SetLogFolder(std::string(LOG_dir.mb_str()));
+    Read_XML_file();
+    logfile.close();
 }
