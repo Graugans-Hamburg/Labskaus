@@ -650,23 +650,30 @@ void CCP_driver::SetMeasurementStartTime(void)
 
 void CCP_driver::Messagebuffer_export(void)
 {
+    /* Determine the file name */
+    std::stringstream file_name;
+    time_t t = time(0);   // get time now
+    struct tm * now = localtime( & t );
+    file_name << (now->tm_year + 1900) << '-'<< (now->tm_mon + 1) << '-'<<  now->tm_mday
+         << "_"<< now->tm_hour << now->tm_min << now->tm_sec << "_log.csv";
     /*
      *Determine the file name
      */
-    std::string file_name;
+    std::string path_name;
 
     if(log_folder.empty() == true)
     {
-        file_name = "CCPFramelog.csv";
+        path_name = file_name.str();
     }
     else
     {
-        file_name = log_folder;
-        file_name.append("/CCPFramelog.csv");
+        path_name = log_folder;
+        path_name.append("/");
+        path_name.append(file_name.str());
     }
 
 
-    std::ofstream logfile(file_name);
+    std::ofstream logfile(path_name);
     if ( ! logfile)
     {
         std::cerr << "[Error001] Logfile for CCP frames could not be opened" << std::endl;

@@ -74,23 +74,32 @@ void History_Log::add_new_value(uint32_t var_add,EnumDataType var_type, uint8_t 
 
 void History_Log::VariableLog_export(struct timespec time_measurement_started, std::string log_folder)
 {
+    /* Determin the date */
+
+    std::stringstream file_name;
+    time_t t = time(0);   // get time now
+    struct tm * now = localtime( & t );
+    file_name << (now->tm_year + 1900) << '-'<< (now->tm_mon + 1) << '-'<<  now->tm_mday
+         << "_"<< now->tm_hour << now->tm_min << now->tm_sec << "_log.m";
+
     /*
      *Determine the file name
      */
 
-    std::string file_name;
+    std::string file_path;
 
     if(log_folder.empty() == true)
     {
-        file_name = "data.m";
+        file_path = file_name.str();
     }
     else
     {
-        file_name = log_folder;
-        file_name.append("/data.m");
+        file_path = log_folder;
+        file_path.append("/");
+        file_path.append(file_name.str());
     }
 
-    std::ofstream logfile(file_name);
+    std::ofstream logfile(file_path);
     if ( ! logfile)
     {
         std::cerr << "Logfile could not be opened" << std::endl;
@@ -99,7 +108,7 @@ void History_Log::VariableLog_export(struct timespec time_measurement_started, s
     /*
      *  Write some header information
      */
-    logfile << "%Blaesshuehner, attacke!!!!!" << std::endl;
+    logfile << "%Labskaus measurement data log." << std::endl;
     if (log_data_base.empty())
     {
         logfile << "% Datafile is empty!" << std::endl;

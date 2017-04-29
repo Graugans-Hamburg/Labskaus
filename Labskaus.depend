@@ -1805,12 +1805,13 @@
 
 1492258618 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/type_definition.h
 
-1493323202 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/History_Log.cpp
+1493486294 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/History_Log.cpp
 	"History_Log.h"
 
-1493323183 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/History_Log.h
+1493486103 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/History_Log.h
 	<iostream>
 	<fstream>
+	<sstream>
 	"Data_Row.h"
 	"type_definition.h"
 

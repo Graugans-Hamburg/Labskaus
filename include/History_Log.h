@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include "Data_Row.h"
 #include "type_definition.h"
 
