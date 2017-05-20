@@ -27,6 +27,7 @@
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-std=c++11" />
 					<Add directory="include" />
 				</Compiler>
 				<Linker>
@@ -41,8 +42,6 @@
 		<Linker>
 			<Add option="`wx-config --libs`" />
 		</Linker>
-		<Unit filename="ECU_VarListElement.cpp" />
-		<Unit filename="ECU_VarListElement.h" />
 		<Unit filename="ECU_variable.cpp" />
 		<Unit filename="ECU_variable.h" />
 		<Unit filename="GUIFrame.cpp" />
@@ -52,16 +51,16 @@
 		<Unit filename="LabskausMain.cpp" />
 		<Unit filename="LabskausMain.h" />
 		<Unit filename="WxWizFrame.fbp" />
-		<Unit filename="include/CCP_Drive_List_Element.h" />
 		<Unit filename="include/CCP_Frame.h" />
+		<Unit filename="include/CCP_Schedular_List_Element.h" />
 		<Unit filename="include/CCP_driver.h" />
 		<Unit filename="include/Data_Row.h" />
 		<Unit filename="include/History_Log.h" />
 		<Unit filename="include/serial.h" />
 		<Unit filename="include/type_definition.h" />
 		<Unit filename="include/xmlECUfile.h" />
-		<Unit filename="src/CCP_Drive_List_Element.cpp" />
 		<Unit filename="src/CCP_Frame.cpp" />
+		<Unit filename="src/CCP_Schedular_List_Element.cpp" />
 		<Unit filename="src/CCP_driver.cpp" />
 		<Unit filename="src/Data_Row.cpp" />
 		<Unit filename="src/History_Log.cpp" />

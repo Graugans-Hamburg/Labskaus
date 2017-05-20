@@ -2,6 +2,7 @@
 #define CCP_SCHEDULAR_LIST_ELEMENT_H
 
 #include "../ECU_variable.h"
+#include <time.h>
 
 enum EnumMode
 {
@@ -15,10 +16,15 @@ class CCP_Schedular_List_Element : public ECU_variable
     public:
         CCP_Schedular_List_Element();
         virtual ~CCP_Schedular_List_Element();
+        void SetSampleTime(uint32_t val){SampleTime_ms = val;}
+        void SetMode_Polling(void){AquisitionMode = periodic_sample;}
+        void SetLastRequest_2_now(void);
+        int64_t GetPrio(void);
     protected:
     private:
         uint32_t SampleTime_ms;
         EnumMode AquisitionMode;
+        struct timespec last_request;
 
 };
 

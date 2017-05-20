@@ -766,6 +766,9 @@ void CCP_driver::addvariable2ActionPlan(ECU_variable& var2add)
         CCP_Schedular_List_Element* tmp = new(CCP_Schedular_List_Element);
         tmp->SetAddress(var2add.GetAddress());
         tmp->SetDataType(var2add.GetDataType());
+        tmp->SetSampleTime(10);
+        tmp->SetMode_Polling();
+        tmp->SetLastRequest_2_now();
         ActionTable.push_back(*tmp);
     }
 }
@@ -777,20 +780,38 @@ void CCP_driver::updateSchedular(void)
     // simple command to just take the next element inside the list
     if (!ActionTable.empty())
     {
-        // Select the next List element
-        memory_list_element++;
-
-        if(memory_list_element >= ActionTable.size())
+        /* Experimental driver */
+        int64_t highest_prio=-10000000000;
+        int64_t tmp_prio;
+        uint32_t idx;
+        CCP_Schedular_List_Element* ptr_tabel_element;
+        for(idx = 0; idx < ActionTable.size(); idx++)
         {
-            memory_list_element = 0;
+            ptr_tabel_element = &ActionTable.at(idx);
+            tmp_prio = ptr_tabel_element->GetPrio();
+            if(tmp_prio > highest_prio)
+            {
+                highest_prio = tmp_prio;
+                memory_list_element = idx;
+            }
         }
-        CCP_Schedular_List_Element* ptr_tabel_element= &ActionTable.at(memory_list_element);
-        SMI_read_variable_address = ptr_tabel_element->GetAddress();
-        SMI_read_variable_type = ptr_tabel_element->GetDataType();
-
-        // Gebe der Statemachine den Auftrag die nächste variable zu lesen
-        SMT_read_variable = true;
-
+        //
+        std::cout << "Highest Prio: " << highest_prio << " Element: " << memory_list_element
+                  << std::endl;
+        // Select the next List element
+        if(highest_prio > 0)
+        {
+            if(memory_list_element >= ActionTable.size())
+            {
+                memory_list_element = 0;
+            }
+            ptr_tabel_element= &ActionTable.at(memory_list_element);
+            SMI_read_variable_address = ptr_tabel_element->GetAddress();
+            SMI_read_variable_type = ptr_tabel_element->GetDataType();
+            ptr_tabel_element->SetLastRequest_2_now();
+            // Gebe der Statemachine den Auftrag die nächste variable zu lesen
+            SMT_read_variable = true;
+        }
     }
 }
 
