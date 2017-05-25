@@ -24,6 +24,8 @@
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/frame.h>
+#include <wx/textctrl.h>
+#include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -48,6 +50,7 @@ class GUIFrame : public wxFrame
 		wxStaticText* m_VarInfoField;
 		wxStaticLine* m_staticline2;
 		wxButton* m_Add_var2list;
+		wxButton* m_Add_Cal2List;
 		wxStaticText* m_staticText2;
 		
 		// Virtual event handlers, overide them in your derived class
@@ -60,12 +63,40 @@ class GUIFrame : public wxFrame
 		virtual void EventCloseSerial( wxCommandEvent& event ) { event.Skip(); }
 		virtual void VarListSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventAddVar2List( wxCommandEvent& event ) { event.Skip(); }
+		virtual void EventAddCalVal2List( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
 		GUIFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("wxWidgets Application Template"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,600 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~GUIFrame();
+	
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class Dialog_SetValue
+///////////////////////////////////////////////////////////////////////////////
+class Dialog_SetValue : public wxDialog 
+{
+	private:
+	
+	protected:
+		wxStaticText* m_DiaVarName;
+		wxStaticText* m_staticText6;
+		wxStaticText* m_staticText7;
+		wxStaticText* m_staticText8;
+		wxStaticText* m_staticText9;
+		wxStaticText* m_staticText12;
+		wxStaticText* m_staticText13;
+		wxStaticText* m_staticText14;
+		wxTextCtrl* m_textCtrl1;
+		wxButton* m_button4;
+		wxButton* m_button5;
+	
+	public:
+		
+		Dialog_SetValue( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Set value"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+		~Dialog_SetValue();
 	
 };
 

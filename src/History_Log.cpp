@@ -72,16 +72,27 @@ void History_Log::add_new_value(uint32_t var_add,EnumDataType var_type, uint8_t 
 }
 
 
-void History_Log::VariableLog_export(struct timespec time_measurement_started, std::string log_folder)
+void History_Log::VariableLog_export(struct timespec time_measurement_started, std::string log_folder, EnumLogFileName E_Nametype)
 {
     /* Determin the date */
 
     std::stringstream file_name;
     time_t t = time(0);   // get time now
     struct tm * now = localtime( & t );
-    file_name << (now->tm_year + 1900) << '-'<< (now->tm_mon + 1) << '-'<<  now->tm_mday
-         << "_"<< now->tm_hour << now->tm_min << now->tm_sec << "_log.m";
-
+    if(E_Nametype == FileName_date)
+    {
+        file_name << (now->tm_year + 1900) << '-'
+                  << std::setfill('0') << std::setw(2) <<(now->tm_mon + 1) << '-'
+                  << std::setfill('0') << std::setw(2) << now->tm_mday << "_"
+                  << std::setfill('0') << std::setw(2) << now->tm_hour
+                  << std::setfill('0') << std::setw(2) << now->tm_min
+                  << std::setfill('0') << std::setw(2) << now->tm_sec
+                  << "_log.m";
+    }
+    if(E_Nametype == FileName_general)
+    {
+        file_name << "data.m";
+    }
     /*
      *Determine the file name
      */

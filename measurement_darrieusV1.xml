@@ -63,4 +63,9 @@
 		  <address>0x20002aa4</address>
 		  <datatype>uint16</datatype>         
 	</variable>
+	<variable>
+		  <name>ADC_GainCH4</name>
+		  <address>0x20002aa8</address>
+		  <datatype>uint16</datatype>         
+	</variable>
 </measurement_file>

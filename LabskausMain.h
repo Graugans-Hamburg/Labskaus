@@ -53,6 +53,7 @@ class LabskausFrame: public GUIFrame
         virtual void OnRecTimer(wxTimerEvent& event);
         virtual void DA_List_Timer(wxTimerEvent& event);
         virtual void EventAddVar2List(wxCommandEvent &event);
+        virtual void EventAddCalVal2List(wxCommandEvent &event);
         void read_last_config(void);
         void Read_XML_file(void);
 };

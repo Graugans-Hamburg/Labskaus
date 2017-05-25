@@ -22,7 +22,6 @@ IMPLEMENT_APP(LabskausApp);
 
 bool LabskausApp::OnInit()
 {
-    std::cout << "Test" << std::endl;
     LabskausFrame* frame = new LabskausFrame(0L);
     frame->Show();
     return true;

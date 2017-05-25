@@ -90,6 +90,9 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_Add_var2list = new wxButton( this, wxID_ANY, wxT("Variable messen"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer3->Add( m_Add_var2list, 0, wxALL, 5 );
 	
+	m_Add_Cal2List = new wxButton( this, wxID_ANY, wxT("Variable setzten"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3->Add( m_Add_Cal2List, 0, wxALL, 5 );
+	
 	bSizer2->Add( bSizer3, 1, wxEXPAND, 5 );
 	
 	bSizer1->Add( bSizer2, 1, wxEXPAND, 5 );
@@ -113,6 +116,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	this->Connect( m_CloseSerial->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventCloseSerial ) );
 	m_listBox1->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( GUIFrame::VarListSelected ), NULL, this );
 	m_Add_var2list->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventAddVar2List ), NULL, this );
+	m_Add_Cal2List->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventAddCalVal2List ), NULL, this );
 }
 
 GUIFrame::~GUIFrame()
@@ -127,4 +131,82 @@ GUIFrame::~GUIFrame()
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventCloseSerial ) );
 	m_listBox1->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( GUIFrame::VarListSelected ), NULL, this );
 	m_Add_var2list->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventAddVar2List ), NULL, this );
+	m_Add_Cal2List->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventAddCalVal2List ), NULL, this );
+}
+
+Dialog_SetValue::Dialog_SetValue( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxSize( 300,200 ), wxDefaultSize );
+	
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxVERTICAL );
+	
+	m_DiaVarName = new wxStaticText( this, wxID_ANY, wxT("ECU Variablenname"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DiaVarName->Wrap( -1 );
+	bSizer4->Add( m_DiaVarName, 0, wxALL, 5 );
+	
+	wxBoxSizer* bSizer5;
+	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText6 = new wxStaticText( this, wxID_ANY, wxT("Max:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6->Wrap( -1 );
+	bSizer5->Add( m_staticText6, 0, wxALL, 5 );
+	
+	m_staticText7 = new wxStaticText( this, wxID_ANY, wxT("???"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText7->Wrap( -1 );
+	bSizer5->Add( m_staticText7, 0, wxALL, 5 );
+	
+	m_staticText8 = new wxStaticText( this, wxID_ANY, wxT("Min:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText8->Wrap( -1 );
+	bSizer5->Add( m_staticText8, 0, wxALL, 5 );
+	
+	m_staticText9 = new wxStaticText( this, wxID_ANY, wxT("???"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText9->Wrap( -1 );
+	bSizer5->Add( m_staticText9, 0, wxALL, 5 );
+	
+	bSizer4->Add( bSizer5, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText12 = new wxStaticText( this, wxID_ANY, wxT("Aktueller Wert:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText12->Wrap( -1 );
+	bSizer7->Add( m_staticText12, 0, wxALL, 5 );
+	
+	m_staticText13 = new wxStaticText( this, wxID_ANY, wxT("???"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText13->Wrap( -1 );
+	bSizer7->Add( m_staticText13, 0, wxALL, 5 );
+	
+	bSizer4->Add( bSizer7, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText14 = new wxStaticText( this, wxID_ANY, wxT("Neuer Wert"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText14->Wrap( -1 );
+	bSizer8->Add( m_staticText14, 0, wxALL, 5 );
+	
+	m_textCtrl1 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer8->Add( m_textCtrl1, 0, wxALL, 5 );
+	
+	bSizer4->Add( bSizer8, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer9;
+	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_button4 = new wxButton( this, wxID_ANY, wxT("Wert übernehmen"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer9->Add( m_button4, 0, wxALL, 5 );
+	
+	m_button5 = new wxButton( this, wxID_ANY, wxT("Abbrechen"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer9->Add( m_button5, 0, wxALL, 5 );
+	
+	bSizer4->Add( bSizer9, 1, wxEXPAND, 5 );
+	
+	this->SetSizer( bSizer4 );
+	this->Layout();
+	bSizer4->Fit( this );
+}
+
+Dialog_SetValue::~Dialog_SetValue()
+{
 }

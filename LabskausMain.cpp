@@ -376,6 +376,8 @@ void LabskausFrame::DA_List_Timer(wxTimerEvent& event)
 }
 
 
+
+
 void LabskausFrame::EventAddVar2List(wxCommandEvent &event)
 {
     if(XML_list.empty())
@@ -395,6 +397,22 @@ void LabskausFrame::EventAddVar2List(wxCommandEvent &event)
         }
     }
 
+}
+
+void LabskausFrame::EventAddCalVal2List(wxCommandEvent &event)
+{
+    std::cout << "Tine" << std::endl;
+    if(m_listBox1->GetSelection() == wxNOT_FOUND)
+    {
+        std::cerr << "A variable should have been added to the measurement list but"
+        << "no variable was selected so nothing was added to the list" << std::endl;
+    }
+    else
+    {
+    Dialog_SetValue* SetVar_dia = new Dialog_SetValue(0L);
+
+    SetVar_dia->Show();
+    }
 }
 
 void LabskausFrame::read_last_config(void)

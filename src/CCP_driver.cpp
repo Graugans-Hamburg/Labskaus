@@ -654,11 +654,16 @@ void CCP_driver::Messagebuffer_export(void)
     std::stringstream file_name;
     time_t t = time(0);   // get time now
     struct tm * now = localtime( & t );
-    file_name << (now->tm_year + 1900) << '-'<< (now->tm_mon + 1) << '-'<<  now->tm_mday
-         << "_"<< now->tm_hour << now->tm_min << now->tm_sec << "_log.csv";
-    /*
-     *Determine the file name
-     */
+
+            file_name << (now->tm_year + 1900) << '-'
+                  << std::setfill('0') << std::setw(2) <<(now->tm_mon + 1) << '-'
+                  << std::setfill('0') << std::setw(2) << now->tm_mday << "_"
+                  << std::setfill('0') << std::setw(2) << now->tm_hour
+                  << std::setfill('0') << std::setw(2) << now->tm_min
+                  << std::setfill('0') << std::setw(2) << now->tm_sec
+                  << "_log.csv";
+
+
     std::string path_name;
 
     if(log_folder.empty() == true)
@@ -818,5 +823,6 @@ void CCP_driver::updateSchedular(void)
 
 void CCP_driver::VariableLog_export(void)
 {
-    log_database.VariableLog_export(Get_time_measurement_started(),log_folder);
+    log_database.VariableLog_export(Get_time_measurement_started(),log_folder, FileName_date);
+    log_database.VariableLog_export(Get_time_measurement_started(),log_folder, FileName_general);
 }

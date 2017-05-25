@@ -48,4 +48,19 @@
 		  <address>0x20002aaa</address>
 		  <datatype>uint16</datatype>         
 	</variable>
+	<variable>
+		  <name>ADC_measurementCH2</name>
+		  <address>0x20002aa6</address>
+		  <datatype>uint16</datatype>         
+	</variable>
+	<variable>
+		  <name>ADC_measurementCH3</name>
+		  <address>0x20002aac</address>
+		  <datatype>uint16</datatype>         
+	</variable>
+	<variable>
+		  <name>ADC_measurementCH4</name>
+		  <address>0x20002aa4</address>
+		  <datatype>uint16</datatype>         
+	</variable>
 </measurement_file>

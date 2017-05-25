@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1489919671 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausApp.cpp
+1495370766 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausApp.cpp
 	<iostream>
 	"wx_pch.h"
 	"LabskausApp.h"
@@ -581,7 +581,7 @@
 
 1425353624 /usr/include/wx-3.0/wx/gtk/app.h
 
-1493326361 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.h
+1495395221 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.h
 	<streambuf>
 	<vector>
 	"LabskausApp.h"
@@ -590,7 +590,7 @@
 	"wx/timer.h"
 	"GUIFrame.h"
 
-1493318994 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/GUIFrame.h
+1495363940 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/GUIFrame.h
 	<wx/string.h>
 	<wx/bitmap.h>
 	<wx/image.h>
@@ -607,6 +607,8 @@
 	<wx/button.h>
 	<wx/sizer.h>
 	<wx/frame.h>
+	<wx/textctrl.h>
+	<wx/dialog.h>
 
 1425353624 /usr/include/wx-3.0/wx/bitmap.h
 	"wx/string.h"
@@ -983,7 +985,7 @@
 
 1425353624 /usr/include/wx-3.0/wx/gtk/frame.h
 
-1493328411 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.cpp
+1495654644 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.cpp
 	"wx_pch.h"
 	<wx_pch.h>
 	<wx/wx.h>
@@ -998,7 +1000,7 @@
 	"serial.h"
 	"CCP_driver.h"
 
-1493318994 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/GUIFrame.cpp
+1495363940 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/GUIFrame.cpp
 	"wx/wxprec.h"
 	<wx/wx.h>
 	"GUIFrame.h"
@@ -1771,7 +1773,7 @@
 	<vector>
 	"CCP_Frame.h"
 
-1495285447 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/CCP_driver.cpp
+1495698335 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/CCP_driver.cpp
 	"CCP_driver.h"
 
 1493323183 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/CCP_driver.h
@@ -1805,10 +1807,10 @@
 
 1492258618 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/type_definition.h
 
-1493486294 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/History_Log.cpp
+1495698045 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/History_Log.cpp
 	"History_Log.h"
 
-1493486103 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/History_Log.h
+1495654644 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/History_Log.h
 	<iostream>
 	<fstream>
 	<sstream>
