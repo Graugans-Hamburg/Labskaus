@@ -117,8 +117,8 @@ void CCP_driver::TxCRO_GetCCP_Version(void)
     CCP_Frame* CCP_Connect_Cmd = new CCP_Frame();
     CCP_Connect_Cmd->SetByte1(COMMAND_GET_CCP_VERSION);
     CCP_Connect_Cmd->SetByte2(++MessageCounter);
-    CCP_Connect_Cmd->SetByte3(2);   /* Request the CCP Version 2 */
-    CCP_Connect_Cmd->SetByte4(1);   /* Request the CCP Release 1 */
+    CCP_Connect_Cmd->SetByte3(2);
+    CCP_Connect_Cmd->SetByte4(1);
     CCP_Connect_Cmd->SetByte5(0);
     CCP_Connect_Cmd->SetByte6(0);
     CCP_Connect_Cmd->SetByte7(0);
@@ -133,7 +133,7 @@ void CCP_driver::TxCRO_GetCCP_Version(void)
  * Description:
  *
  * Message that will be send over:
- *    Byte1   : 0x02  Command code for the GET_CCP_VERSION command
+ *    Byte1   : 0x02  Command code for the SETMTA command
  *    Byte2   : 0x??  Command Counter ctr
  *    Byte3,4 : 0x02 0x01  Requested CCP Version 2.1
  *    Byte5-8 : doesn't matter
@@ -143,8 +143,8 @@ void CCP_driver::TxCRO_SetMTA(uint8_t MTA_number, uint8_t AdressExtention, uint3
     CCP_Frame* CCP_Connect_Cmd = new CCP_Frame();
     CCP_Connect_Cmd->SetByte1(COMMAND_SET_MTA);
     CCP_Connect_Cmd->SetByte2(++MessageCounter);
-    CCP_Connect_Cmd->SetByte3(MTA_number);   /* Request the CCP Version 2 */
-    CCP_Connect_Cmd->SetByte4(AdressExtention);   /* Request the CCP Release 1 */
+    CCP_Connect_Cmd->SetByte3(MTA_number);
+    CCP_Connect_Cmd->SetByte4(AdressExtention);
     CCP_Connect_Cmd->SetByte5(uint8_t(MTA_adress >> 24));
     CCP_Connect_Cmd->SetByte6(uint8_t((MTA_adress & 0x00FFFFFF) >> 16));
     CCP_Connect_Cmd->SetByte7(uint8_t((MTA_adress & 0x0000FFFF) >> 8));
@@ -160,7 +160,7 @@ void CCP_driver::TxCRO_SetMTA(uint8_t MTA_number, uint8_t AdressExtention, uint3
  * Description:
  *
  * Message that will be send over:
- *    Byte1   : 0x04  Command code for the GET_CCP_VERSION command
+ *    Byte1   : 0x04  Command code for U command
  *    Byte2   : 0x??  Command Counter ctr
  *    Byte3   : 0x??  Size of the data block
  *    Byte4-8 : doesn't matter
@@ -176,6 +176,32 @@ void CCP_driver::TxCRO_Upload(uint8_t num_of_bytes)
     CCP_Connect_Cmd->SetByte6(0);
     CCP_Connect_Cmd->SetByte7(0);
     CCP_Connect_Cmd->SetByte8(0);
+    CCP_Connect_Cmd->setCCPFrameTime();
+    CRO_Tx(*CCP_Connect_Cmd);
+}
+
+/*
+ * Send the command to Dnload data to the ECU from the CCP_driver
+ *
+ * Description:
+ *
+ * Message that will be send over:
+ *    Byte1   : 0x03  Command code for DNLOAD command
+ *    Byte2   : 0x??  Command Counter ctr
+ *    Byte3   : 0x??  Size of the data block
+ *    Byte4-8 : 0x??  Data that shall be transmitted to the CPU
+ */
+void CCP_driver::TxCRO_Dnload(uint8_t * ptr_data, uint8_t num_of_bytes )
+{
+    CCP_Frame* CCP_Connect_Cmd = new CCP_Frame();
+    CCP_Connect_Cmd->SetByte1(COMMAND_DNLOAD);
+    CCP_Connect_Cmd->SetByte2(++MessageCounter);
+    CCP_Connect_Cmd->SetByte3(num_of_bytes);
+    if(num_of_bytes >= 1) CCP_Connect_Cmd->SetByte4(*(ptr_data + 0));
+    if(num_of_bytes >= 2) CCP_Connect_Cmd->SetByte5(*(ptr_data + 1));
+    if(num_of_bytes >= 3) CCP_Connect_Cmd->SetByte6(*(ptr_data + 2));
+    if(num_of_bytes >= 4) CCP_Connect_Cmd->SetByte7(*(ptr_data + 3));
+    if(num_of_bytes >= 5) CCP_Connect_Cmd->SetByte8(*(ptr_data + 4));
     CCP_Connect_Cmd->setCCPFrameTime();
     CRO_Tx(*CCP_Connect_Cmd);
 }
@@ -264,8 +290,14 @@ void CCP_driver::SM_run_state_machine(void)
             }
             updateSchedular();
             if(SMT_read_variable == true)
-            {  /* Exit the state, Connection established */
+            {  /* Exit the state, start to set the MTA */
                 SM_actl_state = SM_read_variable_SetMTA;
+                SM_enterleave_state = true;
+                break;
+            }
+            if(SMT_calibrate_variable == true)
+            { /* Exit the state, start to set the MTA */
+                SM_actl_state = SM_calibrate_variable_SetMTA;
                 SM_enterleave_state = true;
                 break;
             }
@@ -343,6 +375,72 @@ void CCP_driver::SM_run_state_machine(void)
             {  /* Exit the state, Everything received */
                 SM_actl_state = SM_Wait;
                 SMI_read_variable_successfull = false;
+                SM_enterleave_state = true;
+                break;
+            }
+            break;
+        case SM_calibrate_variable_SetMTA:
+            if(SM_enterleave_state == true)
+            { /* Enter the state */
+                TxCRO_SetMTA(0,SMI_read_address_extention,SMI_read_variable_address);
+                SM_enterleave_state = false;
+                SMT_calibrate_variable = false;
+                break;
+            }
+
+            if(CRO_waiting_for_request == false &&
+               CRM_ErrorCode_last_received == CRC_ACKNOWLEGE)
+            {  /* Exit the state, MTA is positioned */
+                SM_actl_state = SM_calibrate_variable_DataDNLoad;
+                SM_enterleave_state = true;
+                break;
+            }
+            if(CRO_waiting_for_request == false &&
+               CRM_ErrorCode_last_received != CRC_ACKNOWLEGE)
+            {  /* Exit the state, MTA is positioned */
+                SM_actl_state = SM_Wait;
+                SM_enterleave_state = true;
+                break;
+            }
+            break;
+        case SM_calibrate_variable_DataDNLoad:
+            if(SM_enterleave_state == true)
+            { /* Enter the state */
+                /* ACHTUNG  ABHAENIG VON DER BYTE ORDER */
+                if(SMI_read_variable_type == type_u8)  TxCRO_Dnload((uint8_t*)(&SMI_read_variable_uint8),1);
+                if(SMI_read_variable_type == type_i8)  TxCRO_Dnload((uint8_t*)(&SMI_read_variable_sint8),1);
+                if(SMI_read_variable_type == type_u16) TxCRO_Dnload((uint8_t*)(&SMI_read_variable_uint16),2);
+                if(SMI_read_variable_type == type_i16) TxCRO_Dnload((uint8_t*)(&SMI_read_variable_sint16),2);
+                if(SMI_read_variable_type == type_u32) TxCRO_Dnload((uint8_t*)(&SMI_read_variable_uint32),4);
+                if(SMI_read_variable_type == type_i32) TxCRO_Dnload((uint8_t*)(&SMI_read_variable_sint32),4);
+                if(SMI_read_variable_type == type_f32) TxCRO_Dnload((uint8_t*)(&SMI_read_variable_f32),4);
+                SM_enterleave_state = false;
+                break;
+            }
+
+            if(CRO_waiting_for_request == false &&
+               CRM_ErrorCode_last_received == CRC_ACKNOWLEGE)
+            {  /* Exit the state, Everything received */
+
+                #ifdef PLOT_COMMUNICATION_TO_TERMINAL
+                std::cout << "Empfangene Werte:" << std::endl
+                          << "u8  : " << std::dec<< (int)SMI_read_variable_uint8  << std::endl
+                          << "s8  : " << std::dec<< (int)SMI_read_variable_sint8  << std::endl
+                          << "u16 : " << std::dec<< SMI_read_variable_uint16 << std::endl
+                          << "s16 : " << std::dec<< SMI_read_variable_sint16 << std::endl
+                          << "u32 : " << std::dec<< SMI_read_variable_uint32 << std::endl
+                          << "s32 : " << std::dec <<SMI_read_variable_sint32 << std::endl;
+                #endif /* PLOT_COMMUNICATION_TO_TERMINAL*/
+
+
+                SM_actl_state = SM_Wait;
+                SM_enterleave_state = true;
+                break;
+            }
+            if(CRO_waiting_for_request == false &&
+               CRM_ErrorCode_last_received != CRC_ACKNOWLEGE)
+            {  /* Exit the state, Everything received */
+                SM_actl_state = SM_Wait;
                 SM_enterleave_state = true;
                 break;
             }
@@ -781,7 +879,7 @@ void CCP_driver::addvariable2ActionPlan(ECU_variable& var2add)
 
 void CCP_driver::updateSchedular(void)
 {
-    static uint32_t memory_list_element = 0;
+    uint32_t memory_list_element = 0;
     // simple command to just take the next element inside the list
     if (!ActionTable.empty())
     {
@@ -800,22 +898,44 @@ void CCP_driver::updateSchedular(void)
                 memory_list_element = idx;
             }
         }
-        //
+        /*
         std::cout << "Highest Prio: " << highest_prio << " Element: " << memory_list_element
                   << std::endl;
-        // Select the next List element
+        */
+
+        /*
+         *Select the next List element
+         */
         if(highest_prio > 0)
         {
             if(memory_list_element >= ActionTable.size())
             {
-                memory_list_element = 0;
+                memory_list_element = 0; // Ist das hier nicht eigentlich ein Fehlerfall?
             }
             ptr_tabel_element= &ActionTable.at(memory_list_element);
-            SMI_read_variable_address = ptr_tabel_element->GetAddress();
-            SMI_read_variable_type = ptr_tabel_element->GetDataType();
-            ptr_tabel_element->SetLastRequest_2_now();
-            // Gebe der Statemachine den Auftrag die nächste variable zu lesen
-            SMT_read_variable = true;
+            if(ptr_tabel_element->GetAquisitionMode()  == E_Calibration)
+            {
+                SMI_read_variable_address = ptr_tabel_element->GetAddress();
+                SMI_read_variable_type    = ptr_tabel_element->GetDataType();
+                SMI_read_variable_uint8   =  (uint8_t) ptr_tabel_element->GetCalValue_Int();
+                SMI_read_variable_sint8   =   (int8_t) ptr_tabel_element->GetCalValue_Int();
+                SMI_read_variable_uint16  = (uint16_t) ptr_tabel_element->GetCalValue_Int();
+                SMI_read_variable_sint16  =  (int16_t) ptr_tabel_element->GetCalValue_Int();
+                SMI_read_variable_uint32  = (uint32_t) ptr_tabel_element->GetCalValue_Int();
+                SMI_read_variable_sint32  =  (int32_t) ptr_tabel_element->GetCalValue_Int();
+                SMI_read_variable_f32     =    (float) ptr_tabel_element->GetCalValue_Float();
+                // Activate the state machine
+                SMT_calibrate_variable = true;
+                ActionTable.erase(ActionTable.begin() + memory_list_element);
+            }
+            if(ptr_tabel_element->GetAquisitionMode()  == E_periodic_sample)
+            {
+                SMI_read_variable_address = ptr_tabel_element->GetAddress();
+                SMI_read_variable_type = ptr_tabel_element->GetDataType();
+                ptr_tabel_element->SetLastRequest_2_now();
+                // Gebe der Statemachine den Auftrag die nächste variable zu lesen
+                SMT_read_variable = true;
+            }
         }
     }
 }
@@ -825,4 +945,29 @@ void CCP_driver::VariableLog_export(void)
 {
     log_database.VariableLog_export(Get_time_measurement_started(),log_folder, FileName_date);
     log_database.VariableLog_export(Get_time_measurement_started(),log_folder, FileName_general);
+}
+
+/*
+ * 1. Argument: ECU Variable Objekt. Dieses beinhaltet in der Regel aber nur wo die Variable liegt
+ *              wie sie heißt und den Datentyp. Deshalb werden noch weitere Informationen benötigt
+ *
+ * 2. Argument: Falls die Variable welche calibriert werden soll vom Typ Integer ist so kann hier
+ *              der entsprechende Wert mit übergeben werden.
+ *
+ * 3. Argument: Falls die Variable welche calibriert werden soll vom Typ Float ist so kann hier
+ *              der entsprechende Wert mit übergeben werden.
+ *
+ */
+
+void CCP_driver::addCalibration2ActionPlan(ECU_variable& Cal2Add, int64_t Cal_Int, float Cal_Float)
+{
+        CCP_Schedular_List_Element* tmp = new(CCP_Schedular_List_Element);
+        tmp->SetAddress(Cal2Add.GetAddress());
+        tmp->SetDataType(Cal2Add.GetDataType());
+        tmp->SetSampleTime(0);
+        tmp->SetMode_Calibration();
+        tmp->SetLastRequest_2_now();
+        tmp->SetCalValue_Int(Cal_Int);
+        tmp->SetCalValue_Float(Cal_Float);
+        ActionTable.push_back(*tmp);
 }

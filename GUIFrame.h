@@ -81,19 +81,22 @@ class Dialog_SetValue : public wxDialog
 	private:
 	
 	protected:
-		wxStaticText* m_DiaVarName;
 		wxStaticText* m_staticText6;
-		wxStaticText* m_staticText7;
 		wxStaticText* m_staticText8;
-		wxStaticText* m_staticText9;
 		wxStaticText* m_staticText12;
-		wxStaticText* m_staticText13;
 		wxStaticText* m_staticText14;
-		wxTextCtrl* m_textCtrl1;
-		wxButton* m_button4;
-		wxButton* m_button5;
+		wxTextCtrl* m_DL_NewVal;
+		wxButton* m_BtnConfirm;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void EventTakeOverVal( wxCommandEvent& event ) { event.Skip(); }
+		
 	
 	public:
+		wxStaticText* m_DLVarName;
+		wxStaticText* m_DL_max;
+		wxStaticText* m_DL_min;
+		wxStaticText* m_DL_Actl;
 		
 		Dialog_SetValue( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Set value"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
 		~Dialog_SetValue();

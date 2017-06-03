@@ -66,11 +66,6 @@ wxString wxbuildinfo(wxbuildinfoformat format)
 LabskausFrame::LabskausFrame(wxFrame *frame)
     : GUIFrame(frame)
 {
-#if wxUSE_STATUSBAR
-    statusBar->SetStatusText(_("Hello Code::Blocks user!"), 0);
-    statusBar->SetStatusText(wxbuildinfo(short_f), 1);
-#endif
-
     CCP_Master = new CCP_driver();
     recTimer = NULL;
     data_acquisition_timer = NULL;
@@ -401,17 +396,62 @@ void LabskausFrame::EventAddVar2List(wxCommandEvent &event)
 
 void LabskausFrame::EventAddCalVal2List(wxCommandEvent &event)
 {
-    std::cout << "Tine" << std::endl;
-    if(m_listBox1->GetSelection() == wxNOT_FOUND)
-    {
-        std::cerr << "A variable should have been added to the measurement list but"
-        << "no variable was selected so nothing was added to the list" << std::endl;
-    }
-    else
-    {
-    Dialog_SetValue* SetVar_dia = new Dialog_SetValue(0L);
 
-    SetVar_dia->Show();
+
+    if(!XML_list.empty())
+    {
+        ECU_variable* Ptr2SelectedElement = &XML_list.at(m_listBox1->GetSelection());
+        if(!Ptr2SelectedElement)
+        {
+            std::cerr << "Error the Positon was not found inside the List" << std::endl;
+            return;
+        }
+
+        LabskausFrameSetCal* SetVar_dia = new LabskausFrameSetCal(CCP_Master,Ptr2SelectedElement);
+        SetVar_dia->Show();
+
+        std::stringstream stream;
+        stream << "Name: " << Ptr2SelectedElement->GetName() << std::endl;
+        SetVar_dia->m_DLVarName->SetLabel(stream.str());
+        std::stringstream stream_min; // wird hier nur gemacht da stream nicht gelöscht werden kann
+        if(Ptr2SelectedElement->MinValueValid())
+        {
+            if((Ptr2SelectedElement->GetDataType() == type_f32) ||
+               (Ptr2SelectedElement->GetDataType() == type_f64) )
+            {
+                stream_min << Ptr2SelectedElement->GetMinValue_F();
+            }
+            else /* Falls keine Gleitkommazahl gelesen werden soll */
+            {
+                stream_min << Ptr2SelectedElement->GetMinValue_Int();
+            }
+
+        }
+        else
+        {
+            stream_min << "unknown";
+        }
+        SetVar_dia->m_DL_min->SetLabel(stream_min.str());
+
+        std::stringstream stream_max; // wird hier nur gemacht da stream nicht gelöscht werden kann
+        if(Ptr2SelectedElement->MaxValueValid())
+        {
+            if((Ptr2SelectedElement->GetDataType() == type_f32) ||
+               (Ptr2SelectedElement->GetDataType() == type_f64) )
+            {
+                stream_max << Ptr2SelectedElement->GetMaxValue_F();
+            }
+            else /* Falls keine Gleitkommazahl gelesen werden soll */
+            {
+                stream_max << Ptr2SelectedElement->GetMaxValue_Int();
+            }
+
+        }
+        else
+        {
+            stream_max << "unknown";
+        }
+        SetVar_dia->m_DL_max->SetLabel(stream_max.str());
     }
 }
 
@@ -442,4 +482,60 @@ void LabskausFrame::read_last_config(void)
     CCP_Master->SetLogFolder(std::string(LOG_dir.mb_str()));
     Read_XML_file();
     logfile.close();
+}
+
+
+LabskausFrameSetCal::LabskausFrameSetCal(CCP_driver *ptr_ccp_driver, ECU_variable *ptr_ECU_variable) : Dialog_SetValue(0L)
+{
+    CCP_Master = ptr_ccp_driver;
+    m_ECU_Variable = ptr_ECU_variable;
+}
+
+
+LabskausFrameSetCal::~LabskausFrameSetCal()
+{
+}
+
+void LabskausFrameSetCal::EventTakeOverVal(wxCommandEvent &event)
+{
+    // Überprüfe ob das Feld leer ist
+
+    if( m_DL_NewVal->IsEmpty())
+    {
+        std::cerr << "No new value entered" << std::endl;
+        return;
+    }
+    wxString number = m_DL_NewVal->GetValue();
+
+    // Überprüfe welcher Datentyp benötigt wird
+
+    std::cout << "Value entered:" << number << std::endl;
+    long long_value;
+    double double_value;
+    if(m_ECU_Variable->GetDataType() == type_u8  ||
+       m_ECU_Variable->GetDataType() == type_i8  ||
+       m_ECU_Variable->GetDataType() == type_u16 ||
+       m_ECU_Variable->GetDataType() == type_i16 ||
+       m_ECU_Variable->GetDataType() == type_i32 ||
+       m_ECU_Variable->GetDataType() == type_u32)
+    {
+         if(!number.ToLong(&long_value))
+        {
+            std::cerr << "New value could not be converted to long." << std::endl;
+            return;
+        }
+    }
+
+    if(m_ECU_Variable->GetDataType() == type_f32)
+    {
+        if(!number.ToDouble(&double_value))
+        {
+            std::cerr << "New value could not be converted to double." << std::endl;
+            return;
+        }
+    }
+
+    // Rufe die Funktion des CCP Treibers auf
+    CCP_Master->addCalibration2ActionPlan(*m_ECU_Variable,(int64_t)long_value,(float)double_value);
+
 }

@@ -58,4 +58,20 @@ class LabskausFrame: public GUIFrame
         void Read_XML_file(void);
 };
 
+
+class LabskausFrameSetCal: public Dialog_SetValue
+{
+    public:
+        LabskausFrameSetCal(CCP_driver *ptr_ccp_driver, ECU_variable *ptr_ECU_variable);
+        CCP_driver* CCP_Master;
+        ECU_variable* m_ECU_Variable;
+        ~LabskausFrameSetCal();
+
+    private:
+        //virtual void OnClose(wxCloseEvent& event);
+        //virtual void OnQuit(wxCommandEvent& event);
+        //virtual void OnAbout(wxCommandEvent& event);
+        virtual void EventTakeOverVal(wxCommandEvent &event);
+};
+
 #endif // LABSKAUSMAIN_H

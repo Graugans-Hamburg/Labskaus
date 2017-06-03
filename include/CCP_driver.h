@@ -97,6 +97,8 @@ enum CCP_driver_states
     SM_Wait,
     SM_read_variable_SetMTA,
     SM_read_variable_DataUpload,
+    SM_calibrate_variable_SetMTA,
+    SM_calibrate_variable_DataDNLoad,
 };
 
 enum endian
@@ -116,6 +118,7 @@ class CCP_driver
         void TxCRO_GetCCP_Version();
         void TxCRO_SetMTA(uint8_t MTA_number, uint8_t AdressExtention, uint32_t MTA_adress);
         void TxCRO_Upload(uint8_t num_of_bytes);
+        void TxCRO_Dnload(uint8_t * ptr_data, uint8_t num_of_bytes);
         void Analyze(CCP_Frame& received_CCP_frame);
         void analyze_CRM_Upload(CCP_Frame& received_CCP_frame);
         void ECU_SetECU_MTA_Number1(uint32_t val){ECU_MTA_Number1 = val;}
@@ -147,6 +150,7 @@ class CCP_driver
 
         // CCP Treiber
         void addvariable2ActionPlan(ECU_variable& var2add);
+        void addCalibration2ActionPlan(ECU_variable& Cal2Add, int64_t Cal_Int, float Cal_Float);
         void updateSchedular(void);
         void SetNext_variable_address2read(uint32_t val){next_variable_address2read = val;}
         void SetNext_variable_type(EnumDataType val){Next_variable_type = val;}
@@ -180,6 +184,7 @@ class CCP_driver
         bool      SMT_read_variable; /*When this Transition is set to true and the information from
         the variables SMI_read_variable_type and SMI_read_variable_address will used. They define
         the datatype and the address. */
+        bool      SMT_calibrate_variable;
         EnumDataType  SMI_read_variable_type;
         uint32_t      SMI_read_variable_address;
         uint8_t       SMI_read_address_extention;

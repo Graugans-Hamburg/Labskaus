@@ -136,14 +136,14 @@ GUIFrame::~GUIFrame()
 
 Dialog_SetValue::Dialog_SetValue( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 300,200 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( 300,230 ), wxDefaultSize );
 	
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 	
-	m_DiaVarName = new wxStaticText( this, wxID_ANY, wxT("ECU Variablenname"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_DiaVarName->Wrap( -1 );
-	bSizer4->Add( m_DiaVarName, 0, wxALL, 5 );
+	m_DLVarName = new wxStaticText( this, wxID_ANY, wxT("ECU Variablenname"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DLVarName->Wrap( -1 );
+	bSizer4->Add( m_DLVarName, 0, wxALL, 5 );
 	
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
@@ -152,17 +152,19 @@ Dialog_SetValue::Dialog_SetValue( wxWindow* parent, wxWindowID id, const wxStrin
 	m_staticText6->Wrap( -1 );
 	bSizer5->Add( m_staticText6, 0, wxALL, 5 );
 	
-	m_staticText7 = new wxStaticText( this, wxID_ANY, wxT("???"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText7->Wrap( -1 );
-	bSizer5->Add( m_staticText7, 0, wxALL, 5 );
+	m_DL_max = new wxStaticText( this, wxID_ANY, wxT("???"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DL_max->Wrap( -1 );
+	m_DL_max->SetMinSize( wxSize( 80,-1 ) );
+	
+	bSizer5->Add( m_DL_max, 0, wxALL, 5 );
 	
 	m_staticText8 = new wxStaticText( this, wxID_ANY, wxT("Min:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText8->Wrap( -1 );
 	bSizer5->Add( m_staticText8, 0, wxALL, 5 );
 	
-	m_staticText9 = new wxStaticText( this, wxID_ANY, wxT("???"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText9->Wrap( -1 );
-	bSizer5->Add( m_staticText9, 0, wxALL, 5 );
+	m_DL_min = new wxStaticText( this, wxID_ANY, wxT("???"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DL_min->Wrap( -1 );
+	bSizer5->Add( m_DL_min, 0, wxALL, 5 );
 	
 	bSizer4->Add( bSizer5, 1, wxEXPAND, 5 );
 	
@@ -173,9 +175,9 @@ Dialog_SetValue::Dialog_SetValue( wxWindow* parent, wxWindowID id, const wxStrin
 	m_staticText12->Wrap( -1 );
 	bSizer7->Add( m_staticText12, 0, wxALL, 5 );
 	
-	m_staticText13 = new wxStaticText( this, wxID_ANY, wxT("???"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText13->Wrap( -1 );
-	bSizer7->Add( m_staticText13, 0, wxALL, 5 );
+	m_DL_Actl = new wxStaticText( this, wxID_ANY, wxT("???"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DL_Actl->Wrap( -1 );
+	bSizer7->Add( m_DL_Actl, 0, wxALL, 5 );
 	
 	bSizer4->Add( bSizer7, 1, wxEXPAND, 5 );
 	
@@ -186,27 +188,29 @@ Dialog_SetValue::Dialog_SetValue( wxWindow* parent, wxWindowID id, const wxStrin
 	m_staticText14->Wrap( -1 );
 	bSizer8->Add( m_staticText14, 0, wxALL, 5 );
 	
-	m_textCtrl1 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer8->Add( m_textCtrl1, 0, wxALL, 5 );
+	m_DL_NewVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer8->Add( m_DL_NewVal, 0, wxALL, 5 );
 	
 	bSizer4->Add( bSizer8, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_button4 = new wxButton( this, wxID_ANY, wxT("Wert übernehmen"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer9->Add( m_button4, 0, wxALL, 5 );
+	m_BtnConfirm = new wxButton( this, wxID_ANY, wxT("Wert übernehmen"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer9->Add( m_BtnConfirm, 0, wxALL, 5 );
 	
-	m_button5 = new wxButton( this, wxID_ANY, wxT("Abbrechen"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer9->Add( m_button5, 0, wxALL, 5 );
-	
-	bSizer4->Add( bSizer9, 1, wxEXPAND, 5 );
+	bSizer4->Add( bSizer9, 1, wxALIGN_CENTER, 5 );
 	
 	this->SetSizer( bSizer4 );
 	this->Layout();
 	bSizer4->Fit( this );
+	
+	// Connect Events
+	m_BtnConfirm->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Dialog_SetValue::EventTakeOverVal ), NULL, this );
 }
 
 Dialog_SetValue::~Dialog_SetValue()
 {
+	// Disconnect Events
+	m_BtnConfirm->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Dialog_SetValue::EventTakeOverVal ), NULL, this );
 }

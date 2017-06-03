@@ -6,6 +6,8 @@ ECU_variable::ECU_variable()
     //ctor
     Address = 0;
     Datatype = type_unknown;
+    Min_Value_Valid = false;
+    Max_Value_Valid = false;
 }
 
 ECU_variable::~ECU_variable()
