@@ -145,10 +145,21 @@ void CCP_driver::TxCRO_SetMTA(uint8_t MTA_number, uint8_t AdressExtention, uint3
     CCP_Connect_Cmd->SetByte2(++MessageCounter);
     CCP_Connect_Cmd->SetByte3(MTA_number);
     CCP_Connect_Cmd->SetByte4(AdressExtention);
-    CCP_Connect_Cmd->SetByte5(uint8_t(MTA_adress >> 24));
-    CCP_Connect_Cmd->SetByte6(uint8_t((MTA_adress & 0x00FFFFFF) >> 16));
-    CCP_Connect_Cmd->SetByte7(uint8_t((MTA_adress & 0x0000FFFF) >> 8));
-    CCP_Connect_Cmd->SetByte8(uint8_t(MTA_adress & 0x00000FF));
+    if(ECU_byte_order == little_endian)
+    {
+        CCP_Connect_Cmd->SetByte5(uint8_t( MTA_adress & 0x00000FF));
+        CCP_Connect_Cmd->SetByte6(uint8_t((MTA_adress & 0x0000FF00) >> 8));
+        CCP_Connect_Cmd->SetByte7(uint8_t((MTA_adress & 0x00FF0000) >> 16));
+        CCP_Connect_Cmd->SetByte8(uint8_t( MTA_adress >> 24));
+    }
+    if(ECU_byte_order == big_endian)
+    {
+        CCP_Connect_Cmd->SetByte5(uint8_t( MTA_adress >> 24));
+        CCP_Connect_Cmd->SetByte6(uint8_t((MTA_adress & 0x00FF0000) >> 16));
+        CCP_Connect_Cmd->SetByte7(uint8_t((MTA_adress & 0x0000FF00) >> 8));
+        CCP_Connect_Cmd->SetByte8(uint8_t( MTA_adress & 0x00000FF));
+    }
+
     CCP_Connect_Cmd->setCCPFrameTime();
     CRO_Tx(*CCP_Connect_Cmd);
 }
