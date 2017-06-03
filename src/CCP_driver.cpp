@@ -135,8 +135,9 @@ void CCP_driver::TxCRO_GetCCP_Version(void)
  * Message that will be send over:
  *    Byte1   : 0x02  Command code for the SETMTA command
  *    Byte2   : 0x??  Command Counter ctr
- *    Byte3,4 : 0x02 0x01  Requested CCP Version 2.1
- *    Byte5-8 : doesn't matter
+ *    Byte3   : 0x02  MTA which shall be changed
+ *    Byte4   : 0x??  Address extention
+ *    Byte5-8 : 0x??  New Address
  */
 void CCP_driver::TxCRO_SetMTA(uint8_t MTA_number, uint8_t AdressExtention, uint32_t MTA_adress)
 {
@@ -145,19 +146,19 @@ void CCP_driver::TxCRO_SetMTA(uint8_t MTA_number, uint8_t AdressExtention, uint3
     CCP_Connect_Cmd->SetByte2(++MessageCounter);
     CCP_Connect_Cmd->SetByte3(MTA_number);
     CCP_Connect_Cmd->SetByte4(AdressExtention);
-    if(ECU_byte_order == little_endian)
+    if(ECU_byte_order == PC_byte_order)
     {
-        CCP_Connect_Cmd->SetByte5(uint8_t( MTA_adress & 0x00000FF));
+        CCP_Connect_Cmd->SetByte5(uint8_t( MTA_adress & 0x000000FF));
         CCP_Connect_Cmd->SetByte6(uint8_t((MTA_adress & 0x0000FF00) >> 8));
         CCP_Connect_Cmd->SetByte7(uint8_t((MTA_adress & 0x00FF0000) >> 16));
         CCP_Connect_Cmd->SetByte8(uint8_t( MTA_adress >> 24));
     }
-    if(ECU_byte_order == big_endian)
+    if(ECU_byte_order != PC_byte_order)
     {
         CCP_Connect_Cmd->SetByte5(uint8_t( MTA_adress >> 24));
         CCP_Connect_Cmd->SetByte6(uint8_t((MTA_adress & 0x00FF0000) >> 16));
         CCP_Connect_Cmd->SetByte7(uint8_t((MTA_adress & 0x0000FF00) >> 8));
-        CCP_Connect_Cmd->SetByte8(uint8_t( MTA_adress & 0x00000FF));
+        CCP_Connect_Cmd->SetByte8(uint8_t( MTA_adress & 0x000000FF));
     }
 
     CCP_Connect_Cmd->setCCPFrameTime();
@@ -417,14 +418,67 @@ void CCP_driver::SM_run_state_machine(void)
         case SM_calibrate_variable_DataDNLoad:
             if(SM_enterleave_state == true)
             { /* Enter the state */
-                /* ACHTUNG  ABHAENIG VON DER BYTE ORDER */
-                if(SMI_read_variable_type == type_u8)  TxCRO_Dnload((uint8_t*)(&SMI_read_variable_uint8),1);
-                if(SMI_read_variable_type == type_i8)  TxCRO_Dnload((uint8_t*)(&SMI_read_variable_sint8),1);
-                if(SMI_read_variable_type == type_u16) TxCRO_Dnload((uint8_t*)(&SMI_read_variable_uint16),2);
-                if(SMI_read_variable_type == type_i16) TxCRO_Dnload((uint8_t*)(&SMI_read_variable_sint16),2);
-                if(SMI_read_variable_type == type_u32) TxCRO_Dnload((uint8_t*)(&SMI_read_variable_uint32),4);
-                if(SMI_read_variable_type == type_i32) TxCRO_Dnload((uint8_t*)(&SMI_read_variable_sint32),4);
-                if(SMI_read_variable_type == type_f32) TxCRO_Dnload((uint8_t*)(&SMI_read_variable_f32),4);
+                if(ECU_byte_order == PC_byte_order)
+                {
+                    if(SMI_read_variable_type == type_u8)  TxCRO_Dnload((uint8_t*)(&SMI_read_variable_uint8),1);
+                    if(SMI_read_variable_type == type_i8)  TxCRO_Dnload((uint8_t*)(&SMI_read_variable_sint8),1);
+                    if(SMI_read_variable_type == type_u16) TxCRO_Dnload((uint8_t*)(&SMI_read_variable_uint16),2);
+                    if(SMI_read_variable_type == type_i16) TxCRO_Dnload((uint8_t*)(&SMI_read_variable_sint16),2);
+                    if(SMI_read_variable_type == type_u32) TxCRO_Dnload((uint8_t*)(&SMI_read_variable_uint32),4);
+                    if(SMI_read_variable_type == type_i32) TxCRO_Dnload((uint8_t*)(&SMI_read_variable_sint32),4);
+                    if(SMI_read_variable_type == type_f32) TxCRO_Dnload((uint8_t*)(&SMI_read_variable_f32),4);
+                }
+                if(ECU_byte_order != PC_byte_order)
+                {
+                    if(SMI_read_variable_type == type_u8)  TxCRO_Dnload((uint8_t*)(&SMI_read_variable_uint8),1);
+                    if(SMI_read_variable_type == type_i8)  TxCRO_Dnload((uint8_t*)(&SMI_read_variable_sint8),1);
+                    if(SMI_read_variable_type == type_u16)
+                    {
+                        uint8_t array_new_byte_order[2];
+                        uint8_t* ptr_variable = (uint8_t*)(&SMI_read_variable_uint16);
+                        array_new_byte_order[0] = *( ptr_variable + 1);
+                        array_new_byte_order[1] = *( ptr_variable + 0);
+                        TxCRO_Dnload((uint8_t*)(&(array_new_byte_order[0])),2);
+                    }
+                    if(SMI_read_variable_type == type_i16)
+                    {
+                        uint8_t array_new_byte_order[2];
+                        uint8_t* ptr_variable = (uint8_t*)(&SMI_read_variable_sint16);
+                        array_new_byte_order[0] = *( ptr_variable + 1);
+                        array_new_byte_order[1] = *( ptr_variable + 0);
+                        TxCRO_Dnload((uint8_t*)(&(array_new_byte_order[0])),2);
+                    }
+                    if(SMI_read_variable_type == type_u32)
+                    {
+                        uint8_t array_new_byte_order[4];
+                        uint8_t* ptr_variable = (uint8_t*)(&SMI_read_variable_uint32);
+                        array_new_byte_order[0] = *( ptr_variable + 3);
+                        array_new_byte_order[1] = *( ptr_variable + 2);
+                        array_new_byte_order[2] = *( ptr_variable + 1);
+                        array_new_byte_order[3] = *( ptr_variable + 0);
+                        TxCRO_Dnload((uint8_t*)(&(array_new_byte_order[0])),4);
+                    }
+                    if(SMI_read_variable_type == type_i32)
+                    {
+                        uint8_t array_new_byte_order[4];
+                        uint8_t* ptr_variable = (uint8_t*)(&SMI_read_variable_sint32);
+                        array_new_byte_order[0] = *( ptr_variable + 3);
+                        array_new_byte_order[1] = *( ptr_variable + 2);
+                        array_new_byte_order[2] = *( ptr_variable + 1);
+                        array_new_byte_order[3] = *( ptr_variable + 0);
+                        TxCRO_Dnload((uint8_t*)(&(array_new_byte_order[0])),4);
+                    }
+                    if(SMI_read_variable_type == type_f32)
+                    {
+                        uint8_t array_new_byte_order[4];
+                        uint8_t* ptr_variable = (uint8_t*)(&SMI_read_variable_f32);
+                        array_new_byte_order[0] = *( ptr_variable + 3);
+                        array_new_byte_order[1] = *( ptr_variable + 2);
+                        array_new_byte_order[2] = *( ptr_variable + 1);
+                        array_new_byte_order[3] = *( ptr_variable + 0);
+                        TxCRO_Dnload((uint8_t*)(&(array_new_byte_order[0])),4);
+                    }
+                }
                 SM_enterleave_state = false;
                 break;
             }
