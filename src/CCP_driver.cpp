@@ -370,15 +370,15 @@ void CCP_driver::SM_run_state_machine(void)
                 SM_actl_state = SM_Wait;
                 SMI_read_variable_successfull = true;
                 log_database.add_new_value(SMI_read_variable_address,
-                                            SMI_read_variable_type,
-                                            SMI_read_variable_uint8,
-                                            SMI_read_variable_sint8,
-                                            SMI_read_variable_uint16,
-                                            SMI_read_variable_sint16,
-                                            SMI_read_variable_uint32,
-                                            SMI_read_variable_sint32,
-                                            SMI_read_variable_f32,
-                                            time_of_last_received_CRM);
+                                           SMI_read_variable_type,
+                                           SMI_read_variable_uint8,
+                                           SMI_read_variable_sint8,
+                                           SMI_read_variable_uint16,
+                                           SMI_read_variable_sint16,
+                                           SMI_read_variable_uint32,
+                                           SMI_read_variable_sint32,
+                                           SMI_read_variable_f32,
+                                           time_of_last_received_CRM);
                 SM_enterleave_state = true;
                 break;
             }

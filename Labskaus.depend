@@ -1773,7 +1773,7 @@
 	<vector>
 	"CCP_Frame.h"
 
-1496495274 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/CCP_driver.cpp
+1496526371 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/CCP_driver.cpp
 	"CCP_driver.h"
 
 1495722233 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/CCP_driver.h
@@ -1817,7 +1817,7 @@
 	"Data_Row.h"
 	"type_definition.h"
 
-1493068718 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/Data_Row.h
+1496525729 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/Data_Row.h
 	<time.h>
 	<stdint.h>
 	<string>
@@ -1826,6 +1826,7 @@
 	<iostream>
 	<iomanip>
 	"type_definition.h"
+	"../ECU_variable.h"
 
 1493068647 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/Data_Row.cpp
 	"Data_Row.h"
