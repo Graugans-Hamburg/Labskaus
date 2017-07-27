@@ -19,8 +19,6 @@ class ECU_VarLog : public ECU_VarInfo
     public:
         ECU_VarLog();
         virtual ~ECU_VarLog();
-        void SetVariableAdress(uint32_t val){variable_address = val;}
-        uint32_t GetVariableAdress(void){return variable_address;}
         void plot_values_csv(std::ofstream&);
         void plot_time_csv(std::ofstream& logfile, struct timespec time_measurement_started);
         void Append_u8(uint8_t val, struct timespec time_point);
@@ -32,9 +30,6 @@ class ECU_VarLog : public ECU_VarInfo
         void Append_f32(float val, struct timespec time_point);
     protected:
     private:
-        //std::string variable_name;
-        ECU_VarInfo* ecu_variable;
-        uint32_t variable_address;
         EnumDataType data_type;
         std::vector<uint8_t> datarow_u8;
         std::vector<int8_t> datarow_s8;
