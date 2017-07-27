@@ -11,7 +11,7 @@
 #include "CCP_Frame.h"
 #include "CCP_Drive_List_Element.h"
 #include "type_definition.h"
-#include "History_Log.h"
+#include "LOG_Container.h"
 #include "CCP_Schedular_List_Element.h"
 
 
@@ -145,12 +145,13 @@ class CCP_driver
         /* Following functions are only for testing */
         void test_read_variable(void);
         // Public variable
-        History_Log log_database;
+        LOG_Container log_database;
+        CCP_Schedular_List_Element* SMI_Actl_ECU_Variable;
 
 
         // CCP Treiber
-        void addvariable2ActionPlan(ECU_variable& var2add);
-        void addCalibration2ActionPlan(ECU_variable& Cal2Add, int64_t Cal_Int, float Cal_Float);
+        void addvariable2ActionPlan(ECU_VarInfo& var2add);
+        void addCalibration2ActionPlan(ECU_VarInfo& Cal2Add, int64_t Cal_Int, float Cal_Float);
         void updateSchedular(void);
         void SetNext_variable_address2read(uint32_t val){next_variable_address2read = val;}
         void SetNext_variable_type(EnumDataType val){Next_variable_type = val;}

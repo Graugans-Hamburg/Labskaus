@@ -16,7 +16,9 @@
 	<variable>
 		  <name>i8_test_value</name>
 		  <address>0x20002ab2</address>
-		  <datatype>int8</datatype>         
+		  <datatype>int8</datatype>    
+		  <description/>
+		  <unit/>
 	</variable>
 	<variable>
 		  <name>u16_test_value</name>

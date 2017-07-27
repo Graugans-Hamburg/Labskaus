@@ -1,10 +1,10 @@
-#ifndef HISTORY_LOG_H
-#define HISTORY_LOG_H
+#ifndef LOG_CONTAINER_H_
+#define LOG_CONTAINER_H_
 
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "Data_Row.h"
+#include "ECU_VarLog.h"
 #include "type_definition.h"
 
 enum EnumLogFileName
@@ -13,11 +13,11 @@ enum EnumLogFileName
     FileName_date
 };
 
-class History_Log
+class LOG_Container
 {
     public:
-        History_Log();
-        virtual ~History_Log();
+        LOG_Container();
+        virtual ~LOG_Container();
         void add_new_value(uint32_t var_add,EnumDataType var_type,
                            uint8_t val_u8,
                             int8_t val_i8,
@@ -32,8 +32,8 @@ class History_Log
         void VariableLog_clear(void);
     protected:
     private:
-        std::vector<Data_Row> log_data_base;
+        std::vector<ECU_VarLog> log_data_base;
 
 };
 
-#endif // HISTORY_LOG_H
+#endif // LOG_CONTAINER_H_

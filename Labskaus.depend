@@ -581,11 +581,11 @@
 
 1425353624 /usr/include/wx-3.0/wx/gtk/app.h
 
-1496439926 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.h
+1501185051 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.h
 	<streambuf>
 	<vector>
 	"LabskausApp.h"
-	"ECU_variable.h"
+	"ECU_VarInfo.h"
 	"CCP_driver.h"
 	"wx/timer.h"
 	"GUIFrame.h"
@@ -985,7 +985,7 @@
 
 1425353624 /usr/include/wx-3.0/wx/gtk/frame.h
 
-1496440699 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.cpp
+1501185051 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.cpp
 	"wx_pch.h"
 	<wx_pch.h>
 	<wx/wx.h>
@@ -996,7 +996,6 @@
 	<wx/timer.h>
 	<streambuf>
 	"tinyxml2.h"
-	"ECU_VarListElement.h"
 	"serial.h"
 	"CCP_driver.h"
 
@@ -1773,10 +1772,10 @@
 	<vector>
 	"CCP_Frame.h"
 
-1496526371 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/CCP_driver.cpp
+1501185051 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/CCP_driver.cpp
 	"CCP_driver.h"
 
-1495722233 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/CCP_driver.h
+1501185523 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/CCP_driver.h
 	<vector>
 	<iostream>
 	<iomanip>
@@ -1787,7 +1786,7 @@
 	"CCP_Frame.h"
 	"CCP_Drive_List_Element.h"
 	"type_definition.h"
-	"History_Log.h"
+	"LOG_Container.h"
 	"CCP_Schedular_List_Element.h"
 
 1492628388 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/CCP_Frame.cpp
@@ -1802,22 +1801,22 @@
 1490727794 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/CCP_Drive_List_Element.cpp
 	"CCP_Drive_List_Element.h"
 
-1490900718 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/CCP_Drive_List_Element.h
-	"../ECU_variable.h"
+1501185182 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/CCP_Drive_List_Element.h
+	"ECU_VarInfo.h"
 
 1492258618 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/type_definition.h
 
-1495698045 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/History_Log.cpp
+1501184731 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/History_Log.cpp
 	"History_Log.h"
 
-1495654644 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/History_Log.h
+1501184740 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/History_Log.h
 	<iostream>
 	<fstream>
 	<sstream>
-	"Data_Row.h"
+	"ECU_VarLog.h"
 	"type_definition.h"
 
-1496525729 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/Data_Row.h
+1501183908 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/Data_Row.h
 	<time.h>
 	<stdint.h>
 	<string>
@@ -1826,7 +1825,7 @@
 	<iostream>
 	<iomanip>
 	"type_definition.h"
-	"../ECU_variable.h"
+	"ECU_variable.h"
 
 1493068647 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/Data_Row.cpp
 	"Data_Row.h"
@@ -1839,10 +1838,58 @@
 	<iostream>
 	"CCP_Schedular_List_Element.h"
 
-1495719902 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/CCP_Schedular_List_Element.h
-	"../ECU_variable.h"
+1501185051 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/CCP_Schedular_List_Element.h
+	"ECU_VarInfo.h"
 	<time.h>
 
 1495286969 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/CCP_Schedular_List_Element.cpp
 	"CCP_Schedular_List_Element.h"
+
+1501184736 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/ECU_variable.h
+	<string>
+	"type_definition.h"
+	<stdint.h>
+
+1495712198 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/ECU_variable.cpp
+	"ECU_variable.h"
+	<cstring>
+
+1489698842 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/ECU_VarListElement.h
+	"ECU_variable.h"
+
+1489853776 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/ECU_VarListElement.cpp
+	"ECU_VarListElement.h"
+
+1501185693 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/ECU_VarLog.h
+	<time.h>
+	<stdint.h>
+	<string>
+	<vector>
+	<fstream>
+	<iostream>
+	<iomanip>
+	"type_definition.h"
+	"ECU_VarInfo.h"
+
+1501185051 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/ECU_VarInfo.h
+	<string>
+	"type_definition.h"
+	<stdint.h>
+
+1501184743 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/ECU_VarLog.cpp
+	"ECU_VarLog.h"
+
+1501185051 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/ECU_VarInfo.cpp
+	"ECU_VarInfo.h"
+	<cstring>
+
+1501185523 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/LOG_Container.h
+	<iostream>
+	<fstream>
+	<sstream>
+	"ECU_VarLog.h"
+	"type_definition.h"
+
+1501185523 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/LOG_Container.cpp
+	"LOG_Container.h"
 

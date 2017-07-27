@@ -30,7 +30,6 @@
 
 
 #include "tinyxml2.h"
-#include "ECU_VarListElement.h"
 #include "serial.h"
 #include "CCP_driver.h"
 
@@ -165,7 +164,7 @@ void LabskausFrame::Read_XML_file(void)
     using namespace std;
     using namespace tinyxml2;
     tinyxml2::XMLDocument doc;
-    doc.LoadFile("measurement_darrieusV1.xml");
+    doc.LoadFile("/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/varfile/Labskaus.xml");
     tinyxml2::XMLNode* root = doc.FirstChildElement();
     m_listBox1->Clear();
 
@@ -232,7 +231,7 @@ void LabskausFrame::Read_XML_file(void)
         postn = postn +1;
         m_listBox1->Append(var_name);
 
-        ECU_variable* tmp_var_element = new(ECU_variable);
+        ECU_VarInfo* tmp_var_element = new(ECU_VarInfo);
         tmp_var_element->SetName(var_name);
         unsigned int x;
         std::stringstream ss;
@@ -273,7 +272,7 @@ void LabskausFrame::VarListSelected(wxCommandEvent &event)
 {
     if(!XML_list.empty())
     {
-        ECU_variable* Ptr2SelectedElement = &XML_list.at(m_listBox1->GetSelection());
+        ECU_VarInfo* Ptr2SelectedElement = &XML_list.at(m_listBox1->GetSelection());
         if(!Ptr2SelectedElement)
         {
             std::cerr << "Error the Positon was not found inside the List" << std::endl;
@@ -400,7 +399,7 @@ void LabskausFrame::EventAddCalVal2List(wxCommandEvent &event)
 
     if(!XML_list.empty())
     {
-        ECU_variable* Ptr2SelectedElement = &XML_list.at(m_listBox1->GetSelection());
+        ECU_VarInfo* Ptr2SelectedElement = &XML_list.at(m_listBox1->GetSelection());
         if(!Ptr2SelectedElement)
         {
             std::cerr << "Error the Positon was not found inside the List" << std::endl;
@@ -485,10 +484,10 @@ void LabskausFrame::read_last_config(void)
 }
 
 
-LabskausFrameSetCal::LabskausFrameSetCal(CCP_driver *ptr_ccp_driver, ECU_variable *ptr_ECU_variable) : Dialog_SetValue(0L)
+LabskausFrameSetCal::LabskausFrameSetCal(CCP_driver *ptr_ccp_driver, ECU_VarInfo *ptr_ECU_VarInfo) : Dialog_SetValue(0L)
 {
     CCP_Master = ptr_ccp_driver;
-    m_ECU_Variable = ptr_ECU_variable;
+    m_ECU_Variable = ptr_ECU_VarInfo;
 }
 
 

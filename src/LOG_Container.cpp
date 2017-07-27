@@ -1,23 +1,23 @@
-#include "History_Log.h"
+#include "LOG_Container.h"
 
-History_Log::History_Log()
+LOG_Container::LOG_Container()
 {
     //ctor
 }
 
-History_Log::~History_Log()
+LOG_Container::~LOG_Container()
 {
     //dtor
 }
 
 
-void History_Log::add_new_value(uint32_t var_add,EnumDataType var_type, uint8_t val_u8,
+void LOG_Container::add_new_value(uint32_t var_add,EnumDataType var_type, uint8_t val_u8,
                                 int8_t val_i8, uint16_t val_u16, int16_t val_i16, uint32_t val_u32,
                                 int32_t val_i32,float val_f32, struct timespec time_point)
 {
     bool datarow_found = false;
     uint64_t i = 0;
-    Data_Row* tmp_data_row;
+    ECU_VarLog* tmp_data_row;
 
     // Checke ob es schon ein Datenreihe für diese Variable gibt
     for(i = 0; i < log_data_base.size(); i++)
@@ -32,7 +32,7 @@ void History_Log::add_new_value(uint32_t var_add,EnumDataType var_type, uint8_t 
     // Erstellen der Datenreihe falls noch nicht gefunden
     if(datarow_found == false)
     {
-        Data_Row* new_variablen_row = new(Data_Row);
+        ECU_VarLog* new_variablen_row = new(ECU_VarLog);
         new_variablen_row->SetVariableAdress(var_add);
         log_data_base.push_back(*new_variablen_row);
     }
@@ -72,7 +72,7 @@ void History_Log::add_new_value(uint32_t var_add,EnumDataType var_type, uint8_t 
 }
 
 
-void History_Log::VariableLog_export(struct timespec time_measurement_started, std::string log_folder, EnumLogFileName E_Nametype)
+void LOG_Container::VariableLog_export(struct timespec time_measurement_started, std::string log_folder, EnumLogFileName E_Nametype)
 {
     /* Determin the date */
 
@@ -141,7 +141,7 @@ void History_Log::VariableLog_export(struct timespec time_measurement_started, s
          {
             uint64_t one_based_idx = idx_i + 1;
             /*  Select the first variable log*/
-            Data_Row* tmp_variable_datarow;
+            ECU_VarLog* tmp_variable_datarow;
             tmp_variable_datarow = &log_data_base.at(idx_i);
 
             logfile << "var" << "(" << one_based_idx << ").value = [";
@@ -157,7 +157,7 @@ void History_Log::VariableLog_export(struct timespec time_measurement_started, s
     }
 }
 
-void History_Log::VariableLog_clear(void)
+void LOG_Container::VariableLog_clear(void)
 {
     log_data_base.clear();
 }

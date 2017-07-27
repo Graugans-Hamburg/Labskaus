@@ -1,59 +1,59 @@
-#include "Data_Row.h"
+#include "ECU_VarLog.h"
 
-Data_Row::Data_Row()
+ECU_VarLog::ECU_VarLog()
 {
     //ctor
 }
 
-Data_Row::~Data_Row()
+ECU_VarLog::~ECU_VarLog()
 {
     //dtor
 }
 
-void Data_Row::Append_u8(uint8_t val, struct timespec time_point)
+void ECU_VarLog::Append_u8(uint8_t val, struct timespec time_point)
 {
     datarow_u8.push_back(val);
     timerow.push_back(time_point);
 }
 
-void Data_Row::Append_s8(int8_t val, struct timespec time_point)
+void ECU_VarLog::Append_s8(int8_t val, struct timespec time_point)
 {
 
     datarow_s8.push_back(val);
     timerow.push_back(time_point);
 }
 
-void Data_Row::Append_u16(uint16_t val, struct timespec time_point)
+void ECU_VarLog::Append_u16(uint16_t val, struct timespec time_point)
 {
     datarow_u16.push_back(val);
     timerow.push_back(time_point);
 }
 
-void Data_Row::Append_s16(int16_t val, struct timespec time_point)
+void ECU_VarLog::Append_s16(int16_t val, struct timespec time_point)
 {
     datarow_s16.push_back(val);
     timerow.push_back(time_point);
 }
 
-void Data_Row::Append_u32(uint32_t val, struct timespec time_point)
+void ECU_VarLog::Append_u32(uint32_t val, struct timespec time_point)
 {
     datarow_u32.push_back(val);
     timerow.push_back(time_point);
 }
 
-void Data_Row::Append_s32(int32_t val, struct timespec time_point)
+void ECU_VarLog::Append_s32(int32_t val, struct timespec time_point)
 {
     datarow_s32.push_back(val);
     timerow.push_back(time_point);
 }
 
-void Data_Row::Append_f32(float val, struct timespec time_point)
+void ECU_VarLog::Append_f32(float val, struct timespec time_point)
 {
     datarow_f32.push_back(val);
     timerow.push_back(time_point);
 }
 
-void Data_Row::plot_values_csv(std::ofstream& logfile)
+void ECU_VarLog::plot_values_csv(std::ofstream& logfile)
 {
      /*
       * number_of_non_empty_structs beinhaltet die Anzahl der nicht leeren strukturen. Es
@@ -152,7 +152,7 @@ void Data_Row::plot_values_csv(std::ofstream& logfile)
 }
 
 
-void Data_Row::plot_time_csv(std::ofstream& logfile, struct timespec time_measurement_started)
+void ECU_VarLog::plot_time_csv(std::ofstream& logfile, struct timespec time_measurement_started)
 {
      /*
       * number_of_non_empty_structs beinhaltet die Anzahl der nicht leeren strukturen. Es

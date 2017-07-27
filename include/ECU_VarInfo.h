@@ -1,15 +1,16 @@
-#ifndef ECU_VARIABLE_H
-#define ECU_VARIABLE_H
+#ifndef ECU_VARINFO_H
+#define ECU_VARINFO_H
+
 #include <string>
 #include "type_definition.h"
 #include <stdint.h>
 
 
-class ECU_variable
+class ECU_VarInfo
 {
     public:
-        ECU_variable();
-        virtual ~ECU_variable();
+        ECU_VarInfo();
+        virtual ~ECU_VarInfo();
         uint32_t GetAddress() { return Address; }
         void SetAddress(uint32_t val) { Address = val; }
         EnumDataType GetDataType() { return Datatype; }
@@ -44,4 +45,4 @@ class ECU_variable
         std::string Description;
 };
 
-#endif // ECU_VARIABLE_H
+#endif // ECU_VARINFO_H

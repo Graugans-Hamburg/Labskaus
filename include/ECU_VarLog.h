@@ -1,5 +1,5 @@
-#ifndef DATA_ROW_H
-#define DATA_ROW_H
+#ifndef ECU_VARLOG_H
+#define ECU_VARLOG_H
 
 
 #include <time.h>
@@ -10,15 +10,15 @@
 #include <iostream>
 #include <iomanip>
 #include "type_definition.h"
-#include "../ECU_variable.h"
+#include "ECU_VarInfo.h"
 
 
 
-class Data_Row
+class ECU_VarLog : public ECU_VarInfo
 {
     public:
-        Data_Row();
-        virtual ~Data_Row();
+        ECU_VarLog();
+        virtual ~ECU_VarLog();
         void SetVariableAdress(uint32_t val){variable_address = val;}
         uint32_t GetVariableAdress(void){return variable_address;}
         void plot_values_csv(std::ofstream&);
@@ -33,7 +33,7 @@ class Data_Row
     protected:
     private:
         //std::string variable_name;
-        ECU_variable* ecu_variable;
+        ECU_VarInfo* ecu_variable;
         uint32_t variable_address;
         EnumDataType data_type;
         std::vector<uint8_t> datarow_u8;
@@ -46,4 +46,4 @@ class Data_Row
         std::vector<struct timespec> timerow;
 };
 
-#endif // DATA_ROW_H
+#endif // ECU_VARLOG_H

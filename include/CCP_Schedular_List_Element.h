@@ -1,7 +1,7 @@
 #ifndef CCP_SCHEDULAR_LIST_ELEMENT_H
 #define CCP_SCHEDULAR_LIST_ELEMENT_H
 
-#include "../ECU_variable.h"
+#include "ECU_VarInfo.h"
 #include <time.h>
 
 enum EnumMode
@@ -11,7 +11,7 @@ enum EnumMode
 };
 
 
-class CCP_Schedular_List_Element : public ECU_variable
+class CCP_Schedular_List_Element : public ECU_VarInfo
 {
     public:
         CCP_Schedular_List_Element();

@@ -13,7 +13,7 @@
 #include <streambuf>
 #include <vector>
 #include "LabskausApp.h"
-#include "ECU_variable.h"
+#include "ECU_VarInfo.h"
 #include "CCP_driver.h"
 #include "wx/timer.h"
 #include "GUIFrame.h"
@@ -31,7 +31,7 @@ class LabskausFrame: public GUIFrame
 {
     public:
         LabskausFrame(wxFrame *frame);
-        std::vector<ECU_variable> XML_list;
+        std::vector<ECU_VarInfo> XML_list;
         wxTimer* recTimer; // declaration of Timer object
         wxTimer* data_acquisition_timer;
         CCP_driver* CCP_Master;
@@ -62,9 +62,9 @@ class LabskausFrame: public GUIFrame
 class LabskausFrameSetCal: public Dialog_SetValue
 {
     public:
-        LabskausFrameSetCal(CCP_driver *ptr_ccp_driver, ECU_variable *ptr_ECU_variable);
+        LabskausFrameSetCal(CCP_driver *ptr_ccp_driver, ECU_VarInfo *ptr_ECU_VarInfo);
         CCP_driver* CCP_Master;
-        ECU_variable* m_ECU_Variable;
+        ECU_VarInfo* m_ECU_Variable;
         ~LabskausFrameSetCal();
 
     private:

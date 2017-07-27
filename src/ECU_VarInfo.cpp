@@ -1,7 +1,7 @@
-#include "ECU_variable.h"
+#include "ECU_VarInfo.h"
 #include <cstring>
 
-ECU_variable::ECU_variable()
+ECU_VarInfo::ECU_VarInfo()
 {
     //ctor
     Address = 0;
@@ -10,12 +10,12 @@ ECU_variable::ECU_variable()
     Max_Value_Valid = false;
 }
 
-ECU_variable::~ECU_variable()
+ECU_VarInfo::~ECU_VarInfo()
 {
     //dtor
 }
 
-void ECU_variable::ParseDatatyp(const char * Cstr)
+void ECU_VarInfo::ParseDatatyp(const char * Cstr)
 {
     if(strcmp(Cstr,"uint8") == 0)
     {
@@ -63,7 +63,7 @@ void ECU_variable::ParseDatatyp(const char * Cstr)
     SetDataType(type_unknown);
 }
 
-std::string ECU_variable::GetDatatypAsString(void)
+std::string ECU_VarInfo::GetDatatypAsString(void)
 {
     std::string typeAsString;
     switch(Datatype)

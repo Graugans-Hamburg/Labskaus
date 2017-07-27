@@ -1,7 +1,7 @@
 #ifndef CCP_DRIVE_LIST_ELEMENT_H
 #define CCP_DRIVE_LIST_ELEMENT_H
 
-#include "../ECU_variable.h"
+#include "ECU_VarInfo.h"
 
 enum data_acquisition_type
 {
@@ -11,7 +11,7 @@ enum data_acquisition_type
 };
 
 
-class CCP_Drive_List_Element : public ECU_variable
+class CCP_Drive_List_Element : public ECU_VarInfo
 {
     public:
         CCP_Drive_List_Element();

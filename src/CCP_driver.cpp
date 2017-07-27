@@ -899,7 +899,7 @@ void CCP_driver::Messagebuffer_clear(void)
     CCP_Msg_Buffer.clear();
 }
 
-void CCP_driver::addvariable2ActionPlan(ECU_variable& var2add)
+void CCP_driver::addvariable2ActionPlan(ECU_VarInfo& var2add)
 {
     bool add_variable2list = false;
 
@@ -980,6 +980,8 @@ void CCP_driver::updateSchedular(void)
             ptr_tabel_element= &ActionTable.at(memory_list_element);
             if(ptr_tabel_element->GetAquisitionMode()  == E_Calibration)
             {
+                // TODO place ECU_VarInfo here
+                SMI_Actl_ECU_Variable = ptr_tabel_element;
                 SMI_read_variable_address = ptr_tabel_element->GetAddress();
                 SMI_read_variable_type    = ptr_tabel_element->GetDataType();
                 SMI_read_variable_uint8   =  (uint8_t) ptr_tabel_element->GetCalValue_Int();
@@ -1024,7 +1026,7 @@ void CCP_driver::VariableLog_export(void)
  *
  */
 
-void CCP_driver::addCalibration2ActionPlan(ECU_variable& Cal2Add, int64_t Cal_Int, float Cal_Float)
+void CCP_driver::addCalibration2ActionPlan(ECU_VarInfo& Cal2Add, int64_t Cal_Int, float Cal_Float)
 {
         CCP_Schedular_List_Element* tmp = new(CCP_Schedular_List_Element);
         tmp->SetAddress(Cal2Add.GetAddress());
