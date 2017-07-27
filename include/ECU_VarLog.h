@@ -30,14 +30,13 @@ class ECU_VarLog : public ECU_VarInfo
         void Append_f32(float val, struct timespec time_point);
     protected:
     private:
-        EnumDataType data_type;
-        std::vector<uint8_t> datarow_u8;
-        std::vector<int8_t> datarow_s8;
+        std::vector<uint8_t>  datarow_u8;
+        std::vector<int8_t>   datarow_s8;
         std::vector<uint16_t> datarow_u16;
-        std::vector<int16_t> datarow_s16;
+        std::vector<int16_t>  datarow_s16;
         std::vector<uint32_t> datarow_u32;
-        std::vector<int32_t> datarow_s32;
-        std::vector<float> datarow_f32;
+        std::vector<int32_t>  datarow_s32;
+        std::vector<float>    datarow_f32;
         std::vector<struct timespec> timerow;
 };
 

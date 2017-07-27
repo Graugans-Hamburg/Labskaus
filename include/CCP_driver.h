@@ -111,7 +111,9 @@ class CCP_driver
 {
     public:
         CCP_driver();
+        CCP_driver(std::vector<ECU_VarInfo>* ptr_XML_List);
         virtual ~CCP_driver();
+        void Set_XMLExtract(std::vector<ECU_VarInfo>* ptr_XML_List);
         void SendCCPFrame();
         void AnalyzeCCPFrame();
         void TxCRO_Connect();
@@ -147,8 +149,6 @@ class CCP_driver
         // Public variable
         LOG_Container log_database;
         CCP_Schedular_List_Element* SMI_Actl_ECU_Variable;
-
-
         // CCP Treiber
         void addvariable2ActionPlan(ECU_VarInfo& var2add);
         void addCalibration2ActionPlan(ECU_VarInfo& Cal2Add, int64_t Cal_Int, float Cal_Float);
@@ -158,7 +158,6 @@ class CCP_driver
     protected:
     private:
         serial SerialPort;
-
 
         bool      ECU_Connected; /*Connect Cmd, positive Antwort */
         uint8_t   ECU_CCP_Version_Main;
@@ -203,6 +202,7 @@ class CCP_driver
         std::vector<CCP_Frame> CCP_Msg_Buffer;
         std::string log_folder;
 
+        std::vector<ECU_VarInfo>* m_XML_list;
 
         std::vector<CCP_Schedular_List_Element> ActionTable;
         uint32_t   next_variable_address2read;

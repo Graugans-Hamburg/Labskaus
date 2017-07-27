@@ -247,6 +247,7 @@ void CCP_driver::SM_run_state_machine(void)
             { /* Enter the state */
                 Messagebuffer_clear();
                 log_database.VariableLog_clear();
+                log_database.Set_XMLListReference(m_XML_list);
                 SetMeasurementStartTime();
                 TxCRO_Connect();
                 SM_enterleave_state = false;
@@ -1037,4 +1038,15 @@ void CCP_driver::addCalibration2ActionPlan(ECU_VarInfo& Cal2Add, int64_t Cal_Int
         tmp->SetCalValue_Int(Cal_Int);
         tmp->SetCalValue_Float(Cal_Float);
         ActionTable.push_back(*tmp);
+}
+
+/*
+ * 1. Argument: Zeiger zur Extrahierten XML Liste
+ *
+ */
+
+
+void CCP_driver::Set_XMLExtract(std::vector<ECU_VarInfo>* ptr_XML_List)
+{
+    m_XML_list = ptr_XML_List;
 }

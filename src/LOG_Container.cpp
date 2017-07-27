@@ -3,6 +3,7 @@
 LOG_Container::LOG_Container()
 {
     //ctor
+    m_XML_list = nullptr;
 }
 
 LOG_Container::~LOG_Container()
@@ -34,6 +35,7 @@ void LOG_Container::add_new_value(uint32_t var_add,EnumDataType var_type, uint8_
     {
         ECU_VarLog* new_VarLog = new(ECU_VarLog);
         new_VarLog->SetAddress(var_add);
+        Update_ECUInfo(*new_VarLog,var_add);
         log_data_base.push_back(*new_VarLog);
     }
 
@@ -144,6 +146,12 @@ void LOG_Container::VariableLog_export(struct timespec time_measurement_started,
             ECU_VarLog* tmp_variable_datarow;
             tmp_variable_datarow = &log_data_base.at(idx_i);
 
+            logfile << "var" << "(" << one_based_idx << ").name = '";
+            logfile << tmp_variable_datarow->GetName() << "';" << std::endl;
+
+            logfile << "var" << "(" << one_based_idx << ").unit = '";
+            logfile << tmp_variable_datarow->GetUnit() << "';" << std::endl;
+
             logfile << "var" << "(" << one_based_idx << ").value = [";
             tmp_variable_datarow->plot_values_csv(logfile);
             logfile << "];" << std::endl;
@@ -160,4 +168,34 @@ void LOG_Container::VariableLog_export(struct timespec time_measurement_started,
 void LOG_Container::VariableLog_clear(void)
 {
     log_data_base.clear();
+}
+
+
+void LOG_Container::Set_XMLListReference(std::vector<ECU_VarInfo>* ptr_XML_List)
+{
+    m_XML_list = ptr_XML_List;
+}
+
+void LOG_Container::Update_ECUInfo(ECU_VarLog& loc_ECU_VarLog, uint32_t Address)
+{
+
+    uint64_t i = 0;
+    ECU_VarInfo* tmp_ECU_VarInfo;
+
+    // Checke ob es schon ein Datenreihe für diese Variable gibt
+    for(i = 0; i < m_XML_list->size(); i++)
+    {
+        tmp_ECU_VarInfo = &(m_XML_list->at(i));
+        if (tmp_ECU_VarInfo->GetAddress() == Address)
+        {
+            loc_ECU_VarLog.SetName(tmp_ECU_VarInfo->GetName());
+            loc_ECU_VarLog.SetUnit(tmp_ECU_VarInfo->GetUnit());
+            loc_ECU_VarLog.SetDescription(tmp_ECU_VarInfo->GetDescription());
+
+            break;
+
+        }
+
+    }
+
 }

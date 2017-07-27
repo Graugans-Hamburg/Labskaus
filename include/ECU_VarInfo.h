@@ -17,6 +17,8 @@ class ECU_VarInfo
         void SetDataType(EnumDataType val) { Datatype = val; }
         std::string GetName() { return Name; }
         void SetName(std::string val) { Name = val; }
+        std::string GetUnit() { return Unit; }
+        void SetUnit(std::string val) { Unit = val; }
         std::string GetDescription() { return Description; }
         void SetDescription(std::string val) { Description = val; }
         void ParseDatatyp(const char *);
@@ -43,6 +45,7 @@ class ECU_VarInfo
         bool Min_Value_Valid;
         std::string Name;
         std::string Description;
+        std::string Unit;
 };
 
 #endif // ECU_VARINFO_H

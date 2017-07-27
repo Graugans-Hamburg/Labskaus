@@ -244,6 +244,8 @@ void LabskausFrame::Read_XML_file(void)
         variable = variable->NextSiblingElement();
     }while(variable);
 
+    CCP_Master->Set_XMLExtract(&XML_list);
+
 }
 
 
