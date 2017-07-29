@@ -28,6 +28,9 @@ class ECU_VarLog : public ECU_VarInfo
         void Append_u32(uint32_t val, struct timespec time_point);
         void Append_s32(int32_t val, struct timespec time_point);
         void Append_f32(float val, struct timespec time_point);
+
+        std::string GetLastValue(void);
+
     protected:
     private:
         std::vector<uint8_t>  datarow_u8;

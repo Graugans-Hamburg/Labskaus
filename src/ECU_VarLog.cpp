@@ -187,3 +187,18 @@ void ECU_VarLog::plot_time_csv(std::ofstream& logfile, struct timespec time_meas
     }
 }
 
+std::string ECU_VarLog::GetLastValue(void)
+{
+    std::string emtpystr;
+
+    if(!datarow_u8.size()) {return std::to_string(datarow_u8.back()); }
+    if(!datarow_s8.size()) {return std::to_string(datarow_s8.back()); }
+    if(!datarow_u16.size()) {return std::to_string(datarow_u16.back()); }
+    if(!datarow_s16.size()) {return std::to_string(datarow_s16.back()); }
+    if(!datarow_u32.size()) {return std::to_string(datarow_u32.back()); }
+    if(!datarow_s32.size()) {return std::to_string(datarow_s32.back()); }
+    if(!datarow_f32.size()) {return std::to_string(datarow_f32.back()); }
+
+    return emtpystr;
+}
+

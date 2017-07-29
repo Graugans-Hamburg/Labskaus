@@ -369,6 +369,22 @@ void LabskausFrame::DA_List_Timer(wxTimerEvent& event)
     tmp.append(std::to_string(CCP_Master->log_database.GetNmOfLogVariables()));
     statusBar->SetStatusText(_(tmp), 0);
     statusBar->SetStatusText(wxbuildinfo(short_f), 1);
+    //updateMeasListValues();
+}
+
+
+void LabskausFrame::updateMeasListValues(void)
+{
+    std::string lastValue;
+    wxString tmp_wxString;
+    for(int idx = 0; idx < m_MeasList->GetNumberRows(); idx++)
+    {
+        tmp_wxString = m_MeasList->GetCellValue(idx,0);
+        lastValue = CCP_Master->log_database.LastRecValue(tmp_wxString.ToStdString());
+        wxString newwxshit(lastValue);
+        m_MeasList->SetCellValue(idx,1,"bla");
+    }
+
 }
 
 
@@ -389,7 +405,16 @@ void LabskausFrame::EventAddVar2List(wxCommandEvent &event)
         }
         else
         {
-            CCP_Master->addvariable2ActionPlan(XML_list.at(m_listBox1->GetSelection()));
+            int result;
+            result = CCP_Master->addvariable2ActionPlan(XML_list.at(m_listBox1->GetSelection()));
+            if(!result)
+            {
+                ECU_VarInfo& tmp_ECU_VarInfo = XML_list.at(m_listBox1->GetSelection());
+                wxString tmp_wxString(tmp_ECU_VarInfo.GetName());
+                m_MeasList->AppendRows(1);
+                determine_next_free_row();
+                m_MeasList->SetCellValue(m_next_free_row,0,tmp_wxString);
+            }
         }
     }
 
@@ -456,6 +481,32 @@ void LabskausFrame::EventAddCalVal2List(wxCommandEvent &event)
     }
 }
 
+
+void LabskausFrame::EventMeaListKeyPres( wxKeyEvent& event )
+{
+
+    wxArrayInt selection = m_MeasList->GetSelectedRows();
+    std::cout << "Number of selected elements: " << selection.size() << std::endl;
+
+    if(selection.size() == 1)
+    {
+        std::cout << "Selected Row: " << selection.Item(0) << std::endl;
+        int selected_row = selection.Item(0);
+        wxString tmp_xxString = m_MeasList->GetCellValue(selected_row,0);
+        std::string var2rm_str = tmp_xxString.ToStdString();
+        std::cout << "Remove the variable: "<< var2rm_str << std::endl;
+        m_MeasList->DeleteRows(selection.Item(0));
+
+        CCP_Master->rmVariableFromActionPlan(var2rm_str);
+
+    }
+
+    //std::cout << "Row: "<<  << "is selected." << std::endl;
+
+
+}
+
+
 void LabskausFrame::read_last_config(void)
 {
     std::ifstream logfile("config_last_session.txt");
@@ -485,6 +536,18 @@ void LabskausFrame::read_last_config(void)
     logfile.close();
 }
 
+
+void LabskausFrame::determine_next_free_row()
+{
+    wxString analyse_wxstring;
+    uint64_t analyse_row = 0;
+    do
+    {
+        analyse_wxstring = m_MeasList->GetCellValue(analyse_row,0);
+        m_next_free_row = analyse_row;
+        analyse_row++;
+    }while(!analyse_wxstring.IsEmpty());
+}
 
 LabskausFrameSetCal::LabskausFrameSetCal(CCP_driver *ptr_ccp_driver, ECU_VarInfo *ptr_ECU_VarInfo) : Dialog_SetValue(0L)
 {
@@ -538,5 +601,7 @@ void LabskausFrameSetCal::EventTakeOverVal(wxCommandEvent &event)
 
     // Rufe die Funktion des CCP Treibers auf
     CCP_Master->addCalibration2ActionPlan(*m_ECU_Variable,(int64_t)long_value,(float)double_value);
-
 }
+
+
+

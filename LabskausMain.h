@@ -32,6 +32,8 @@ class LabskausFrame: public GUIFrame
     public:
         LabskausFrame(wxFrame *frame);
         std::vector<ECU_VarInfo> XML_list;
+        uint64_t m_next_free_row;
+        void updateMeasListValues(void);
         wxTimer* recTimer; // declaration of Timer object
         wxTimer* data_acquisition_timer;
         CCP_driver* CCP_Master;
@@ -54,8 +56,10 @@ class LabskausFrame: public GUIFrame
         virtual void DA_List_Timer(wxTimerEvent& event);
         virtual void EventAddVar2List(wxCommandEvent &event);
         virtual void EventAddCalVal2List(wxCommandEvent &event);
+        virtual void EventMeaListKeyPres( wxKeyEvent& event );
         void read_last_config(void);
         void Read_XML_file(void);
+        void determine_next_free_row();
 };
 
 

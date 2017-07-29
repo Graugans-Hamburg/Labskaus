@@ -900,7 +900,7 @@ void CCP_driver::Messagebuffer_clear(void)
     CCP_Msg_Buffer.clear();
 }
 
-void CCP_driver::addvariable2ActionPlan(ECU_VarInfo& var2add)
+int CCP_driver::addvariable2ActionPlan(ECU_VarInfo& var2add)
 {
     bool add_variable2list = false;
 
@@ -921,7 +921,7 @@ void CCP_driver::addvariable2ActionPlan(ECU_VarInfo& var2add)
             {
                 add_variable2list = false;
                 std::cerr << "Die Variable befindet sich bereits einmal in der Liste" << std::endl;
-                break;
+                return -1;
             }
             else
             {
@@ -935,11 +935,29 @@ void CCP_driver::addvariable2ActionPlan(ECU_VarInfo& var2add)
         CCP_Schedular_List_Element* tmp = new(CCP_Schedular_List_Element);
         tmp->SetAddress(var2add.GetAddress());
         tmp->SetDataType(var2add.GetDataType());
+        tmp->SetName(var2add.GetName());
         tmp->SetSampleTime(10);
         tmp->SetMode_Polling();
         tmp->SetLastRequest_2_now();
         ActionTable.push_back(*tmp);
     }
+    return 0;
+}
+
+int CCP_driver::rmVariableFromActionPlan(std::string var2rm)
+{
+    CCP_Schedular_List_Element* ptr_tmp_list_element;
+    uint32_t idx;
+    for(idx = 0; idx < ActionTable.size(); idx++)
+    {
+        ptr_tmp_list_element = &ActionTable.at(idx);
+        if(!var2rm.compare(ptr_tmp_list_element->GetName()))
+        {
+            ActionTable.erase(ActionTable.begin() + idx);
+            break;
+        }
+    }
+    return 0;
 }
 
 

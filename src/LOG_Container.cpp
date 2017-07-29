@@ -191,11 +191,25 @@ void LOG_Container::Update_ECUInfo(ECU_VarLog& loc_ECU_VarLog, uint32_t Address)
             loc_ECU_VarLog.SetName(tmp_ECU_VarInfo->GetName());
             loc_ECU_VarLog.SetUnit(tmp_ECU_VarInfo->GetUnit());
             loc_ECU_VarLog.SetDescription(tmp_ECU_VarInfo->GetDescription());
-
             break;
-
         }
-
     }
+}
 
+std::string LOG_Container::LastRecValue(std::string ecuName)
+{
+    uint64_t i = 0;
+    ECU_VarLog* tmp_VarLog;
+    std::string emptystr;
+    std::cout << ecuName << std::endl;
+    // Checke ob es schon ein Datenreihe für diese Variable gibt
+    for(i = 0; i < log_data_base.size(); i++)
+    {
+        tmp_VarLog = &log_data_base.at(i);
+        if(!ecuName.compare(tmp_VarLog->GetName()))
+        {
+            return tmp_VarLog->GetLastValue();
+        }
+    }
+    return emptystr;
 }

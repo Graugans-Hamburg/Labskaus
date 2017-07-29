@@ -581,7 +581,7 @@
 
 1425353624 /usr/include/wx-3.0/wx/gtk/app.h
 
-1501185051 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.h
+1501285970 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.h
 	<streambuf>
 	<vector>
 	"LabskausApp.h"
@@ -590,7 +590,7 @@
 	"wx/timer.h"
 	"GUIFrame.h"
 
-1495714322 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/GUIFrame.h
+1501284799 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/GUIFrame.h
 	<wx/string.h>
 	<wx/bitmap.h>
 	<wx/image.h>
@@ -606,6 +606,7 @@
 	<wx/stattext.h>
 	<wx/button.h>
 	<wx/sizer.h>
+	<wx/grid.h>
 	<wx/frame.h>
 	<wx/textctrl.h>
 	<wx/dialog.h>
@@ -985,7 +986,7 @@
 
 1425353624 /usr/include/wx-3.0/wx/gtk/frame.h
 
-1501188718 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.cpp
+1501289632 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.cpp
 	"wx_pch.h"
 	<wx_pch.h>
 	<wx/wx.h>
@@ -999,7 +1000,7 @@
 	"serial.h"
 	"CCP_driver.h"
 
-1495714322 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/GUIFrame.cpp
+1501284041 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/GUIFrame.cpp
 	"wx/wxprec.h"
 	<wx/wx.h>
 	"GUIFrame.h"
@@ -1772,10 +1773,10 @@
 	<vector>
 	"CCP_Frame.h"
 
-1501189086 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/CCP_driver.cpp
+1501284115 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/CCP_driver.cpp
 	"CCP_driver.h"
 
-1501189168 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/CCP_driver.h
+1501278722 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/CCP_driver.h
 	<vector>
 	<iostream>
 	<iomanip>
@@ -1860,7 +1861,7 @@
 1489853776 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/ECU_VarListElement.cpp
 	"ECU_VarListElement.h"
 
-1501187811 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/ECU_VarLog.h
+1501287530 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/ECU_VarLog.h
 	<time.h>
 	<stdint.h>
 	<string>
@@ -1876,20 +1877,38 @@
 	"type_definition.h"
 	<stdint.h>
 
-1501184743 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/ECU_VarLog.cpp
+1501288229 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/ECU_VarLog.cpp
 	"ECU_VarLog.h"
 
 1501185051 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/ECU_VarInfo.cpp
 	"ECU_VarInfo.h"
 	<cstring>
 
-1501190232 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/LOG_Container.h
+1501288013 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/include/LOG_Container.h
 	<iostream>
 	<fstream>
 	<sstream>
 	"ECU_VarLog.h"
 	"type_definition.h"
 
-1501190922 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/LOG_Container.cpp
+1501289344 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/src/LOG_Container.cpp
 	"LOG_Container.h"
+
+1425353625 /usr/include/wx-3.0/wx/grid.h
+	"wx/generic/grid.h"
+	"wx/generic/grideditors.h"
+	"wx/generic/gridctrl.h"
+
+1425353625 /usr/include/wx-3.0/wx/generic/grid.h
+	"wx/defs.h"
+	"wx/hashmap.h"
+	"wx/scrolwin.h"
+
+1425353625 /usr/include/wx-3.0/wx/generic/grideditors.h
+	"wx/defs.h"
+	"wx/scopedptr.h"
+
+1425353625 /usr/include/wx-3.0/wx/generic/gridctrl.h
+	"wx/grid.h"
+	"wx/datetime.h"
 

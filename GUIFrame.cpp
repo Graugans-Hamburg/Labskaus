@@ -97,11 +97,44 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	bSizer1->Add( bSizer2, 1, wxEXPAND, 5 );
 	
-	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("This will show the information"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->Wrap( -1 );
-	m_staticText2->SetMinSize( wxSize( 500,200 ) );
+	wxBoxSizer* bSizer9;
+	bSizer9 = new wxBoxSizer( wxVERTICAL );
 	
-	bSizer1->Add( m_staticText2, 0, wxALL, 5 );
+	m_MeasList = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	// Grid
+	m_MeasList->CreateGrid( 0, 2 );
+	m_MeasList->EnableEditing( false );
+	m_MeasList->EnableGridLines( true );
+	m_MeasList->SetGridLineColour( wxColour( 190, 190, 190 ) );
+	m_MeasList->EnableDragGridSize( false );
+	m_MeasList->SetMargins( 0, 0 );
+	
+	// Columns
+	m_MeasList->SetColSize( 0, 345 );
+	m_MeasList->SetColSize( 1, 68 );
+	m_MeasList->EnableDragColMove( true );
+	m_MeasList->EnableDragColSize( true );
+	m_MeasList->SetColLabelSize( 20 );
+	m_MeasList->SetColLabelValue( 0, wxT("Variable") );
+	m_MeasList->SetColLabelValue( 1, wxT("Wert") );
+	m_MeasList->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
+	
+	// Rows
+	m_MeasList->EnableDragRowSize( true );
+	m_MeasList->SetRowLabelSize( 20 );
+	m_MeasList->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
+	
+	// Label Appearance
+	m_MeasList->SetLabelFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90, false, wxEmptyString ) );
+	m_MeasList->SetLabelTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_CAPTIONTEXT ) );
+	
+	// Cell Defaults
+	m_MeasList->SetDefaultCellFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90, false, wxT("Caladea") ) );
+	m_MeasList->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	bSizer9->Add( m_MeasList, 5, wxALL|wxEXPAND, 5 );
+	
+	bSizer1->Add( bSizer9, 3, wxEXPAND, 5 );
 	
 	this->SetSizer( bSizer1 );
 	this->Layout();
@@ -117,6 +150,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_listBox1->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( GUIFrame::VarListSelected ), NULL, this );
 	m_Add_var2list->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventAddVar2List ), NULL, this );
 	m_Add_Cal2List->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventAddCalVal2List ), NULL, this );
+	m_MeasList->Connect( wxEVT_CHAR, wxKeyEventHandler( GUIFrame::EventMeaListKeyPres ), NULL, this );
 }
 
 GUIFrame::~GUIFrame()
@@ -132,6 +166,7 @@ GUIFrame::~GUIFrame()
 	m_listBox1->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( GUIFrame::VarListSelected ), NULL, this );
 	m_Add_var2list->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventAddVar2List ), NULL, this );
 	m_Add_Cal2List->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventAddCalVal2List ), NULL, this );
+	m_MeasList->Disconnect( wxEVT_CHAR, wxKeyEventHandler( GUIFrame::EventMeaListKeyPres ), NULL, this );
 }
 
 Dialog_SetValue::Dialog_SetValue( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )

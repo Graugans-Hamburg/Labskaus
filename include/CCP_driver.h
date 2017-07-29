@@ -150,7 +150,8 @@ class CCP_driver
         LOG_Container log_database;
         CCP_Schedular_List_Element* SMI_Actl_ECU_Variable;
         // CCP Treiber
-        void addvariable2ActionPlan(ECU_VarInfo& var2add);
+        int addvariable2ActionPlan(ECU_VarInfo& var2add);
+        int rmVariableFromActionPlan(std::string var2rm);
         void addCalibration2ActionPlan(ECU_VarInfo& Cal2Add, int64_t Cal_Int, float Cal_Float);
         void updateSchedular(void);
         void SetNext_variable_address2read(uint32_t val){next_variable_address2read = val;}
