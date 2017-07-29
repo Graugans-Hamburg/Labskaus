@@ -24,8 +24,8 @@ enum // Timer events IDs
     DAL_Timer = wxID_HIGHEST -1,
 };
 
-const int interval = 10;
-const int data_acq_list_timer_ms = 10;
+const int interval_state_machine_ms = 10;
+const int data_acq_list_timer_ms = 500;
 
 class LabskausFrame: public GUIFrame
 {
@@ -34,6 +34,7 @@ class LabskausFrame: public GUIFrame
         std::vector<ECU_VarInfo> XML_list;
         uint64_t m_next_free_row;
         void updateMeasListValues(void);
+        void DEBUGOfflineTest(void);
         wxTimer* recTimer; // declaration of Timer object
         wxTimer* data_acquisition_timer;
         CCP_driver* CCP_Master;

@@ -201,8 +201,6 @@ std::string LOG_Container::LastRecValue(std::string ecuName)
     uint64_t i = 0;
     ECU_VarLog* tmp_VarLog;
     std::string emptystr;
-    std::cout << ecuName << std::endl;
-    // Checke ob es schon ein Datenreihe für diese Variable gibt
     for(i = 0; i < log_data_base.size(); i++)
     {
         tmp_VarLog = &log_data_base.at(i);
