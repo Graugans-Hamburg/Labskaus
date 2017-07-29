@@ -34,7 +34,6 @@ class LabskausFrame: public GUIFrame
         std::vector<ECU_VarInfo> XML_list;
         uint64_t m_next_free_row;
         void updateMeasListValues(void);
-        void DEBUGOfflineTest(void);
         wxTimer* recTimer; // declaration of Timer object
         wxTimer* data_acquisition_timer;
         CCP_driver* CCP_Master;

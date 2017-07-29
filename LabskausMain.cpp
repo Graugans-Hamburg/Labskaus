@@ -369,7 +369,6 @@ void LabskausFrame::DA_List_Timer(wxTimerEvent& event)
     tmp.append(std::to_string(CCP_Master->log_database.GetNmOfLogVariables()));
     statusBar->SetStatusText(_(tmp), 0);
     statusBar->SetStatusText(wxbuildinfo(short_f), 1);
-    DEBUGOfflineTest();
     updateMeasListValues();
 }
 
@@ -388,48 +387,6 @@ void LabskausFrame::updateMeasListValues(void)
 
 }
 
-void LabskausFrame::DEBUGOfflineTest(void)
-{
-
-    static int debugvalue;
-    std::string l_VarName;
-    wxString l_wxVarName;
-    uint32_t l_address;
-    EnumDataType l_datatype;
-    ECU_VarInfo* l_ptr_ECU_VarInfo;
-    debugvalue++;
-    std::cout << "Tick" << std::endl;
-    struct timespec ptr_tmp_timespec;
-    clock_gettime(CLOCK_REALTIME,&ptr_tmp_timespec);
-
-
-    for(int idx = 0; idx < m_MeasList->GetNumberRows(); idx++)
-    {
-       l_wxVarName = m_MeasList->GetCellValue(idx,0);
-       l_VarName = l_wxVarName.ToStdString();
-       std::cout << m_MeasList->GetNumberRows() << std::endl;
-       std::cout << l_VarName << std::endl;
-       for(int idy = 0; idy < XML_list.size(); idy++)
-       {
-            l_ptr_ECU_VarInfo = &(XML_list.at(idy));
-            //std::cout << "Compare: "<< l_VarName << " and " << l_ptr_ECU_VarInfo->GetName() <<std::endl;
-            if(!l_VarName.compare(l_ptr_ECU_VarInfo->GetName()))
-            {
-            std::cout << "Found!" << std::endl;
-
-                l_address = l_ptr_ECU_VarInfo->GetAddress();
-                l_datatype = l_ptr_ECU_VarInfo->GetDataType();
-
-                CCP_Master->log_database.add_new_value(l_address,l_datatype,
-                                                        (uint8_t)debugvalue,(int8_t)debugvalue,
-                                                       (uint16_t)debugvalue,(int16_t)debugvalue,
-                                                       (uint32_t)debugvalue,(int32_t)debugvalue,
-                                                       (float)debugvalue,
-                                                       ptr_tmp_timespec);
-            }
-       }
-    }
-}
 
 
 void LabskausFrame::EventAddVar2List(wxCommandEvent &event)
