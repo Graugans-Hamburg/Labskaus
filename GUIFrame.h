@@ -36,10 +36,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class GUIFrame
 ///////////////////////////////////////////////////////////////////////////////
-class GUIFrame : public wxFrame
+class GUIFrame : public wxFrame 
 {
 	private:
-
+	
 	protected:
 		wxMenuBar* mbar;
 		wxMenu* fileMenu;
@@ -53,7 +53,7 @@ class GUIFrame : public wxFrame
 		wxButton* m_Add_var2list;
 		wxButton* m_Add_Cal2List;
 		wxGrid* m_MeasList;
-
+		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
@@ -66,22 +66,22 @@ class GUIFrame : public wxFrame
 		virtual void EventAddVar2List( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventAddCalVal2List( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventMeaListKeyPres( wxKeyEvent& event ) { event.Skip(); }
-
-
+		
+	
 	public:
-
-		GUIFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Labskaus"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,600 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		
+		GUIFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("wxWidgets Application Template"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 850,600 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~GUIFrame();
-
+	
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class Dialog_SetValue
 ///////////////////////////////////////////////////////////////////////////////
-class Dialog_SetValue : public wxDialog
+class Dialog_SetValue : public wxDialog 
 {
 	private:
-
+	
 	protected:
 		wxStaticText* m_staticText6;
 		wxStaticText* m_staticText8;
@@ -89,20 +89,20 @@ class Dialog_SetValue : public wxDialog
 		wxStaticText* m_staticText14;
 		wxTextCtrl* m_DL_NewVal;
 		wxButton* m_BtnConfirm;
-
+		
 		// Virtual event handlers, overide them in your derived class
 		virtual void EventTakeOverVal( wxCommandEvent& event ) { event.Skip(); }
-
-
+		
+	
 	public:
 		wxStaticText* m_DLVarName;
 		wxStaticText* m_DL_max;
 		wxStaticText* m_DL_min;
 		wxStaticText* m_DL_Actl;
-
+		
 		Dialog_SetValue( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Set value"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
 		~Dialog_SetValue();
-
+	
 };
 
 #endif //__GUIFrame__

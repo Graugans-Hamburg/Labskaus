@@ -33,7 +33,7 @@
             <property name="minimum_size"></property>
             <property name="name">GUIFrame</property>
             <property name="pos"></property>
-            <property name="size">800,600</property>
+            <property name="size">850,600</property>
             <property name="style">wxDEFAULT_FRAME_STYLE</property>
             <property name="subclass"></property>
             <property name="title">wxWidgets Application Template</property>
@@ -658,10 +658,10 @@
                                 <property name="cell_vert_alignment">wxALIGN_TOP</property>
                                 <property name="col_label_horiz_alignment">wxALIGN_CENTRE</property>
                                 <property name="col_label_size">20</property>
-                                <property name="col_label_values">&quot;Variable&quot; &quot;Wert&quot;</property>
+                                <property name="col_label_values">&quot;Variable&quot; &quot;Value&quot; &quot;Unit&quot;</property>
                                 <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
-                                <property name="cols">2</property>
-                                <property name="column_sizes">345,68</property>
+                                <property name="cols">3</property>
+                                <property name="column_sizes">334,133,80</property>
                                 <property name="context_help"></property>
                                 <property name="drag_col_move">1</property>
                                 <property name="drag_col_size">1</property>

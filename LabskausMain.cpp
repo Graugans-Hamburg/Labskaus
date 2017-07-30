@@ -191,6 +191,7 @@ void LabskausFrame::Read_XML_file(void)
         const char* var_name;
         const char* var_address;
         const char* var_type;
+        const char* var_unit;
         do{
             if (!varelement) {
                 cout << "No Child found." << endl;
@@ -216,6 +217,11 @@ void LabskausFrame::Read_XML_file(void)
                             /*cout << "Datatype found" << endl;*/
                             var_type = str;
                         }
+                    if(strcmp(varelement->Value(),"unit")==0)
+                        {
+                            /*cout << "Datatype found" << endl;*/
+                            var_unit = str;
+                        }
                     }
                 else{
                     /* cout << "Found the element "<< varelement->Value() <<" in line "
@@ -238,6 +244,7 @@ void LabskausFrame::Read_XML_file(void)
         ss << std::hex << var_address;
         ss >> x;
         tmp_var_element->SetAddress(x);
+        tmp_var_element->SetUnit(var_unit);
         tmp_var_element->ParseDatatyp(var_type);
         XML_list.push_back(*tmp_var_element);
 
@@ -408,11 +415,13 @@ void LabskausFrame::EventAddVar2List(wxCommandEvent &event)
             result = CCP_Master->addvariable2ActionPlan(XML_list.at(m_listBox1->GetSelection()));
             if(!result)
             {
-                ECU_VarInfo& tmp_ECU_VarInfo = XML_list.at(m_listBox1->GetSelection());
-                wxString tmp_wxString(tmp_ECU_VarInfo.GetName());
                 m_MeasList->AppendRows(1);
                 determine_next_free_row();
+                ECU_VarInfo& tmp_ECU_VarInfo = XML_list.at(m_listBox1->GetSelection());
+                wxString tmp_wxString(tmp_ECU_VarInfo.GetName());
+                wxString tmp2_wxString(tmp_ECU_VarInfo.GetUnit());
                 m_MeasList->SetCellValue(m_next_free_row,0,tmp_wxString);
+                m_MeasList->SetCellValue(m_next_free_row,2,tmp2_wxString);
             }
         }
     }

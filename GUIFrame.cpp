@@ -103,7 +103,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_MeasList = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
-	m_MeasList->CreateGrid( 0, 2 );
+	m_MeasList->CreateGrid( 0, 3 );
 	m_MeasList->EnableEditing( false );
 	m_MeasList->EnableGridLines( true );
 	m_MeasList->SetGridLineColour( wxColour( 190, 190, 190 ) );
@@ -111,13 +111,15 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_MeasList->SetMargins( 0, 0 );
 	
 	// Columns
-	m_MeasList->SetColSize( 0, 345 );
-	m_MeasList->SetColSize( 1, 68 );
+	m_MeasList->SetColSize( 0, 334 );
+	m_MeasList->SetColSize( 1, 133 );
+	m_MeasList->SetColSize( 2, 80 );
 	m_MeasList->EnableDragColMove( true );
 	m_MeasList->EnableDragColSize( true );
 	m_MeasList->SetColLabelSize( 20 );
 	m_MeasList->SetColLabelValue( 0, wxT("Variable") );
-	m_MeasList->SetColLabelValue( 1, wxT("Wert") );
+	m_MeasList->SetColLabelValue( 1, wxT("Value") );
+	m_MeasList->SetColLabelValue( 2, wxT("Unit") );
 	m_MeasList->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
