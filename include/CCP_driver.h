@@ -156,10 +156,13 @@ class CCP_driver
         void updateSchedular(void);
         void SetNext_variable_address2read(uint32_t val){next_variable_address2read = val;}
         void SetNext_variable_type(EnumDataType val){Next_variable_type = val;}
+        bool Get_MessStatus (void){return m_MeasurementActive; };
+        void Set_MessStatus2Run (void){m_MeasurementActive = true;};
+        void Set_MessStatus2Stop(void){m_MeasurementActive = false;};
     protected:
     private:
         serial SerialPort;
-
+        bool      m_MeasurementActive;
         bool      ECU_Connected; /*Connect Cmd, positive Antwort */
         uint8_t   ECU_CCP_Version_Main;
         uint8_t   ECU_CCP_Version_Release;

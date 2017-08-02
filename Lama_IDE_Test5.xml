@@ -1,6 +1,6 @@
 <measurement_file>
     <variable>
-        <name>u8_test_value</name>
+        <name>sadf_test_value</name>
         <address>0x20002ad0</address>
         <datatype>uint8</datatype>
     </variable>

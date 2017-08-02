@@ -101,12 +101,19 @@ void LabskausFrame::OnQuit(wxCommandEvent &event)
 
 void LabskausFrame::OnAbout(wxCommandEvent &event)
 {
-    wxString msg = wxbuildinfo(long_f);
-    wxMessageBox(msg, _("Labskaus"));
+    wxString msg = _("Version: Only known for a Release \nGit-Checksum: Only known for a release\n\n Main-developer: Matthias Baumann");
+
+    wxMessageBox(msg, _("Labskaus version information"));
 }
 
 void LabskausFrame::open_load_dialog(wxCommandEvent &event)
 {
+    if(CCP_Master->Get_MessStatus())
+    {
+        wxMessageBox(_("XML file can only be changed if the measurment is not active!\n\n First stop the Measurement"),_("Labskaus Information"));
+        return;
+    }
+
     wxFileDialog* OpenDialog = new wxFileDialog(
 		this, _("Choose a ECU-xml file"), wxEmptyString, wxEmptyString,
 		_("XML-files (*.xml)|*.xml"),
@@ -131,6 +138,7 @@ void LabskausFrame::open_load_dialog(wxCommandEvent &event)
 
 void LabskausFrame::Read_XML_file(void)
 {
+
     // remove the content of the last XML file
     XML_list.clear();
 
@@ -138,23 +146,6 @@ void LabskausFrame::Read_XML_file(void)
     std::cout << ECU_XML_full_Path << std::endl;
     std::cout << ECU_XML_file_dir << std::endl;
     std::cout << ECU_XML_file_name << std::endl;
-
-    std::ifstream xmlfile(ECU_XML_full_Path);
-    if ( ! xmlfile)
-    {
-        std::cerr << "File measurement_darrieusV1.xml existiert nicht" << std::endl;
-        return;
-    }
-
-    // Hier kann die Datei gelesen werden. Benutze die Macht
-    std::string one_line_from_xml_file;
-    std::getline(xmlfile, one_line_from_xml_file);
-
-    if(xmlfile.is_open())
-    {
-        xmlfile.close();
-    }
-
 
     /*********************************************************************************
 
@@ -164,13 +155,12 @@ void LabskausFrame::Read_XML_file(void)
     using namespace std;
     using namespace tinyxml2;
     tinyxml2::XMLDocument doc;
-    doc.LoadFile("/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/varfile/Labskaus.xml");
+    doc.LoadFile(ECU_XML_full_Path);
     tinyxml2::XMLNode* root = doc.FirstChildElement();
     m_listBox1->Clear();
 
     // Counter to know how many list elements are available
     int postn = 0;
-
 
     if (strcmp(root->Value( ), "measurement_file") != 0) {
         cout << string("bad root: Wrong xml? ") + root->Value( ) << endl;
@@ -188,17 +178,20 @@ void LabskausFrame::Read_XML_file(void)
     do{
     //cout << "---------------------" << endl;
         XMLElement* varelement = variable->FirstChildElement();
-        const char* var_name;
-        const char* var_address;
-        const char* var_type;
-        const char* var_unit;
+        std::string var_name;
+        std::string var_address;
+        std::string var_type;
+        std::string var_unit;
+        std::string var_des;
+
+
         do{
             if (!varelement) {
                 cout << "No Child found." << endl;
                 }
             else{
-                const char* str = varelement->GetText();
-                if(str){
+                std::string str(varelement->GetText());
+                if(!str.empty()){
                     /*cout << "Found the element "<< varelement->Value() <<" in line "<<varelement->GetLineNum() <<
                     " Content: "<< str <<endl;*/
 
@@ -222,6 +215,12 @@ void LabskausFrame::Read_XML_file(void)
                             /*cout << "Datatype found" << endl;*/
                             var_unit = str;
                         }
+                    if(strcmp(varelement->Value(),"description")==0)
+                        {
+                            /*cout << "Datatype found" << endl;*/
+                            var_des = str;
+                        }
+
                     }
                 else{
                     /* cout << "Found the element "<< varelement->Value() <<" in line "
@@ -245,6 +244,7 @@ void LabskausFrame::Read_XML_file(void)
         ss >> x;
         tmp_var_element->SetAddress(x);
         tmp_var_element->SetUnit(var_unit);
+        tmp_var_element->SetDescription(var_des);
         tmp_var_element->ParseDatatyp(var_type);
         XML_list.push_back(*tmp_var_element);
 
@@ -288,11 +288,18 @@ void LabskausFrame::VarListSelected(wxCommandEvent &event)
             return;
         }
         std::stringstream stream;
+        std::string tmp_string;
         stream << "Name: " << Ptr2SelectedElement->GetName() << std::endl;
         stream << "Addr: 0x" << std::uppercase << std::hex << Ptr2SelectedElement->GetAddress() << std::endl;
         stream << "Type: " << Ptr2SelectedElement->GetDatatypAsString() << std::endl;
-        stream << "Desc: " << std::endl;
-
+        /* TODO clean up Die Beschreibung wird nicht mit in der GUI angezeigt.
+        tmp_string = Ptr2SelectedElement->GetDescription();
+        std::cout << tmp_string << std::endl;
+        if(!tmp_string.empty())
+        {
+            stream << "Desc: " << Ptr2SelectedElement->GetDescription() << std::endl;
+        }
+        */
         m_VarInfoField->SetLabel(stream.str());
 
     }
@@ -325,6 +332,7 @@ void LabskausFrame::EventOpenSerial(wxCommandEvent &event)
     }
     CCP_Master->Set_SMT_req_establish_connection();
     CCP_Master->SetMeasurementStartTime();
+    CCP_Master->Set_MessStatus2Run();
 
 }
 
@@ -356,6 +364,7 @@ void LabskausFrame::EventCloseSerial(wxCommandEvent &event)
     CCP_Master->SM_reset_state_machine();
     CCP_Master->VariableLog_export();
     CCP_Master->Messagebuffer_export();
+    CCP_Master->Set_MessStatus2Stop();
 }
 
 
@@ -428,6 +437,43 @@ void LabskausFrame::EventAddVar2List(wxCommandEvent &event)
 
 }
 
+void LabskausFrame::VarListKeyPressed(wxKeyEvent& event)
+{
+    wxChar uc = event.GetUnicodeKey();
+    if ( uc != ' ' )
+    {
+        event.Skip();
+        return;
+    }
+    if(XML_list.empty())
+    {
+        std::cerr << "There is no variable to log. First load a xml file."<< std::endl;
+    }
+    else
+    {
+        if(m_listBox1->GetSelection() == wxNOT_FOUND)
+        {
+            std::cerr << "A variable should have been added to the measurement list but"
+            << "no variable was selected so nothing was added to the list" << std::endl;
+        }
+        else
+        {
+            int result;
+            result = CCP_Master->addvariable2ActionPlan(XML_list.at(m_listBox1->GetSelection()));
+            if(!result)
+            {
+                m_MeasList->AppendRows(1);
+                determine_next_free_row();
+                ECU_VarInfo& tmp_ECU_VarInfo = XML_list.at(m_listBox1->GetSelection());
+                wxString tmp_wxString(tmp_ECU_VarInfo.GetName());
+                wxString tmp2_wxString(tmp_ECU_VarInfo.GetUnit());
+                m_MeasList->SetCellValue(m_next_free_row,0,tmp_wxString);
+                m_MeasList->SetCellValue(m_next_free_row,2,tmp2_wxString);
+            }
+        }
+    }
+
+}
 void LabskausFrame::EventAddCalVal2List(wxCommandEvent &event)
 {
 

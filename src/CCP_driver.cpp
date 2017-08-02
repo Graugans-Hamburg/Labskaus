@@ -13,6 +13,7 @@ CCP_driver::CCP_driver()
     SMT_req_establish_connection = false;
     ECU_MTA_Number1 = 0;
     ECU_MTA_Number2 = 0;
+    m_MeasurementActive= false;
 
     /* find out the byte order */
     ECU_byte_order = little_endian;

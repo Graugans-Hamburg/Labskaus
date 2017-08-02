@@ -22,6 +22,7 @@ class ECU_VarInfo
         std::string GetDescription() { return Description; }
         void SetDescription(std::string val) { Description = val; }
         void ParseDatatyp(const char *);
+        void ParseDatatyp(std::string str);
         std::string GetDatatypAsString(void);
         bool MinValueValid(void) { return Min_Value_Valid; };
         bool MaxValueValid(void) { return Max_Value_Valid; };

@@ -43,14 +43,15 @@ class GUIFrame : public wxFrame
 	protected:
 		wxMenuBar* mbar;
 		wxMenu* fileMenu;
-		wxMenu* helpMenu;
 		wxMenu* m_menu3;
+		wxMenu* helpMenu;
 		wxStatusBar* statusBar;
 		wxListBox* m_listBox1;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_VarInfoField;
 		wxStaticLine* m_staticline2;
 		wxButton* m_Add_var2list;
+		wxButton* m_Del_var2list;
 		wxButton* m_Add_Cal2List;
 		wxGrid* m_MeasList;
 		
@@ -59,11 +60,13 @@ class GUIFrame : public wxFrame
 		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void open_load_dialog( wxCommandEvent& event ) { event.Skip(); }
 		virtual void open_log_dialog( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnAbout( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventOpenSerial( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventCloseSerial( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAbout( wxCommandEvent& event ) { event.Skip(); }
+		virtual void VarListKeyPressed( wxKeyEvent& event ) { event.Skip(); }
 		virtual void VarListSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventAddVar2List( wxCommandEvent& event ) { event.Skip(); }
+		virtual void EventDelVar2List( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventAddCalVal2List( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventMeaListKeyPres( wxKeyEvent& event ) { event.Skip(); }
 		

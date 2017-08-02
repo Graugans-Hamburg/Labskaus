@@ -39,13 +39,6 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	mbar->Append( fileMenu, wxT("&File") );
 	
-	helpMenu = new wxMenu();
-	wxMenuItem* menuHelpAbout;
-	menuHelpAbout = new wxMenuItem( helpMenu, idMenuAbout, wxString( wxT("&About") ) + wxT('\t') + wxT("F1"), wxT("Show info about this application"), wxITEM_NORMAL );
-	helpMenu->Append( menuHelpAbout );
-	
-	mbar->Append( helpMenu, wxT("&Help") );
-	
 	m_menu3 = new wxMenu();
 	wxMenuItem* m_OpenSerial;
 	m_OpenSerial = new wxMenuItem( m_menu3, wxID_ANY, wxString( wxT("Start Measurement") ) , wxEmptyString, wxITEM_NORMAL );
@@ -56,6 +49,13 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_menu3->Append( m_CloseSerial );
 	
 	mbar->Append( m_menu3, wxT("Communication") );
+	
+	helpMenu = new wxMenu();
+	wxMenuItem* menuHelpAbout;
+	menuHelpAbout = new wxMenuItem( helpMenu, idMenuAbout, wxString( wxT("&About") ) + wxT('\t') + wxT("F1"), wxT("Show info about this application"), wxITEM_NORMAL );
+	helpMenu->Append( menuHelpAbout );
+	
+	mbar->Append( helpMenu, wxT("&Help") );
 	
 	this->SetMenuBar( mbar );
 	
@@ -87,13 +87,21 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_Add_var2list = new wxButton( this, wxID_ANY, wxT("Variable messen"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Add_var2list = new wxButton( this, wxID_ANY, wxT("Variable +"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer3->Add( m_Add_var2list, 0, wxALL, 5 );
 	
-	m_Add_Cal2List = new wxButton( this, wxID_ANY, wxT("Variable setzten"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3->Add( m_Add_Cal2List, 0, wxALL, 5 );
+	m_Del_var2list = new wxButton( this, wxID_ANY, wxT("Variable -"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3->Add( m_Del_var2list, 0, wxALL, 5 );
 	
 	bSizer2->Add( bSizer3, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer31;
+	bSizer31 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_Add_Cal2List = new wxButton( this, wxID_ANY, wxT("Variable o"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer31->Add( m_Add_Cal2List, 0, wxALL, 5 );
+	
+	bSizer2->Add( bSizer31, 1, wxEXPAND, 5 );
 	
 	bSizer1->Add( bSizer2, 1, wxEXPAND, 5 );
 	
@@ -146,11 +154,13 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	this->Connect( menuFileQuit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnQuit ) );
 	this->Connect( menu_file_open->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::open_load_dialog ) );
 	this->Connect( menuSelectLogFolder->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::open_log_dialog ) );
-	this->Connect( menuHelpAbout->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnAbout ) );
 	this->Connect( m_OpenSerial->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventOpenSerial ) );
 	this->Connect( m_CloseSerial->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventCloseSerial ) );
+	this->Connect( menuHelpAbout->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnAbout ) );
+	m_listBox1->Connect( wxEVT_CHAR, wxKeyEventHandler( GUIFrame::VarListKeyPressed ), NULL, this );
 	m_listBox1->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( GUIFrame::VarListSelected ), NULL, this );
 	m_Add_var2list->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventAddVar2List ), NULL, this );
+	m_Del_var2list->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventDelVar2List ), NULL, this );
 	m_Add_Cal2List->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventAddCalVal2List ), NULL, this );
 	m_MeasList->Connect( wxEVT_CHAR, wxKeyEventHandler( GUIFrame::EventMeaListKeyPres ), NULL, this );
 }
@@ -162,11 +172,13 @@ GUIFrame::~GUIFrame()
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnQuit ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::open_load_dialog ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::open_log_dialog ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnAbout ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventOpenSerial ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventCloseSerial ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnAbout ) );
+	m_listBox1->Disconnect( wxEVT_CHAR, wxKeyEventHandler( GUIFrame::VarListKeyPressed ), NULL, this );
 	m_listBox1->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( GUIFrame::VarListSelected ), NULL, this );
 	m_Add_var2list->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventAddVar2List ), NULL, this );
+	m_Del_var2list->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventDelVar2List ), NULL, this );
 	m_Add_Cal2List->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventAddCalVal2List ), NULL, this );
 	m_MeasList->Disconnect( wxEVT_CHAR, wxKeyEventHandler( GUIFrame::EventMeaListKeyPres ), NULL, this );
 }

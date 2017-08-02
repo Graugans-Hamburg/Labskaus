@@ -55,6 +55,7 @@ class LabskausFrame: public GUIFrame
         virtual void OnRecTimer(wxTimerEvent& event);
         virtual void DA_List_Timer(wxTimerEvent& event);
         virtual void EventAddVar2List(wxCommandEvent &event);
+        virtual void VarListKeyPressed(wxKeyEvent& event);
         virtual void EventAddCalVal2List(wxCommandEvent &event);
         virtual void EventMeaListKeyPres( wxKeyEvent& event );
         void read_last_config(void);

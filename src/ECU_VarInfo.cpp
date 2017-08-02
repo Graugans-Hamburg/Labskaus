@@ -63,6 +63,54 @@ void ECU_VarInfo::ParseDatatyp(const char * Cstr)
     SetDataType(type_unknown);
 }
 
+void ECU_VarInfo::ParseDatatyp(std::string str)
+{
+    if(str.compare("uint8") == 0)
+    {
+        SetDataType(type_u8);
+        return;
+    }
+    if(str.compare("int8") == 0)
+    {
+        SetDataType(type_i8);
+        return;
+    }
+    if(str.compare("uint16") == 0)
+    {
+        SetDataType(type_u16);
+        return;
+    }
+    if(str.compare("int16") == 0)
+    {
+        SetDataType(type_i16);
+        return;
+    }
+    if(str.compare("uint32") == 0)
+    {
+        SetDataType(type_u32);
+        return;
+    }
+    if(str.compare("int32") == 0)
+    {
+        SetDataType(type_i32);
+        return;
+    }
+
+    if(str.compare("float") == 0)
+    {
+        SetDataType(type_f32);
+        return;
+    }
+    if(str.compare("float") == 0)
+    {
+        SetDataType(type_f64);
+        return;
+    }
+
+    // default
+    SetDataType(type_unknown);
+}
+
 std::string ECU_VarInfo::GetDatatypAsString(void)
 {
     std::string typeAsString;
