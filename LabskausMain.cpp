@@ -370,9 +370,7 @@ void LabskausFrame::EventCloseSerial(wxCommandEvent &event)
 
 void LabskausFrame::OnRecTimer(wxTimerEvent& event)
 {
-
     CCP_Master->periodic_check();
-
 }
 
 
@@ -407,34 +405,7 @@ void LabskausFrame::updateMeasListValues(void)
 
 void LabskausFrame::EventAddVar2List(wxCommandEvent &event)
 {
-    if(XML_list.empty())
-    {
-        std::cerr << "There is no variable to log. First load a xml file."<< std::endl;
-    }
-    else
-    {
-        if(m_listBox1->GetSelection() == wxNOT_FOUND)
-        {
-            std::cerr << "A variable should have been added to the measurement list but"
-            << "no variable was selected so nothing was added to the list" << std::endl;
-        }
-        else
-        {
-            int result;
-            result = CCP_Master->addvariable2ActionPlan(XML_list.at(m_listBox1->GetSelection()));
-            if(!result)
-            {
-                m_MeasList->AppendRows(1);
-                determine_next_free_row();
-                ECU_VarInfo& tmp_ECU_VarInfo = XML_list.at(m_listBox1->GetSelection());
-                wxString tmp_wxString(tmp_ECU_VarInfo.GetName());
-                wxString tmp2_wxString(tmp_ECU_VarInfo.GetUnit());
-                m_MeasList->SetCellValue(m_next_free_row,0,tmp_wxString);
-                m_MeasList->SetCellValue(m_next_free_row,2,tmp2_wxString);
-            }
-        }
-    }
-
+        AddVar2List();
 }
 
 void LabskausFrame::VarListKeyPressed(wxKeyEvent& event)
@@ -445,6 +416,14 @@ void LabskausFrame::VarListKeyPressed(wxKeyEvent& event)
         event.Skip();
         return;
     }
+    else
+    {
+        AddVar2List();
+    }
+}
+
+void LabskausFrame::AddVar2List(void)
+{
     if(XML_list.empty())
     {
         std::cerr << "There is no variable to log. First load a xml file."<< std::endl;
@@ -472,8 +451,10 @@ void LabskausFrame::VarListKeyPressed(wxKeyEvent& event)
             }
         }
     }
-
 }
+
+
+
 void LabskausFrame::EventAddCalVal2List(wxCommandEvent &event)
 {
 
@@ -505,7 +486,6 @@ void LabskausFrame::EventAddCalVal2List(wxCommandEvent &event)
             {
                 stream_min << Ptr2SelectedElement->GetMinValue_Int();
             }
-
         }
         else
         {
@@ -552,12 +532,9 @@ void LabskausFrame::EventMeaListKeyPres( wxKeyEvent& event )
         m_MeasList->DeleteRows(selection.Item(0));
 
         CCP_Master->rmVariableFromActionPlan(var2rm_str);
-
     }
 
     //std::cout << "Row: "<<  << "is selected." << std::endl;
-
-
 }
 
 

@@ -61,6 +61,7 @@ class LabskausFrame: public GUIFrame
         void read_last_config(void);
         void Read_XML_file(void);
         void determine_next_free_row();
+        void AddVar2List(void);
 };
 
 
