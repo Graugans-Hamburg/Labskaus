@@ -581,7 +581,7 @@
 
 1425353624 /usr/include/wx-3.0/wx/gtk/app.h
 
-1501842163 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.h
+1501884111 /home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.h
 	<streambuf>
 	<vector>
 	"LabskausApp.h"
@@ -986,7 +986,7 @@
 
 1425353624 /usr/include/wx-3.0/wx/gtk/frame.h
 
-1501876288 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.cpp
+1501885825 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain.cpp
 	"wx_pch.h"
 	<wx_pch.h>
 	<wx/wx.h>
@@ -1912,7 +1912,18 @@
 	"wx/grid.h"
 	"wx/datetime.h"
 
-1501877695 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain_Config.cpp
+1501885825 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain_Config.cpp
+	"LabskausMain.h"
+	<fstream>
+	<string>
+	<sstream>
+	<wx/timer.h>
+	<streambuf>
+	<wx/wx.h>
+	"tinyxml2.h"
+	"CCP_driver.h"
+
+1501886083 source:/home/mattes/Projekte/40_ADC_Measurements_XCP/code_blocks/Labskaus/LabskausMain_XMLList.cpp
 	"LabskausMain.h"
 	<fstream>
 	<string>

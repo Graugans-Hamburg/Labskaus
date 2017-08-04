@@ -30,15 +30,15 @@ void LabskausFrame::SaveConfiguration(std::string file_full_path)
     // ECU XML location
     XMLElement * p_ECU_XMLlocation = xmlDoc.NewElement("ecu_xml_location");
     pRoot->InsertEndChild(p_ECU_XMLlocation);
-    p_ECU_XMLlocation->SetText(ECU_XML_full_Path.ToAscii());
+    p_ECU_XMLlocation->SetText(ECU_XML_full_Path.c_str());
     // Log file version
     XMLElement * p_LOGlocation = xmlDoc.NewElement("log_folder_location");
     pRoot->InsertEndChild(p_LOGlocation);
-    p_LOGlocation->SetText(LOG_dir.ToAscii());
+    p_LOGlocation->SetText(LOG_dir.c_str());
     // measurement setup
     XMLElement * p_measuremet_setup = xmlDoc.NewElement("measurement_setup");
     pRoot->InsertEndChild(p_measuremet_setup);
-    for(unsigned int idx_i = 0; idx_i < m_MeasList->GetNumberRows(); idx_i++)
+    for(int idx_i = 0; idx_i < m_MeasList->GetNumberRows(); idx_i++)
     {
         XMLElement * pName = xmlDoc.NewElement("variable");
         p_measuremet_setup->InsertEndChild(pName);
@@ -64,10 +64,9 @@ void LabskausFrame::apply_config_file(std::string config_file)
     ConfigXML.LoadFile(config_file.c_str());
     tinyxml2::XMLNode* n_root = ConfigXML.FirstChildElement();
     tinyxml2::XMLElement* n_conf = n_root->FirstChildElement();
+    tinyxml2::XMLElement* n_measurement_setup;
 
-    //Container for extracted Information
-    std::string str_XML_ECU_full_path;
-    std::string str_Measuerment_log_folder;
+    bool ECU_XML_file_found = false;
     /*******************************************************************************************
      * Part 1: Check if the root element of the XML file is correct and if the first child
      *         element of this is the one with <version_config_file>
@@ -94,8 +93,9 @@ void LabskausFrame::apply_config_file(std::string config_file)
         }
         else
         {
-            str_XML_ECU_full_path = n_conf->GetText();
+            ECU_XML_full_Path = n_conf->GetText();
             Read_XML_file(n_conf->GetText());
+            ECU_XML_file_found = true;
         }
     }
     /*******************************************************************************************
@@ -112,11 +112,59 @@ void LabskausFrame::apply_config_file(std::string config_file)
              || ( n_conf->GetText() == nullptr                       )  )
         {
             wxMessageBox(_("Log folder was not found inside the configuration file.\n\n Log folder is set to the default directory"),_("Configuration Load Warning"));
-            str_Measuerment_log_folder = "/home/mattes/.Labskaus/logs";
+            LOG_dir = "/home/mattes/.Labskaus/logs";
         }
         else
         {
-            str_Measuerment_log_folder = n_conf->GetText();
+            LOG_dir = n_conf->GetText();
+            //TODO check if log folder is existing.
+        }
+    }
+    /*******************************************************************************************
+     * Part 4: Load the lastest variables into the ActionTable. This can only be done with the
+     *         if the ECU-XML file has been successfully loaded (see Part1 of this function).
+     ******************************************************************************************/
+    if(ECU_XML_file_found == true)
+    {
+        n_conf = n_conf->NextSiblingElement();
+        n_measurement_setup = n_conf->FirstChildElement();
+        /* Information about the log folder is expected */
+        if (    (strcmp(n_conf->Value(), "measurement_setup") != 0)
+             || ( n_measurement_setup == nullptr                  )  )
+        {
+            wxMessageBox(_("No measurement setup was found inside the configuration file.\n\n Labskaus will start with a emtpy measurement setup"),_("Configuration Load Warning"));
+
+        }
+        else
+        {
+            //str_Measuerment_log_folder = n_conf->GetText();
+            //TODO check if log folder is existing.
+            while(n_measurement_setup)
+            {
+                if(n_measurement_setup->GetText())
+                {
+                    //Find the ECU variable inside the list by name
+                    int result;
+                    if(find_ECUVarByName(n_measurement_setup->GetText()) != nullptr)
+                    {
+                        ECU_VarInfo& ref_VarInfo = *(find_ECUVarByName(n_measurement_setup->GetText()));
+                        result = CCP_Master->addvariable2ActionPlan(ref_VarInfo);
+                        if(!result)
+                        {
+                            m_MeasList->AppendRows(1);
+                            determine_next_free_row();
+                            ECU_VarInfo& tmp_ECU_VarInfo = ref_VarInfo;
+                            wxString tmp_wxString(tmp_ECU_VarInfo.GetName());
+                            wxString tmp2_wxString(tmp_ECU_VarInfo.GetUnit());
+                            m_MeasList->SetCellValue(m_next_free_row,0,tmp_wxString);
+                            m_MeasList->SetCellValue(m_next_free_row,2,tmp2_wxString);
+                        }
+                    }
+                }
+                n_measurement_setup = n_measurement_setup->NextSiblingElement();
+            }
         }
     }
 }
+
+

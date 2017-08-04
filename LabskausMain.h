@@ -37,9 +37,9 @@ class LabskausFrame: public GUIFrame
         wxTimer* recTimer; // declaration of Timer object
         wxTimer* data_acquisition_timer;
         CCP_driver* CCP_Master;
-        wxString ECU_XML_full_Path;
-        wxString ECU_XML_file_name;
-        wxString LOG_dir;
+        std::string ECU_XML_full_Path;
+        std::string ECU_XML_file_name;
+        std::string LOG_dir;
         ~LabskausFrame();
 
     private:
@@ -65,6 +65,7 @@ class LabskausFrame: public GUIFrame
         // LabskausMain_Config.cpp
         void SaveConfiguration(std::string location);
         void read_last_config(std::string config_file);
+        ECU_VarInfo* find_ECUVarByName(std::string VarName);
 };
 
 
