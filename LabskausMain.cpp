@@ -68,8 +68,7 @@ LabskausFrame::LabskausFrame(wxFrame *frame)
     CCP_Master = new CCP_driver();
     recTimer = NULL;
     data_acquisition_timer = NULL;
-    read_last_config();
-
+    apply_config_file("/home/mattes/.Labskaus/base.lcf");
 }
 
 LabskausFrame::~LabskausFrame()
@@ -83,19 +82,7 @@ void LabskausFrame::OnClose(wxCloseEvent &event)
 
 void LabskausFrame::OnQuit(wxCommandEvent &event)
 {
-
-    // Save the lastest settings and pathes
-
-    std::ofstream logfile("config_last_session.txt");
-    if ( ! logfile)
-    {
-        std::cerr << "Logfile could not be opened" << std::endl;
-    }
-    logfile << ECU_XML_full_Path << std::endl;
-    logfile << ECU_XML_file_dir << std::endl;
-    logfile << ECU_XML_file_name << std::endl;
-    logfile << LOG_dir << std::endl;
-    logfile.close();
+    SaveConfiguration("/home/mattes/.Labskaus/base.lcf");
     Destroy();
 }
 
@@ -123,8 +110,7 @@ void LabskausFrame::open_load_dialog(wxCommandEvent &event)
 	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
 	{
 		ECU_XML_full_Path = OpenDialog->GetPath();
-		ECU_XML_file_dir = OpenDialog->GetDirectory();
-		ECU_XML_file_name =OpenDialog->GetFilename();
+		ECU_XML_file_name = OpenDialog->GetFilename();
 	}
 	else
 	{
@@ -133,29 +119,23 @@ void LabskausFrame::open_load_dialog(wxCommandEvent &event)
 	}
 	// Clean up after ourselves
 	OpenDialog->Destroy();
-    Read_XML_file();
+    Read_XML_file(ECU_XML_full_Path.ToStdString());
 }
 
-void LabskausFrame::Read_XML_file(void)
+void LabskausFrame::Read_XML_file(std::string ECU_XML_file_full_path)
 {
 
     // remove the content of the last XML file
     XML_list.clear();
 
-	// Disconnect Events
-    std::cout << ECU_XML_full_Path << std::endl;
-    std::cout << ECU_XML_file_dir << std::endl;
-    std::cout << ECU_XML_file_name << std::endl;
 
     /*********************************************************************************
-
-    Start to work with tinyXML2
-
+    Extract all information from the ECU XML file
     *********************************************************************************/
     using namespace std;
     using namespace tinyxml2;
     tinyxml2::XMLDocument doc;
-    doc.LoadFile(ECU_XML_full_Path);
+    doc.LoadFile(ECU_XML_file_full_path.c_str());
     tinyxml2::XMLNode* root = doc.FirstChildElement();
     m_listBox1->Clear();
 
@@ -424,6 +404,7 @@ void LabskausFrame::VarListKeyPressed(wxKeyEvent& event)
 
 void LabskausFrame::AddVar2List(void)
 {
+    std::cout << "Add element to ActionList" << std::endl;
     if(XML_list.empty())
     {
         std::cerr << "There is no variable to log. First load a xml file."<< std::endl;
@@ -518,7 +499,11 @@ void LabskausFrame::EventAddCalVal2List(wxCommandEvent &event)
 
 void LabskausFrame::EventMeaListKeyPres( wxKeyEvent& event )
 {
+    RmVarElementActiontable();
+}
 
+void LabskausFrame::RmVarElementActiontable( void)
+{
     wxArrayInt selection = m_MeasList->GetSelectedRows();
     std::cout << "Number of selected elements: " << selection.size() << std::endl;
 
@@ -533,38 +518,6 @@ void LabskausFrame::EventMeaListKeyPres( wxKeyEvent& event )
 
         CCP_Master->rmVariableFromActionPlan(var2rm_str);
     }
-
-    //std::cout << "Row: "<<  << "is selected." << std::endl;
-}
-
-
-void LabskausFrame::read_last_config(void)
-{
-    std::ifstream logfile("config_last_session.txt");
-    if ( ! logfile)
-    {
-        std::cerr << "No latest configuration found" << std::endl;
-    }
-    std::string tmp;
-    std::getline(logfile,tmp);
-    wxString wxStr_ECU_XML_full_Path(tmp);
-    ECU_XML_full_Path =wxStr_ECU_XML_full_Path;
-
-    std::getline(logfile,tmp);
-    wxString wxStr_ECU_XML_file_dir(tmp);
-    ECU_XML_file_dir = wxStr_ECU_XML_file_dir;
-
-    std::getline(logfile,tmp);
-    wxString wxStr_ECU_XML_file_name(tmp);
-    ECU_XML_file_name = wxStr_ECU_XML_file_name;
-
-    std::getline(logfile,tmp);
-    wxString wxStr_LOG_dir(tmp);
-    LOG_dir = wxStr_LOG_dir;
-
-    CCP_Master->SetLogFolder(std::string(LOG_dir.mb_str()));
-    Read_XML_file();
-    logfile.close();
 }
 
 
@@ -633,6 +586,5 @@ void LabskausFrameSetCal::EventTakeOverVal(wxCommandEvent &event)
     // Rufe die Funktion des CCP Treibers auf
     CCP_Master->addCalibration2ActionPlan(*m_ECU_Variable,(int64_t)long_value,(float)double_value);
 }
-
 
 

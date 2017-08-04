@@ -205,9 +205,7 @@ class CCP_driver
 
         std::vector<CCP_Frame> CCP_Msg_Buffer;
         std::string log_folder;
-
         std::vector<ECU_VarInfo>* m_XML_list;
-
         std::vector<CCP_Schedular_List_Element> ActionTable;
         uint32_t   next_variable_address2read;
         EnumDataType Next_variable_type;

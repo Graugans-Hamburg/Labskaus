@@ -38,7 +38,6 @@ class LabskausFrame: public GUIFrame
         wxTimer* data_acquisition_timer;
         CCP_driver* CCP_Master;
         wxString ECU_XML_full_Path;
-        wxString ECU_XML_file_dir;
         wxString ECU_XML_file_name;
         wxString LOG_dir;
         ~LabskausFrame();
@@ -58,10 +57,14 @@ class LabskausFrame: public GUIFrame
         virtual void VarListKeyPressed(wxKeyEvent& event);
         virtual void EventAddCalVal2List(wxCommandEvent &event);
         virtual void EventMeaListKeyPres( wxKeyEvent& event );
-        void read_last_config(void);
-        void Read_XML_file(void);
-        void determine_next_free_row();
+        void apply_config_file(std::string ECU_XML_file_full_path);
+        void Read_XML_file(std::string ECU_XML_file_full_path);
+        void determine_next_free_row(void);
         void AddVar2List(void);
+        void RmVarElementActiontable(void);
+        // LabskausMain_Config.cpp
+        void SaveConfiguration(std::string location);
+        void read_last_config(std::string config_file);
 };
 
 
