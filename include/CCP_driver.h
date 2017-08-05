@@ -152,7 +152,9 @@ class CCP_driver
         // CCP Treiber
         int addvariable2ActionPlan(ECU_VarInfo& var2add);
         int rmVariableFromActionPlan(std::string var2rm);
+        void clearActionPlan(void);
         void addCalibration2ActionPlan(ECU_VarInfo& Cal2Add, int64_t Cal_Int, float Cal_Float);
+
         void updateSchedular(void);
         void SetNext_variable_address2read(uint32_t val){next_variable_address2read = val;}
         void SetNext_variable_type(EnumDataType val){Next_variable_type = val;}

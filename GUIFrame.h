@@ -57,9 +57,11 @@ class GUIFrame : public wxFrame
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
+		virtual void open_load_config_dialog( wxCommandEvent& event ) { event.Skip(); }
+		virtual void open_save_config_dialog( wxCommandEvent& event ) { event.Skip(); }
 		virtual void open_load_dialog( wxCommandEvent& event ) { event.Skip(); }
 		virtual void open_log_dialog( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventOpenSerial( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventCloseSerial( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAbout( wxCommandEvent& event ) { event.Skip(); }
@@ -69,11 +71,13 @@ class GUIFrame : public wxFrame
 		virtual void EventDelVar2List( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventAddCalVal2List( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventMeaListKeyPres( wxKeyEvent& event ) { event.Skip(); }
+		virtual void EventMeasListKeyDn( wxKeyEvent& event ) { event.Skip(); }
+		virtual void EventMeasListKeyUp( wxKeyEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		GUIFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("wxWidgets Application Template"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 850,600 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		GUIFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Labskaus"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 850,600 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~GUIFrame();
 	
 };

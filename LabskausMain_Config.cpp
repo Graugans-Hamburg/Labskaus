@@ -20,9 +20,12 @@ void LabskausFrame::SaveConfiguration(std::string file_full_path)
     using namespace tinyxml2;
 
     XMLDocument xmlDoc;
+    // Declaration
+    XMLDeclaration * pdec = xmlDoc.NewDeclaration( "xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"");
+    xmlDoc.InsertFirstChild(pdec);
     // Rootelement
     XMLNode * pRoot = xmlDoc.NewElement("labskaus_configuration_file");
-    xmlDoc.InsertFirstChild(pRoot);
+    xmlDoc.InsertEndChild(pRoot);
     // Config file version
     XMLElement * p_ConfigVersion = xmlDoc.NewElement("version_config_file");
     pRoot->InsertEndChild(p_ConfigVersion);
@@ -45,6 +48,7 @@ void LabskausFrame::SaveConfiguration(std::string file_full_path)
         wxString tmp_wxString = m_MeasList->GetCellValue(idx_i,0);
         pName->SetText(tmp_wxString.ToAscii());
     }
+
     XMLError eResult = xmlDoc.SaveFile(file_full_path.c_str());
     // TODO: Do some checks and create a error if the save function fails
     std::cout << "Configuration Saved!" << std::endl;
@@ -67,6 +71,15 @@ void LabskausFrame::apply_config_file(std::string config_file)
     tinyxml2::XMLElement* n_measurement_setup;
 
     bool ECU_XML_file_found = false;
+    /*******************************************************************************************
+     * Part 0: Clear the ActionTable
+     ******************************************************************************************/
+    CCP_Master->clearActionPlan();
+    m_MeasList->ClearGrid();
+    if(m_MeasList->GetNumberRows()>0)
+    {
+        m_MeasList->DeleteRows(0,m_MeasList->GetNumberRows());
+    }
     /*******************************************************************************************
      * Part 1: Check if the root element of the XML file is correct and if the first child
      *         element of this is the one with <version_config_file>
@@ -117,6 +130,7 @@ void LabskausFrame::apply_config_file(std::string config_file)
         else
         {
             LOG_dir = n_conf->GetText();
+            CCP_Master->SetLogFolder(LOG_dir);
             //TODO check if log folder is existing.
         }
     }
@@ -165,6 +179,59 @@ void LabskausFrame::apply_config_file(std::string config_file)
             }
         }
     }
+}
+/*******************************************************************************************
+ * Function to open a dialog to load an already saved configuration
+ ******************************************************************************************/
+void LabskausFrame::open_load_config_dialog(wxCommandEvent &event)
+{
+
+    std::string tmp_config_file;
+
+    wxFileDialog* OpenDialog = new wxFileDialog(
+		this, _("Choose a Labskaus configuration file"), wxEmptyString, wxEmptyString,
+		_("Labskaus Config File (*.lcf)|*.lcf"),
+		wxFD_OPEN, wxDefaultPosition);
+
+	// Creates a "open file" dialog with 4 file types
+	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
+	{
+		tmp_config_file = OpenDialog->GetPath();
+	}
+	else
+	{
+        std::cout << "XML read canceled;" << std::endl;
+        return;
+	}
+	// Clean up after ourselves
+	OpenDialog->Destroy();
+    apply_config_file(tmp_config_file);
+}
+
+/*******************************************************************************************
+ * Function to open a dialog to save a new configuration
+ ******************************************************************************************/
+void LabskausFrame::open_save_config_dialog(wxCommandEvent &event)
+{
+    std::string tmp_config_file;
+    wxFileDialog* OpenDialog = new wxFileDialog(
+		this, _("Choose a Labskaus configuration file"), wxEmptyString, wxEmptyString,
+		_("Labskaus Config File (*.lcf)|*.lcf"),
+		wxFD_SAVE, wxDefaultPosition);
+
+	// Creates a "open file" dialog with 4 file types
+	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
+	{
+		tmp_config_file = OpenDialog->GetPath();
+	}
+	else
+	{
+        std::cout << "XML save canceled;" << std::endl;
+        return;
+	}
+	// Clean up after ourselves
+	OpenDialog->Destroy();
+    SaveConfiguration(tmp_config_file.append(".lcf"));
 }
 
 

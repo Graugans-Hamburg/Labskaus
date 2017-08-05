@@ -36,7 +36,7 @@
             <property name="size">850,600</property>
             <property name="style">wxDEFAULT_FRAME_STYLE</property>
             <property name="subclass"></property>
-            <property name="title">wxWidgets Application Template</property>
+            <property name="title">Labskaus</property>
             <property name="tooltip"></property>
             <property name="validator_data_type"></property>
             <property name="validator_style">wxFILTER_NONE</property>
@@ -123,7 +123,7 @@
                 <event name="OnSetFocus"></event>
                 <event name="OnSize"></event>
                 <event name="OnUpdateUI"></event>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">&amp;File</property>
                     <property name="name">fileMenu</property>
                     <property name="permission">protected</property>
@@ -131,16 +131,35 @@
                         <property name="bitmap"></property>
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
-                        <property name="help">Quit the application</property>
-                        <property name="id">idMenuQuit</property>
+                        <property name="help">Restore a previous configuration (a measurement setup) which has been saved before.</property>
+                        <property name="id">wxID_ANY</property>
                         <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">&amp;Quit</property>
-                        <property name="name">menuFileQuit</property>
+                        <property name="label">Open configuration</property>
+                        <property name="name">menu_conf_open</property>
                         <property name="permission">none</property>
-                        <property name="shortcut">Alt+F4</property>
+                        <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection">OnQuit</event>
+                        <event name="OnMenuSelection">open_load_config_dialog</event>
                         <event name="OnUpdateUI"></event>
+                    </object>
+                    <object class="wxMenuItem" expanded="1">
+                        <property name="bitmap"></property>
+                        <property name="checked">0</property>
+                        <property name="enabled">1</property>
+                        <property name="help">Restore a previous configuration (a measurement setup) which has been saved before.</property>
+                        <property name="id">wxID_ANY</property>
+                        <property name="kind">wxITEM_NORMAL</property>
+                        <property name="label">Save configuration</property>
+                        <property name="name">menu_conf_save</property>
+                        <property name="permission">none</property>
+                        <property name="shortcut"></property>
+                        <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">open_save_config_dialog</event>
+                        <event name="OnUpdateUI"></event>
+                    </object>
+                    <object class="separator" expanded="1">
+                        <property name="name">m_separator1</property>
+                        <property name="permission">none</property>
                     </object>
                     <object class="wxMenuItem" expanded="1">
                         <property name="bitmap"></property>
@@ -149,7 +168,7 @@
                         <property name="help">Open an XML or A2L file as a Basis for the Controler</property>
                         <property name="id">wxID_ANY</property>
                         <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Open XML</property>
+                        <property name="label">Open ECU-XML file</property>
                         <property name="name">menu_file_open</property>
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
@@ -172,8 +191,27 @@
                         <event name="OnMenuSelection">open_log_dialog</event>
                         <event name="OnUpdateUI"></event>
                     </object>
+                    <object class="separator" expanded="1">
+                        <property name="name">m_separator2</property>
+                        <property name="permission">none</property>
+                    </object>
+                    <object class="wxMenuItem" expanded="1">
+                        <property name="bitmap"></property>
+                        <property name="checked">0</property>
+                        <property name="enabled">1</property>
+                        <property name="help">Quit the application</property>
+                        <property name="id">idMenuQuit</property>
+                        <property name="kind">wxITEM_NORMAL</property>
+                        <property name="label">&amp;Quit</property>
+                        <property name="name">menuFileQuit</property>
+                        <property name="permission">none</property>
+                        <property name="shortcut">Alt+F4</property>
+                        <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">OnQuit</event>
+                        <event name="OnUpdateUI"></event>
+                    </object>
                 </object>
-                <object class="wxMenu" expanded="1">
+                <object class="wxMenu" expanded="0">
                     <property name="label">Communication</property>
                     <property name="name">m_menu3</property>
                     <property name="permission">protected</property>
@@ -208,7 +246,7 @@
                         <event name="OnUpdateUI"></event>
                     </object>
                 </object>
-                <object class="wxMenu" expanded="1">
+                <object class="wxMenu" expanded="0">
                     <property name="label">&amp;Help</property>
                     <property name="name">helpMenu</property>
                     <property name="permission">protected</property>
@@ -295,7 +333,7 @@
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxALL|wxEXPAND</property>
-                            <property name="proportion">0</property>
+                            <property name="proportion">10</property>
                             <object class="wxListBox" expanded="1">
                                 <property name="bg"></property>
                                 <property name="choices">&quot;first load the xml file&quot;</property>
@@ -306,7 +344,7 @@
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
                                 <property name="maximum_size">-1,-1</property>
-                                <property name="minimum_size">200,300</property>
+                                <property name="minimum_size">-1,-1</property>
                                 <property name="name">m_listBox1</property>
                                 <property name="permission">protected</property>
                                 <property name="pos"></property>
@@ -404,7 +442,7 @@
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxALL|wxEXPAND</property>
-                            <property name="proportion">0</property>
+                            <property name="proportion">2</property>
                             <object class="wxStaticText" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
@@ -415,7 +453,7 @@
                                 <property name="id">wxID_ANY</property>
                                 <property name="label">MyLabel</property>
                                 <property name="maximum_size"></property>
-                                <property name="minimum_size">200,100</property>
+                                <property name="minimum_size">-1,-1</property>
                                 <property name="name">m_VarInfoField</property>
                                 <property name="permission">protected</property>
                                 <property name="pos"></property>
@@ -636,7 +674,7 @@
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
                             <property name="proportion">1</property>
-                            <object class="wxBoxSizer" expanded="1">
+                            <object class="wxBoxSizer" expanded="0">
                                 <property name="minimum_size"></property>
                                 <property name="name">bSizer31</property>
                                 <property name="orient">wxHORIZONTAL</property>
@@ -803,8 +841,8 @@
                                 <event name="OnGridRangeSelect"></event>
                                 <event name="OnGridRowSize"></event>
                                 <event name="OnGridSelectCell"></event>
-                                <event name="OnKeyDown"></event>
-                                <event name="OnKeyUp"></event>
+                                <event name="OnKeyDown">EventMeasListKeyDn</event>
+                                <event name="OnKeyUp">EventMeasListKeyUp</event>
                                 <event name="OnKillFocus"></event>
                                 <event name="OnLeaveWindow"></event>
                                 <event name="OnLeftDClick"></event>
@@ -829,7 +867,7 @@
                 </object>
             </object>
         </object>
-        <object class="Dialog" expanded="1">
+        <object class="Dialog" expanded="0">
             <property name="bg"></property>
             <property name="center"></property>
             <property name="context_help"></property>

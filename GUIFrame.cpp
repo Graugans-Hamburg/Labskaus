@@ -25,17 +25,31 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	mbar = new wxMenuBar( 0 );
 	fileMenu = new wxMenu();
-	wxMenuItem* menuFileQuit;
-	menuFileQuit = new wxMenuItem( fileMenu, idMenuQuit, wxString( wxT("&Quit") ) + wxT('\t') + wxT("Alt+F4"), wxT("Quit the application"), wxITEM_NORMAL );
-	fileMenu->Append( menuFileQuit );
+	wxMenuItem* menu_conf_open;
+	menu_conf_open = new wxMenuItem( fileMenu, wxID_ANY, wxString( wxT("Open configuration") ) , wxT("Restore a previous configuration (a measurement setup) which has been saved before."), wxITEM_NORMAL );
+	fileMenu->Append( menu_conf_open );
+	
+	wxMenuItem* menu_conf_save;
+	menu_conf_save = new wxMenuItem( fileMenu, wxID_ANY, wxString( wxT("Save configuration") ) , wxT("Restore a previous configuration (a measurement setup) which has been saved before."), wxITEM_NORMAL );
+	fileMenu->Append( menu_conf_save );
+	
+	wxMenuItem* m_separator1;
+	m_separator1 = fileMenu->AppendSeparator();
 	
 	wxMenuItem* menu_file_open;
-	menu_file_open = new wxMenuItem( fileMenu, wxID_ANY, wxString( wxT("Open XML") ) , wxT("Open an XML or A2L file as a Basis for the Controler"), wxITEM_NORMAL );
+	menu_file_open = new wxMenuItem( fileMenu, wxID_ANY, wxString( wxT("Open ECU-XML file") ) , wxT("Open an XML or A2L file as a Basis for the Controler"), wxITEM_NORMAL );
 	fileMenu->Append( menu_file_open );
 	
 	wxMenuItem* menuSelectLogFolder;
 	menuSelectLogFolder = new wxMenuItem( fileMenu, wxID_ANY, wxString( wxT("Log folder") ) , wxT("Define the folder where to save the results."), wxITEM_NORMAL );
 	fileMenu->Append( menuSelectLogFolder );
+	
+	wxMenuItem* m_separator2;
+	m_separator2 = fileMenu->AppendSeparator();
+	
+	wxMenuItem* menuFileQuit;
+	menuFileQuit = new wxMenuItem( fileMenu, idMenuQuit, wxString( wxT("&Quit") ) + wxT('\t') + wxT("Alt+F4"), wxT("Quit the application"), wxITEM_NORMAL );
+	fileMenu->Append( menuFileQuit );
 	
 	mbar->Append( fileMenu, wxT("&File") );
 	
@@ -68,18 +82,14 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	m_listBox1 = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0|wxHSCROLL|wxVSCROLL );
 	m_listBox1->Append( wxT("first load the xml file") );
-	m_listBox1->SetMinSize( wxSize( 200,300 ) );
-	
-	bSizer2->Add( m_listBox1, 0, wxALL|wxEXPAND, 5 );
+	bSizer2->Add( m_listBox1, 10, wxALL|wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer2->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
 	m_VarInfoField = new wxStaticText( this, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_VarInfoField->Wrap( -1 );
-	m_VarInfoField->SetMinSize( wxSize( 200,100 ) );
-	
-	bSizer2->Add( m_VarInfoField, 0, wxALL|wxEXPAND, 5 );
+	bSizer2->Add( m_VarInfoField, 2, wxALL|wxEXPAND, 5 );
 	
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer2->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
@@ -151,9 +161,11 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( GUIFrame::OnClose ) );
-	this->Connect( menuFileQuit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnQuit ) );
+	this->Connect( menu_conf_open->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::open_load_config_dialog ) );
+	this->Connect( menu_conf_save->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::open_save_config_dialog ) );
 	this->Connect( menu_file_open->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::open_load_dialog ) );
 	this->Connect( menuSelectLogFolder->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::open_log_dialog ) );
+	this->Connect( menuFileQuit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnQuit ) );
 	this->Connect( m_OpenSerial->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventOpenSerial ) );
 	this->Connect( m_CloseSerial->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventCloseSerial ) );
 	this->Connect( menuHelpAbout->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnAbout ) );
@@ -163,15 +175,19 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_Del_var2list->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventDelVar2List ), NULL, this );
 	m_Add_Cal2List->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventAddCalVal2List ), NULL, this );
 	m_MeasList->Connect( wxEVT_CHAR, wxKeyEventHandler( GUIFrame::EventMeaListKeyPres ), NULL, this );
+	m_MeasList->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( GUIFrame::EventMeasListKeyDn ), NULL, this );
+	m_MeasList->Connect( wxEVT_KEY_UP, wxKeyEventHandler( GUIFrame::EventMeasListKeyUp ), NULL, this );
 }
 
 GUIFrame::~GUIFrame()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( GUIFrame::OnClose ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnQuit ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::open_load_config_dialog ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::open_save_config_dialog ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::open_load_dialog ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::open_log_dialog ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnQuit ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventOpenSerial ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventCloseSerial ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnAbout ) );
@@ -181,6 +197,8 @@ GUIFrame::~GUIFrame()
 	m_Del_var2list->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventDelVar2List ), NULL, this );
 	m_Add_Cal2List->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GUIFrame::EventAddCalVal2List ), NULL, this );
 	m_MeasList->Disconnect( wxEVT_CHAR, wxKeyEventHandler( GUIFrame::EventMeaListKeyPres ), NULL, this );
+	m_MeasList->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( GUIFrame::EventMeasListKeyDn ), NULL, this );
+	m_MeasList->Disconnect( wxEVT_KEY_UP, wxKeyEventHandler( GUIFrame::EventMeasListKeyUp ), NULL, this );
 }
 
 Dialog_SetValue::Dialog_SetValue( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )

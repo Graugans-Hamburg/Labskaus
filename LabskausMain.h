@@ -47,6 +47,8 @@ class LabskausFrame: public GUIFrame
         virtual void OnQuit(wxCommandEvent& event);
         virtual void OnAbout(wxCommandEvent& event);
         virtual void open_load_dialog(wxCommandEvent& event);
+        virtual void open_load_config_dialog(wxCommandEvent &event);
+        virtual void open_save_config_dialog(wxCommandEvent &event);
         virtual void open_log_dialog(wxCommandEvent& event);
         virtual void VarListSelected(wxCommandEvent& event);
         virtual void EventOpenSerial(wxCommandEvent& event);
@@ -57,6 +59,8 @@ class LabskausFrame: public GUIFrame
         virtual void VarListKeyPressed(wxKeyEvent& event);
         virtual void EventAddCalVal2List(wxCommandEvent &event);
         virtual void EventMeaListKeyPres( wxKeyEvent& event );
+        virtual void EventMeaListKeyUp( wxKeyEvent& event );
+        virtual void EventDelVar2List( wxCommandEvent &event );
         void apply_config_file(std::string ECU_XML_file_full_path);
         void Read_XML_file(std::string ECU_XML_file_full_path);
         void determine_next_free_row(void);

@@ -69,6 +69,7 @@ LabskausFrame::LabskausFrame(wxFrame *frame)
     recTimer = NULL;
     data_acquisition_timer = NULL;
     apply_config_file("/home/mattes/.Labskaus/base.lcf");
+    m_MeasList->SetSelectionMode(wxGrid::wxGridSelectRows);
 }
 
 LabskausFrame::~LabskausFrame()
@@ -387,22 +388,40 @@ void LabskausFrame::EventAddCalVal2List(wxCommandEvent &event)
 void LabskausFrame::EventMeaListKeyPres( wxKeyEvent& event )
 {
     RmVarElementActiontable();
+
+    wxGridCellCoordsArray selection_cells = m_MeasList->GetSelectedCells();
+    std::cout << "Number of selected cells: " << selection_cells.size() << std::endl;
+    if(selection_cells.size() > 0)
+    {
+        std::cout << "Selected Cells: " << selection_cells.GetCount() << std::endl;
+        std::cout << "Selected Cells: " << selection_cells.size() << std::endl;
+        wxGridCellCoords grid_coordinate;
+        grid_coordinate = selection_cells.Item(0);
+        std::cout << "Grid coordinate: " << grid_coordinate.GetCol() << std::endl;
+        std::cout << "Grid coordinate: " << grid_coordinate.GetRow() << std::endl;
+    }
+}
+
+void LabskausFrame::EventMeaListKeyUp( wxKeyEvent& event )
+{
+    // TODO create a ticket a wxWidgets here is something not working correctly.
+    std::cout << "Key Down Event" << std::endl;
+}
+
+void LabskausFrame::EventDelVar2List( wxCommandEvent &event )
+{
+    RmVarElementActiontable();
 }
 
 void LabskausFrame::RmVarElementActiontable( void)
 {
-    wxArrayInt selection = m_MeasList->GetSelectedRows();
-    std::cout << "Number of selected elements: " << selection.size() << std::endl;
-
-    if(selection.size() == 1)
+    wxArrayInt selection_rows = m_MeasList->GetSelectedRows();
+    if(selection_rows.size() == 1)
     {
-        std::cout << "Selected Row: " << selection.Item(0) << std::endl;
-        int selected_row = selection.Item(0);
+        int selected_row = selection_rows.Item(0);
         wxString tmp_xxString = m_MeasList->GetCellValue(selected_row,0);
         std::string var2rm_str = tmp_xxString.ToStdString();
-        std::cout << "Remove the variable: "<< var2rm_str << std::endl;
-        m_MeasList->DeleteRows(selection.Item(0));
-
+        m_MeasList->DeleteRows(selection_rows.Item(0));
         CCP_Master->rmVariableFromActionPlan(var2rm_str);
     }
 }

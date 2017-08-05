@@ -961,6 +961,11 @@ int CCP_driver::rmVariableFromActionPlan(std::string var2rm)
     return 0;
 }
 
+void CCP_driver::clearActionPlan(void)
+{
+    ActionTable.clear();
+}
+
 
 void CCP_driver::updateSchedular(void)
 {
