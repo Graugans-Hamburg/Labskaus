@@ -52,7 +52,14 @@ void LabskausFrame::Read_XML_file(std::string ECU_XML_file_full_path)
     using namespace std;
     using namespace tinyxml2;
     tinyxml2::XMLDocument doc;
-    doc.LoadFile(ECU_XML_file_full_path.c_str());
+    XMLError result;
+    result = doc.LoadFile(ECU_XML_file_full_path.c_str());
+    if(result != 0)
+    {
+        std::cerr << "ECU xml file: " << ECU_XML_file_full_path << "could not be loaded"
+                  << std::endl;
+        return;
+    }
     tinyxml2::XMLNode* root = doc.FirstChildElement();
     m_listBox1->Clear();
     // Counter to know how many list elements are available

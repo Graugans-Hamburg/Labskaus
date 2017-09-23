@@ -65,14 +65,24 @@ void LabskausFrame::apply_config_file(std::string config_file)
     using namespace std;
     using namespace tinyxml2;
     tinyxml2::XMLDocument ConfigXML;
-    ConfigXML.LoadFile(config_file.c_str());
+    XMLError result;
+    /*******************************************************************************************
+     * Part 0: Check if the argument that is handed over exists and that it can be opened.
+     *         next step open it with tinyxml2
+     ******************************************************************************************/
+    result = ConfigXML.LoadFile(config_file.c_str());
+    if(result != 0)
+    {
+        std::cerr<< "The configuration file " << config_file << "could not be loaded." << std::endl;
+        return;
+    }
     tinyxml2::XMLNode* n_root = ConfigXML.FirstChildElement();
     tinyxml2::XMLElement* n_conf = n_root->FirstChildElement();
     tinyxml2::XMLElement* n_measurement_setup;
 
     bool ECU_XML_file_found = false;
     /*******************************************************************************************
-     * Part 0: Clear the ActionTable
+     * Part 1: Clear the ActionTable
      ******************************************************************************************/
     CCP_Master->clearActionPlan();
     m_MeasList->ClearGrid();
@@ -81,7 +91,7 @@ void LabskausFrame::apply_config_file(std::string config_file)
         m_MeasList->DeleteRows(0,m_MeasList->GetNumberRows());
     }
     /*******************************************************************************************
-     * Part 1: Check if the root element of the XML file is correct and if the first child
+     * Part 2: Check if the root element of the XML file is correct and if the first child
      *         element of this is the one with <version_config_file>
      ******************************************************************************************/
     if (    (strcmp(n_root->Value( ), "labskaus_configuration_file") != 0)
@@ -91,7 +101,7 @@ void LabskausFrame::apply_config_file(std::string config_file)
         return;
     }
     /*******************************************************************************************
-     * Part 2: Check if the next root element has the value ecu_xml_location an if this XML-
+     * Part 3: Check if the next root element has the value ecu_xml_location an if this XML-
      *         element does has a value. If all is correct the XML file should be loaded.
      ******************************************************************************************/
     n_conf = n_conf->NextSiblingElement();
@@ -112,7 +122,7 @@ void LabskausFrame::apply_config_file(std::string config_file)
         }
     }
     /*******************************************************************************************
-     * Part 3: Check if the next root element has the value log_folder_location an if this XML-
+     * Part 4: Check if the next root element has the value log_folder_location an if this XML-
      *         element does has a value. If all is correct the location for the log files should
      *         should be set. If no log folder is defined by the configuration file, a warning
      *         shall inform the user about it and a base location shall be defined.
@@ -135,7 +145,7 @@ void LabskausFrame::apply_config_file(std::string config_file)
         }
     }
     /*******************************************************************************************
-     * Part 4: Load the lastest variables into the ActionTable. This can only be done with the
+     * Part 5: Load the lastest variables into the ActionTable. This can only be done with the
      *         if the ECU-XML file has been successfully loaded (see Part1 of this function).
      ******************************************************************************************/
     if(ECU_XML_file_found == true)
