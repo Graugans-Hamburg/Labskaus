@@ -68,7 +68,8 @@ LabskausFrame::LabskausFrame(wxFrame *frame)
     CCP_Master = new CCP_driver();
     recTimer = NULL;
     data_acquisition_timer = NULL;
-    apply_config_file("/home/mattes/.Labskaus/base.lcf");
+    createDefaultDir();
+    LoadLastConfig();
     m_MeasList->SetSelectionMode(wxGrid::wxGridSelectRows);
 }
 
@@ -83,7 +84,7 @@ void LabskausFrame::OnClose(wxCloseEvent &event)
 
 void LabskausFrame::OnQuit(wxCommandEvent &event)
 {
-    SaveConfiguration("/home/mattes/.Labskaus/base.lcf");
+    SaveLastConfig();
     Destroy();
 }
 

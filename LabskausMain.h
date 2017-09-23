@@ -69,6 +69,10 @@ class LabskausFrame: public GUIFrame
         // LabskausMain_Config.cpp
         void SaveConfiguration(std::string location);
         void read_last_config(std::string config_file);
+        void createDefaultDir(void);
+        void setLogDir2Default(void);
+        void LoadLastConfig(void);
+        void SaveLastConfig(void);
         ECU_VarInfo* find_ECUVarByName(std::string VarName);
 };
 

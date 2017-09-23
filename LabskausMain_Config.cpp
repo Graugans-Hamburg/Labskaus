@@ -10,6 +10,11 @@
 #include "tinyxml2.h"
 #include "CCP_driver.h"
 
+// Required to get the user name and the name of the home directory
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
+
 
 /*******************************************************************************************
  * Function to save the active configuration to a location which is defined by the first
@@ -73,7 +78,8 @@ void LabskausFrame::apply_config_file(std::string config_file)
     result = ConfigXML.LoadFile(config_file.c_str());
     if(result != 0)
     {
-        std::cerr<< "The configuration file " << config_file << "could not be loaded." << std::endl;
+        std::cerr<< "The configuration file " << config_file << " could not be loaded." << std::endl;
+        setLogDir2Default();
         return;
     }
     tinyxml2::XMLNode* n_root = ConfigXML.FirstChildElement();
@@ -98,6 +104,7 @@ void LabskausFrame::apply_config_file(std::string config_file)
          || (strcmp(n_conf->Value( ), "version_config_file")         != 0)  )
     {
         std::cerr << "XML file with the last configuration could not be loaded" << endl;
+        setLogDir2Default();
         return;
     }
     /*******************************************************************************************
@@ -135,14 +142,14 @@ void LabskausFrame::apply_config_file(std::string config_file)
              || ( n_conf->GetText() == nullptr                       )  )
         {
             wxMessageBox(_("Log folder was not found inside the configuration file.\n\n Log folder is set to the default directory"),_("Configuration Load Warning"));
-            LOG_dir = "/home/mattes/.Labskaus/logs";
+            setLogDir2Default();
         }
         else
         {
             LOG_dir = n_conf->GetText();
-            CCP_Master->SetLogFolder(LOG_dir);
-            //TODO check if log folder is existing.
         }
+        //TODO check if log folder is existing.
+        CCP_Master->SetLogFolder(LOG_dir);
     }
     /*******************************************************************************************
      * Part 5: Load the lastest variables into the ActionTable. This can only be done with the
@@ -245,3 +252,70 @@ void LabskausFrame::open_save_config_dialog(wxCommandEvent &event)
 }
 
 
+
+/*******************************************************************************************
+ * Function check if the default folder structure is existing. If it is not existing, create
+ * it.
+ *
+ * default folder structure: ~.Labskaus
+ *                           ~.Labskaus/logs
+ *
+ * LINUX-SPECIFIC
+ ******************************************************************************************/
+
+ void LabskausFrame::createDefaultDir(void)
+ {
+    struct passwd *pw = getpwuid(getuid());
+    const char *homedir = pw->pw_dir;
+    std::cout << "Name of the home directory: " << homedir << std::endl;
+    system("mkdir ~/.Labskaus");
+    system("mkdir ~/.Labskaus/logs");
+ }
+
+/*******************************************************************************************
+ * Function to find out the home path of the user. The default directory for logs is in this
+ * user directory/.Labskaus/logs .
+ *
+ * LINUX-SPECIFIC
+ ******************************************************************************************/
+
+ void LabskausFrame::setLogDir2Default(void)
+ {
+    struct passwd *pw = getpwuid(getuid());
+    const char *homedir = pw->pw_dir;
+    std::string default_dir_log = homedir;
+    default_dir_log.append("/.Labskaus/logs");
+    std::cout << "Name of the home directory for logs: " << default_dir_log << std::endl;
+    CCP_Master->SetLogFolder(default_dir_log);
+ }
+
+ /*******************************************************************************************
+ * Function load the config file of the latest run. This config file is always stored inside
+ * default directory of Labskaus which is
+ *
+ * LINUX-SPECIFIC
+ ******************************************************************************************/
+
+ void LabskausFrame::LoadLastConfig(void)
+ {
+    struct passwd *pw = getpwuid(getuid());
+    const char *homedir = pw->pw_dir;
+    std::string last_config = homedir;
+    last_config.append("/.Labskaus/base.lcf");
+    apply_config_file(last_config);
+ }
+
+  /*******************************************************************************************
+ * Function load the config file of the latest run. This config file is always stored inside
+ * default directory of Labskaus which is
+ *
+ * LINUX-SPECIFIC
+ ******************************************************************************************/
+  void LabskausFrame::SaveLastConfig(void)
+ {
+    struct passwd *pw = getpwuid(getuid());
+    const char *homedir = pw->pw_dir;
+    std::string last_config = homedir;
+    last_config.append("/.Labskaus/base.lcf");
+    SaveConfiguration(last_config);
+ }
