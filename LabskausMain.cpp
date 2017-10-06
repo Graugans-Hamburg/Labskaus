@@ -79,6 +79,7 @@ LabskausFrame::~LabskausFrame()
 
 void LabskausFrame::OnClose(wxCloseEvent &event)
 {
+    SaveLastConfig();
     Destroy();
 }
 
