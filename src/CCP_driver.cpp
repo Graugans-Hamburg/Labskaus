@@ -56,7 +56,23 @@ void CCP_driver::periodic_check(void)
     /*Überprüfe ob akutell ein Timeout vorliegt.*/
     CRO_check_time_out();
     /* See if there is anything new for the state machine */
-    SM_run_state_machine();
+
+    uint16_t SM_actl_state_old;
+    uint16_t  interation_counter = 0;
+    do
+    {
+        SM_actl_state_old = SM_actl_state;
+        SM_run_state_machine();
+        interation_counter++;
+        if(interation_counter > 100)
+        {
+            std::cerr << "More than 100 iteration and the state is still changing. Looks"
+                      << "somebody programmed shit." << std::endl;
+            break;
+        }
+
+    }while(SM_actl_state_old != SM_actl_state);
+
 }
 
 /*
