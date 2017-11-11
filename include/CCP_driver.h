@@ -97,6 +97,7 @@ enum CCP_driver_states
     SM_Wait,
     SM_read_variable_SetMTA,
     SM_read_variable_DataUpload,
+    SM_read_variable_ShortUp,
     SM_calibrate_variable_SetMTA,
     SM_calibrate_variable_DataDNLoad,
 };
@@ -118,8 +119,9 @@ class CCP_driver
         void AnalyzeCCPFrame();
         void TxCRO_Connect();
         void TxCRO_GetCCP_Version();
-        void TxCRO_SetMTA(uint8_t MTA_number, uint8_t AdressExtention, uint32_t MTA_adress);
+        void TxCRO_SetMTA(uint8_t MTA_number, uint8_t AddressExtention, uint32_t MTA_adress);
         void TxCRO_Upload(uint8_t num_of_bytes);
+        void TxCRO_ShortUp(uint8_t number_of_bytes, uint8_t AddressExtention, uint32_t u32_address);
         void TxCRO_Dnload(uint8_t * ptr_data, uint8_t num_of_bytes);
         void Analyze(CCP_Frame& received_CCP_frame);
         void analyze_CRM_Upload(CCP_Frame& received_CCP_frame);

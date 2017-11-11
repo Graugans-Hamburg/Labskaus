@@ -140,13 +140,13 @@ void CCP_driver::TxCRO_GetCCP_Version(void)
  *    Byte4   : 0x??  Address extention
  *    Byte5-8 : 0x??  New Address
  */
-void CCP_driver::TxCRO_SetMTA(uint8_t MTA_number, uint8_t AdressExtention, uint32_t MTA_adress)
+void CCP_driver::TxCRO_SetMTA(uint8_t MTA_number, uint8_t AddressExtention, uint32_t MTA_adress)
 {
     CCP_Frame* CCP_Connect_Cmd = new CCP_Frame();
     CCP_Connect_Cmd->SetByte1(COMMAND_SET_MTA);
     CCP_Connect_Cmd->SetByte2(++MessageCounter);
     CCP_Connect_Cmd->SetByte3(MTA_number);
-    CCP_Connect_Cmd->SetByte4(AdressExtention);
+    CCP_Connect_Cmd->SetByte4(AddressExtention);
     if(ECU_byte_order == PC_byte_order)
     {
         CCP_Connect_Cmd->SetByte5(uint8_t( MTA_adress & 0x000000FF));
@@ -190,6 +190,44 @@ void CCP_driver::TxCRO_Upload(uint8_t num_of_bytes)
     CCP_Connect_Cmd->SetByte7(0);
     CCP_Connect_Cmd->SetByte8(0);
     CCP_Connect_Cmd->setCCPFrameTime();
+    CRO_Tx(*CCP_Connect_Cmd);
+}
+
+
+/*
+ * Send the command to upload a small amount of data SHORT_UP
+ *
+ * Description:
+ *
+ * Message that will be send over:
+ *    Byte1   : 0x02  Command code for the SETMTA command
+ *    Byte2   : 0x??  Command Counter ctr
+ *    Byte3   : 0x02  Number of Bytes that shall be send back from the ECU
+ *    Byte4   : 0x??  Address extention
+ *    Byte5-8 : 0x??  New Address
+ */
+void CCP_driver::TxCRO_ShortUp(uint8_t number_of_bytes, uint8_t AddressExtention, uint32_t u32_address)
+{
+    CCP_Frame* CCP_Connect_Cmd = new CCP_Frame();
+    CCP_Connect_Cmd->SetByte1(COMMAND_SHORT_UP);
+    CCP_Connect_Cmd->SetByte2(++MessageCounter);
+    CCP_Connect_Cmd->SetByte3(number_of_bytes);
+    CCP_Connect_Cmd->SetByte4(AddressExtention);
+    if(ECU_byte_order == PC_byte_order)
+    {
+        CCP_Connect_Cmd->SetByte5(uint8_t( u32_address & 0x000000FF));
+        CCP_Connect_Cmd->SetByte6(uint8_t((u32_address & 0x0000FF00) >> 8));
+        CCP_Connect_Cmd->SetByte7(uint8_t((u32_address & 0x00FF0000) >> 16));
+        CCP_Connect_Cmd->SetByte8(uint8_t( u32_address >> 24));
+    }
+    if(ECU_byte_order != PC_byte_order)
+    {
+        CCP_Connect_Cmd->SetByte5(uint8_t( u32_address >> 24));
+        CCP_Connect_Cmd->SetByte6(uint8_t((u32_address & 0x00FF0000) >> 16));
+        CCP_Connect_Cmd->SetByte7(uint8_t((u32_address & 0x0000FF00) >> 8));
+        CCP_Connect_Cmd->SetByte8(uint8_t( u32_address & 0x000000FF));
+    }
+
     CRO_Tx(*CCP_Connect_Cmd);
 }
 
@@ -305,7 +343,7 @@ void CCP_driver::SM_run_state_machine(void)
             updateSchedular();
             if(SMT_read_variable == true)
             {  /* Exit the state, start to set the MTA */
-                SM_actl_state = SM_read_variable_SetMTA;
+                SM_actl_state = SM_read_variable_ShortUp;
                 SM_enterleave_state = true;
                 break;
             }
@@ -316,40 +354,16 @@ void CCP_driver::SM_run_state_machine(void)
                 break;
             }
             break;
-        case SM_read_variable_SetMTA:
+        case SM_read_variable_ShortUp:
             if(SM_enterleave_state == true)
             { /* Enter the state */
-                TxCRO_SetMTA(0,SMI_read_address_extention,SMI_read_variable_address);
-                SM_enterleave_state = false;
-                SMT_read_variable = false;
-                break;
-            }
-
-            if(CRO_waiting_for_request == false &&
-               CRM_ErrorCode_last_received == CRC_ACKNOWLEGE)
-            {  /* Exit the state, MTA is positioned */
-                SM_actl_state = SM_read_variable_DataUpload;
-                SM_enterleave_state = true;
-                break;
-            }
-            if(CRO_waiting_for_request == false &&
-               CRM_ErrorCode_last_received != CRC_ACKNOWLEGE)
-            {  /* Exit the state, MTA is positioned */
-                SM_actl_state = SM_Wait;
-                SM_enterleave_state = true;
-                break;
-            }
-            break;
-        case SM_read_variable_DataUpload:
-            if(SM_enterleave_state == true)
-            { /* Enter the state */
-                if(SMI_read_variable_type == type_u8)TxCRO_Upload(1);
-                if(SMI_read_variable_type == type_i8)TxCRO_Upload(1);
-                if(SMI_read_variable_type == type_u16)TxCRO_Upload(2);
-                if(SMI_read_variable_type == type_i16)TxCRO_Upload(2);
-                if(SMI_read_variable_type == type_u32)TxCRO_Upload(4);
-                if(SMI_read_variable_type == type_i32)TxCRO_Upload(4);
-                if(SMI_read_variable_type == type_f32)TxCRO_Upload(4);
+                if(SMI_read_variable_type == type_u8)TxCRO_ShortUp(1,0,SMI_read_variable_address);
+                if(SMI_read_variable_type == type_i8)TxCRO_ShortUp(1,0,SMI_read_variable_address);
+                if(SMI_read_variable_type == type_u16)TxCRO_ShortUp(2,0,SMI_read_variable_address);
+                if(SMI_read_variable_type == type_i16)TxCRO_ShortUp(2,0,SMI_read_variable_address);
+                if(SMI_read_variable_type == type_u32)TxCRO_ShortUp(4,0,SMI_read_variable_address);
+                if(SMI_read_variable_type == type_i32)TxCRO_ShortUp(4,0,SMI_read_variable_address);
+                if(SMI_read_variable_type == type_f32)TxCRO_ShortUp(4,0,SMI_read_variable_address);
                 SM_enterleave_state = false;
                 break;
             }
@@ -609,6 +623,17 @@ void CCP_driver::Analyze(CCP_Frame& received_CCP_frame)
                         }
                         break;
                     case COMMAND_UPLOAD:
+                        if(received_CCP_frame.GetByte2() == CRC_ACKNOWLEGE)
+                        {
+                          analyze_CRM_Upload(received_CCP_frame);
+                        }
+                        else
+                        {
+                            std::cerr << "ECU did not ACK the Command to Upload" <<
+                            std::endl;
+                        }
+                        break;
+                    case COMMAND_SHORT_UP:
                         if(received_CCP_frame.GetByte2() == CRC_ACKNOWLEGE)
                         {
                           analyze_CRM_Upload(received_CCP_frame);
