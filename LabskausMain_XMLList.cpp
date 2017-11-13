@@ -60,18 +60,23 @@ void LabskausFrame::Read_XML_file(std::string ECU_XML_file_full_path)
                   << std::endl;
         return;
     }
-    tinyxml2::XMLNode* root = doc.FirstChildElement();
+    tinyxml2::XMLNode* pXML_root = doc.FirstChildElement("measurement_file");
     m_listBox1->Clear();
     // Counter to know how many list elements are available
     int postn = 0;
 
-    if (strcmp(root->Value( ), "measurement_file") != 0) {
-        cout << string("bad root: Wrong xml? ") + root->Value( ) << endl;
+    if (!pXML_root)
+        {
+        cout << string("bad root: Wrong xml? ")<< endl;
+        return;
         }
-    else{
-        //cout << "Found the element "<< root->Value() <<" in line "<<root->GetLineNum() << endl;
+    tinyxml2::XMLNode* pXML_variable_list = pXML_root->FirstChildElement("variable_list");
+    if (!pXML_variable_list)
+        {
+        cout << string("XML has no Note variable list: Wrong xml? ") << endl;
+        return;
         }
-    XMLNode* variable = root->FirstChildElement();
+    XMLNode* variable = pXML_variable_list->FirstChildElement();
     if (strcmp(variable->Value( ), "variable") != 0) {
         cout << string("bad root: Wrong XML? ") + variable->Value( ) << endl;
         }
