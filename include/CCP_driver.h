@@ -127,6 +127,8 @@ class CCP_driver
         void analyze_CRM_Upload(CCP_Frame& received_CCP_frame);
         void ECU_SetECU_MTA_Number1(uint32_t val){ECU_MTA_Number1 = val;}
         void ECU_SetECU_MTA_Number2(uint32_t val){ECU_MTA_Number2 = val;}
+        void Set_ECU_station_address(uint16_t val){ECU_station_address = val;}
+        void Set_ECU_endianness(endian val){ECU_byte_order = val;}
         void CCP_drv_state_machine(void);
         void CRO_check_time_out(void);
         void CRO_Tx(CCP_Frame& CCP_Tx_Frame);
@@ -172,8 +174,10 @@ class CCP_driver
         uint8_t   ECU_CCP_Version_Release;
         uint32_t  ECU_MTA_Number1; /* Shows the last set position of the MTA1 */
         uint32_t  ECU_MTA_Number2; /* Shows the last set position of the MTA1 */
+        uint16_t  ECU_station_address;
         endian    ECU_byte_order;
         endian    PC_byte_order;
+
 
         bool Device_Available;
         uint8_t MessageCounter;

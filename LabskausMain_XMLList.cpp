@@ -80,11 +80,8 @@ void LabskausFrame::Read_XML_file(std::string ECU_XML_file_full_path)
     if (strcmp(variable->Value( ), "variable") != 0) {
         cout << string("bad root: Wrong XML? ") + variable->Value( ) << endl;
         }
-    else{
-        //cout << "Found the element "<< variable->Value() <<" in line "<<variable->GetLineNum() << endl;
-        }
+
     do{
-    //cout << "---------------------" << endl;
         XMLElement* varelement = variable->FirstChildElement();
         std::string var_name;
         std::string var_address;
@@ -157,4 +154,48 @@ void LabskausFrame::Read_XML_file(std::string ECU_XML_file_full_path)
     }while(variable);
 
     CCP_Master->Set_XMLExtract(&XML_list);
+
+    /* Check the ecu_properties */
+    tinyxml2::XMLNode* pXML_ecu_properties = pXML_root->FirstChildElement("ecu_properties");
+    if (pXML_ecu_properties)
+    {
+        tinyxml2::XMLNode* pXML_station_address = pXML_ecu_properties->FirstChildElement("station_address");
+        if (pXML_station_address)
+            {
+                std::string str_station_address(pXML_station_address->Value());
+                uint16_t station_address;
+                std::stringstream ss;
+                ss << std::dec << str_station_address;
+                ss >> station_address;
+                CCP_Master->Set_ECU_station_address(station_address);
+            }
+        tinyxml2::XMLNode* pXML_endianness = pXML_ecu_properties->FirstChildElement("endianness");
+        if (pXML_endianness)
+            {
+                bool flag_endianness_determined = 0;
+                if((strcmp(pXML_endianness->Value(),"big")==0) ||
+                   (strcmp(pXML_endianness->Value(),"motorola")==0) ||
+                   (strcmp(pXML_endianness->Value(),"big-endian")==0))
+                {
+                    /*cout << "Datatype found" << endl;*/
+                    CCP_Master->Set_ECU_endianness(big_endian);
+                    flag_endianness_determined = true;
+                }
+                if((strcmp(pXML_endianness->Value(),"little")==0) ||
+                   (strcmp(pXML_endianness->Value(),"intel")==0) ||
+                   (strcmp(pXML_endianness->Value(),"littel-endian")==0))
+                {
+                    /*cout << "Datatype found" << endl;*/
+                    CCP_Master->Set_ECU_endianness(little_endian);
+                    flag_endianness_determined = true;
+                }
+                if(flag_endianness_determined == false)
+                {
+                    std::cout << "Endianness could not be determined. Set endianness to default (little-endianness )" << std::endl;
+                }
+            }
+    }
+
+
+
 }

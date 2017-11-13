@@ -92,8 +92,8 @@ void CCP_driver::TxCRO_Connect()
     CCP_Frame* CCP_Connect_Cmd = new CCP_Frame();
     CCP_Connect_Cmd->SetByte1(COMMAND_CONNECT);
     CCP_Connect_Cmd->SetByte2(++MessageCounter);
-    CCP_Connect_Cmd->SetByte3(0);
-    CCP_Connect_Cmd->SetByte4(0);    //
+    CCP_Connect_Cmd->SetByte3( (uint8_t)(ECU_station_address & 0x00FF) );
+    CCP_Connect_Cmd->SetByte4( (uint8_t)((ECU_station_address & 0xFF00) >> 8));    //
     CCP_Connect_Cmd->SetByte5(0);
     CCP_Connect_Cmd->SetByte6(0);
     CCP_Connect_Cmd->SetByte7(0);
