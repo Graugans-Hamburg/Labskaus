@@ -159,31 +159,31 @@ void LabskausFrame::Read_XML_file(std::string ECU_XML_file_full_path)
     tinyxml2::XMLNode* pXML_ecu_properties = pXML_root->FirstChildElement("ecu_properties");
     if (pXML_ecu_properties)
     {
-        tinyxml2::XMLNode* pXML_station_address = pXML_ecu_properties->FirstChildElement("station_address");
+        tinyxml2::XMLElement* pXML_station_address = pXML_ecu_properties->FirstChildElement("station_address");
         if (pXML_station_address)
             {
-                std::string str_station_address(pXML_station_address->Value());
+                std::string str_station_address(pXML_station_address->GetText());
                 uint16_t station_address;
                 std::stringstream ss;
                 ss << std::dec << str_station_address;
                 ss >> station_address;
                 CCP_Master->Set_ECU_station_address(station_address);
             }
-        tinyxml2::XMLNode* pXML_endianness = pXML_ecu_properties->FirstChildElement("endianness");
+        tinyxml2::XMLElement* pXML_endianness = pXML_ecu_properties->FirstChildElement("endianness");
         if (pXML_endianness)
             {
                 bool flag_endianness_determined = 0;
-                if((strcmp(pXML_endianness->Value(),"big")==0) ||
-                   (strcmp(pXML_endianness->Value(),"motorola")==0) ||
-                   (strcmp(pXML_endianness->Value(),"big-endian")==0))
+                if((strcmp(pXML_endianness->GetText(),"big")==0) ||
+                   (strcmp(pXML_endianness->GetText(),"motorola")==0) ||
+                   (strcmp(pXML_endianness->GetText(),"big-endian")==0))
                 {
                     /*cout << "Datatype found" << endl;*/
                     CCP_Master->Set_ECU_endianness(big_endian);
                     flag_endianness_determined = true;
                 }
-                if((strcmp(pXML_endianness->Value(),"little")==0) ||
-                   (strcmp(pXML_endianness->Value(),"intel")==0) ||
-                   (strcmp(pXML_endianness->Value(),"littel-endian")==0))
+                if((strcmp(pXML_endianness->GetText(),"little")==0) ||
+                   (strcmp(pXML_endianness->GetText(),"intel")==0) ||
+                   (strcmp(pXML_endianness->GetText(),"littel-endian")==0))
                 {
                     /*cout << "Datatype found" << endl;*/
                     CCP_Master->Set_ECU_endianness(little_endian);
