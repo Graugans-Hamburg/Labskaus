@@ -1,9 +1,13 @@
-# Ignoriere die erstellten Objekte
-*.o
+# ignore the following objects
+
 Labskaus.depend
 Labskaus.layout
+
+*.o
 *.csv
 *.ods
+
 /logs
 /bin
+/obj
 
