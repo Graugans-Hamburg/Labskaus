@@ -1,0 +1,9 @@
+# Ignoriere die erstellten Objekte
+*.o
+Labskaus.depend
+Labskaus.layout
+*.csv
+*.ods
+/logs
+/bin
+

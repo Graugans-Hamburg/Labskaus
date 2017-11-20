@@ -361,12 +361,14 @@ void CCP_driver::SM_run_state_machine(void)
             {  /* Exit the state, start to set the MTA */
                 SM_actl_state = SM_read_variable_ShortUp;
                 SM_enterleave_state = true;
+                SMT_read_variable = false;
                 break;
             }
             if(SMT_calibrate_variable == true)
             { /* Exit the state, start to set the MTA */
                 SM_actl_state = SM_calibrate_variable_SetMTA;
                 SM_enterleave_state = true;
+                SMT_calibrate_variable = false;
                 break;
             }
             break;
@@ -387,18 +389,6 @@ void CCP_driver::SM_run_state_machine(void)
             if(CRO_waiting_for_request == false &&
                CRM_ErrorCode_last_received == CRC_ACKNOWLEGE)
             {  /* Exit the state, Everything received */
-
-                #ifdef PLOT_COMMUNICATION_TO_TERMINAL
-                std::cout << "Empfangene Werte:" << std::endl
-                          << "u8  : " << std::dec<< (int)SMI_read_variable_uint8  << std::endl
-                          << "s8  : " << std::dec<< (int)SMI_read_variable_sint8  << std::endl
-                          << "u16 : " << std::dec<< SMI_read_variable_uint16 << std::endl
-                          << "s16 : " << std::dec<< SMI_read_variable_sint16 << std::endl
-                          << "u32 : " << std::dec<< SMI_read_variable_uint32 << std::endl
-                          << "s32 : " << std::dec <<SMI_read_variable_sint32 << std::endl;
-                #endif /* PLOT_COMMUNICATION_TO_TERMINAL*/
-
-
                 SM_actl_state = SM_Wait;
                 SMI_read_variable_successfull = true;
                 log_database.add_new_value(SMI_read_variable_address,
@@ -518,18 +508,6 @@ void CCP_driver::SM_run_state_machine(void)
             if(CRO_waiting_for_request == false &&
                CRM_ErrorCode_last_received == CRC_ACKNOWLEGE)
             {  /* Exit the state, Everything received */
-
-                #ifdef PLOT_COMMUNICATION_TO_TERMINAL
-                std::cout << "Empfangene Werte:" << std::endl
-                          << "u8  : " << std::dec<< (int)SMI_read_variable_uint8  << std::endl
-                          << "s8  : " << std::dec<< (int)SMI_read_variable_sint8  << std::endl
-                          << "u16 : " << std::dec<< SMI_read_variable_uint16 << std::endl
-                          << "s16 : " << std::dec<< SMI_read_variable_sint16 << std::endl
-                          << "u32 : " << std::dec<< SMI_read_variable_uint32 << std::endl
-                          << "s32 : " << std::dec <<SMI_read_variable_sint32 << std::endl;
-                #endif /* PLOT_COMMUNICATION_TO_TERMINAL*/
-
-
                 SM_actl_state = SM_Wait;
                 SM_enterleave_state = true;
                 break;
