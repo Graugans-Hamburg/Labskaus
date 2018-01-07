@@ -1,0 +1,117 @@
+% ------------------------------------------------------------------
+%
+%  Verwendete Packages und Makro-Dateien
+%
+% ------------------------------------------------------------------
+
+% ---------------------------------------------------------------------
+% Seitenlayout
+% ---------------------------------------------------------------------
+\usepackage[a4paper,
+            centering,
+            textwidth=17cm,
+            textheight=24cm,
+            headheight=14.5pt]{geometry}
+
+
+% ---------------------------------------------------------------------
+% Absatzabstände
+% ---------------------------------------------------------------------
+\parindent0mm
+\parskip1ex
+
+
+% ---------------------------------------------------------------------
+% Kopf- und Fußzeile
+% ---------------------------------------------------------------------
+\usepackage{fancyhdr}
+\fancyhead[OR,EL]{\thepage}
+\fancyhead[OL]{\sl\nouppercase\rightmark}
+\fancyhead[ER]{\sl\nouppercase\leftmark}
+\fancyfoot{}
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter~~#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection~~#1}}
+\fancypagestyle{plain}{%
+  \fancyhead{}
+  \fancyfoot{}
+  \renewcommand{\headrulewidth}{0pt}
+}
+\raggedbottom
+
+% ---------------------------------------------------------------------
+%  Allgemeine Packages
+% ---------------------------------------------------------------------
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc} 
+\usepackage[ngerman]{babel}
+\usepackage{babelbib}
+\usepackage{makeidx}
+\usepackage{amsmath}
+\usepackage{amsbsy}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{color}
+\usepackage{ifpdf}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+
+		\usepackage[
+		nonumberlist, %keine Seitenzahlen anzeigen
+		acronym,      %ein Abkürzungsverzeichnis erstellen
+		toc,          %Einträge im Inhaltsverzeichnis
+		section]      %im Inhaltsverzeichnis auf section-Ebene erscheinen
+		{glossaries} 
+		
+		\newglossary[slg]{symbolslist}{syi}{syg}{Symbolverzeichnis}
+		
+		%Den Punkt am Ende jeder Beschreibung deaktivieren
+		\renewcommand*{\glspostdescription}{}
+		
+		%Glossar-Befehle anschalten
+		\makeglossaries
+		
+		%Diese Befehle sortieren die Einträge in den
+		%einzelnen Listen:
+		%makeindex -s datei.ist -t datei.alg -o datei.acr datei.acn
+		%makeindex -s datei.ist -t datei.glg -o datei.gls datei.glo
+		%makeindex -s datei.ist -t datei.slg -o datei.syi datei.syg
+		
+		%Befehle für Symbole
+		
+		\newglossaryentry{symb:Pi}{
+		name=$\pi$,
+		description={Die Kreiszahl.},
+		sort=symbolpi, type=symbolslist
+		} 
+
+
+\ifpdf
+  \DeclareGraphicsExtensions{.pdf,.jpg,.png,.ps,.eps}
+\else
+  \DeclareGraphicsExtensions{.eps,.ps,.png,.jpg,.pdf}
+\fi
+
+
+% ---------------------------------------------------------------------
+%  Hyperref-Paket
+% ---------------------------------------------------------------------
+\ifpdf
+  \usepackage{hyperref}
+\else
+  \usepackage[hypertex]{hyperref}
+\fi
+\definecolor{dgreen}{rgb}{0,0.7,0}
+\definecolor{dblue}{rgb}{0,0,0.7}
+\definecolor{dred}{rgb}{0.7,0,0}
+\hypersetup{bookmarksnumbered=true,
+            plainpages=false,
+            colorlinks=true,
+            linkcolor=dblue,
+            citecolor=dgreen,
+            filecolor=dred,
+            urlcolor=blue}
+
+

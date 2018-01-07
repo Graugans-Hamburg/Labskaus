@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" type="text/css" href="../graugans.css" />
+</head>
+
+<body>
+	<h1>Speichern von Messergebnissen</h1>
+
+	Im Programm Labskaus kann in der Menüleiste eingestellt werden wo die logs der letzten Messung 
+	gespeichert werden sollen. Nach dem Abschluss einer jeden Messung werden die folgenden Dateien 
+	angelegt. 
+	<ul>
+		<li>m-Datei (YYYY-MM-DD_hhmmss.m)<br>
+		Messdatendatei mit allen Messwerten und dem entsprechenden Zeitstempel an dem die 
+		die CCP-Botschaft analysiert worden ist. Die Zeitangabe ist relativ zum Startpunkt 
+		der Messung. Falls es jemand genau wissen möchte, sie entspricht der UTC-Zeit der Analyse
+		minus der UTC-Zeit zum Augenblick an dem der Messvorgang gestartet wurde.</li><br><br>
+	
+		<li>csv-Datei (YYYY-MM-DD_hhmmss.csv)<br>
+		Diese Datei enthält die Rohdaten aller CCP-Botschaften die zwischen Labskaus und dem µC
+		hin und hergeschickt wurden. Diese Datei enthält ebenfalls die Den UTC-Zeitstempel an dem 
+		die Botschaft geschickt bzw. analysiert wurde.</li>
+
+	</ul>
+</body>
+</html>

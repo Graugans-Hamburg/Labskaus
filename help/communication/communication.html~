@@ -1,0 +1,47 @@
+<h1>Kommunikation</h1>
+<h2>Grundlagen</h2>
+
+Grundsätzlich sendet der CCP Treiber auf dem µC keine Informationen wenn er nicht vorher gefragt wurde. Werden aber vom CCP-Master
+ (Labskaus) Anfragen an den µC gesendet so antwortet dieser mit einem entsprechenden CCP-Frame der immer aus 8 Byte besteht. Die 
+ Botschaften die über des CCP-Protokoll ausgetauscht werden beinhalten z. B. <br>
+<ul>
+	<li>Anfrage zum Beginnen eine CCP Kommunikation</li>
+	<li>Auslesen einer Variable</li>
+	<li>Setzen einer Variable</li>
+</ul>
+
+Eine Liste aller Befehle welche über CCP ausgetauscht werden kann <a href="ccp211.pdf">hier</a> eingesehen werden.
+
+<h2>Kommunikation aus Sicht des Programms Labskaus</h2>
+
+Wird eine Messung gestartet so öffnet Labskaus einen seriellen Port. Dieser ist hart im Programm
+einkodiert (/dev/ttyUSB0). Dieser Port wird mit den folgenden Eigenschaften geöffnet:
+
+<ul>
+	<li>115200 bps</li>
+	<li>kein paritybit</li>
+	<li>1 Stopbit</li>
+	<li>8 Datenbits</li>
+</ul>
+<h3>Senden von CCP-Botschaften</h3>
+<br>
+Jede Anfrage die von Labskaus an den µC gesendet wird hat die gleiche Form. Sie besteht jeweils aus 
+aus 8 Byte und einem Startzeichen (hex: 0xB0). Nach dem Startzeichen folgen die 8 Byte in welchen 
+die verschiedenen Anfragen codiert. 
+<br>
+<br>
+<img src="pic_frame.png" width="400">
+<br>
+<br>
+Das zustäzliche Startzeichen muss bei der Implementierung auf dem µC berücksichtigt da der CCP-Treiber nur
+die 8 Byte der CCP-Botschaft benötigt. Auf dieses wird hier jedoch nicht weiter eingegangen da die Labskaushilfe 
+keine Implementierungshinweise für den µC enthalten soll. 
+
+<h3>Empfangen von CCP-Botschaften</h3>
+
+Was fürs Senden gilt gilt auch für das Empfangen. Das heißt das jede CCP-Botschaft die vom µC gesendet wird das 
+Byte mit dem Wert 0xB0 als Startzeichen haben muss. Alle CCP-Botschaften die Empfangen werden landen in einem 
+Speicher der alle 10ms anlysiert wird. </br>
+Es 
+<br>
+<br>

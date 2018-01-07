@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" type="text/css" href="../graugans.css" />
+</head>
+
+<body>
+	<h1>Mikrokontrollerbeschreibungsdateien</h1>
+
+	Damit Labskaus alle einzelne Variaben aus dem Speicher des Mikrokontrollers auslesen kann
+	benötigt es die Information wo welche Variable wo zu finden ist. Diese Information ist nur eine 
+	von vielen die in der ECU-Beschreibungsdatei abgelegt ist. Eine Auflistung aller Informationen
+	befindet weiter unten.<br><br>
+
+	Hinweis: In der Automobilindustrie wird als ECU-Beschreibungsdatei häufig ein sogenanntes a2l-Datei
+	verwendet. Der Aufbau einer solchen a2l-Datei ist in einem Standard fest definiert.Dieser wird jedoch
+	im Augenblick nicht von Labskaus unterstützt. Stattdessen wird ein ECU-Beschreibungsdatei
+	verwendet welche auf einer XML-Datei basiert. Der Grund hierfür ist dass sich die programmatische 
+	Umsetzung hiervon sich um einiges leichter gestaltet.<br><br>
+
+	<h2> Informationen je ECU (einmalig)</h2>
+	<ul>
+		<li>Speicherendung (Endianess)</li>	
+		<li>Stationsaddresse</li>
+		<li>Version von Stockente</li>
+	</ul>
+	<h2> Informationen je Variable (mehrfach)</h2>
+	<ul>
+		<li>Name der Variable</li>	
+		<li>Speicheraddresse</li>
+		<li>Datentyp</li>
+		<li>Einheit (optional)</li>
+		<li>Beschreibung (optional)</li>
+	</ul>
+
+
+</body>
+</html>
+
