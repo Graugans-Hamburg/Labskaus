@@ -1,8 +1,26 @@
 body{
-	font-family:verdana;
+	font-family:verdana;	
 	color:black;
+	max-width: 1000px;
+	margin-left: 40px;
 }
 
 table, th, td{
 	border: 1px solid black;
+}
+
+#FooterLogo {
+	background-color: white;
+	width: 150px;
+	float:left;
+}
+
+#FooterText {
+	background-color: white;
+	margin-left: 200px;
+}
+
+#PageContent {	
+	margin-left: 20px;
+	margin-right: 20px;
 }
