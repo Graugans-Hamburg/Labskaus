@@ -46,6 +46,7 @@ class LabskausFrame: public GUIFrame
         virtual void OnClose(wxCloseEvent& event);
         virtual void OnQuit(wxCommandEvent& event);
         virtual void OnAbout(wxCommandEvent& event);
+        virtual void OnOpenDocumentation( wxCommandEvent& event);
         virtual void open_load_dialog(wxCommandEvent& event);
         virtual void open_load_config_dialog(wxCommandEvent &event);
         virtual void open_save_config_dialog(wxCommandEvent &event);

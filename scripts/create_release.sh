@@ -18,9 +18,8 @@ echo 'Step 3:Kopiere alle help Dateien in den Zielordner'
 cp -R ../help $Zielordner
 
 ##
-echo 'Step 4:Erstelle einen Ordner für das Programm und kopiere es hinein'
-mkdir "$Zielordner/bin"
-cp ../bin/Release/Labskaus "$Zielordner/bin"
+echo 'Step 4:Kopiere das Programm in den Zielordner'
+cp ../bin/Release/Labskaus "$Zielordner"
 
 ##
 echo 'Step 5: Kopiere das configure.sh in den Zielordner'

@@ -96,6 +96,11 @@ void LabskausFrame::OnAbout(wxCommandEvent &event)
     wxMessageBox(msg, _("Labskaus version information"));
 }
 
+void LabskausFrame::OnOpenDocumentation(wxCommandEvent &event)
+{
+    system("xdg-open \'./help/overview/index.html\'");
+}
+
 void LabskausFrame::open_load_dialog(wxCommandEvent &event)
 {
     if(CCP_Master->Get_MessStatus())

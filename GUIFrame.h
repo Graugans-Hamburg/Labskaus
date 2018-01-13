@@ -31,7 +31,8 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #define idMenuQuit 1000
-#define idMenuAbout 1001
+#define idMenuHelp 1001
+#define idMenuAbout 1002
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class GUIFrame
@@ -64,6 +65,7 @@ class GUIFrame : public wxFrame
 		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventOpenSerial( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventCloseSerial( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOpenDocumentation( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAbout( wxCommandEvent& event ) { event.Skip(); }
 		virtual void VarListKeyPressed( wxKeyEvent& event ) { event.Skip(); }
 		virtual void VarListSelected( wxCommandEvent& event ) { event.Skip(); }
