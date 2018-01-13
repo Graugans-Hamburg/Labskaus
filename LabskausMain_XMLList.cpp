@@ -94,6 +94,10 @@ void LabskausFrame::Read_XML_file(std::string ECU_XML_file_full_path)
                 }
             else
             {
+                if(!varelement->GetText())
+                {
+                    break;
+                }
                 std::string str(varelement->GetText());
                 if(!str.empty())
                 {
