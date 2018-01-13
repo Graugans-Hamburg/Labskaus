@@ -98,14 +98,18 @@ class LabskausFrameSettings: public DialogSettings
 {
     public:
         LabskausFrameSettings(CCP_driver *ptr_ccp_driver);
-        CCP_driver* CCP_Master;
         ~LabskausFrameSettings();
+        CCP_driver* CCP_Master;
+        endian newECUByteOrder;
+        uint16_t newStationAddress;
+        bool ByteOrder_changed;
+        bool Station_Address_changed;
 
     private:
-        //virtual void OnClose(wxCloseEvent& event);
-        //virtual void OnQuit(wxCommandEvent& event);
-        //virtual void OnAbout(wxCommandEvent& event);
-        //virtual void EventTakeOverVal(wxCommandEvent &event);
+		virtual void event_ChangeByteOrder( wxCommandEvent& event );
+		virtual void event_ChangeStationAddress( wxCommandEvent& event );
+		virtual void event_Cancel( wxCommandEvent& event );
+		virtual void event_Apply( wxCommandEvent& event );
 };
 
 #endif // LABSKAUSMAIN_H

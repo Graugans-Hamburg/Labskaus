@@ -335,6 +335,8 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	int m_choiceECUByteOrderNChoices = sizeof( m_choiceECUByteOrderChoices ) / sizeof( wxString );
 	m_choiceECUByteOrder = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceECUByteOrderNChoices, m_choiceECUByteOrderChoices, 0 );
 	m_choiceECUByteOrder->SetSelection( 0 );
+	m_choiceECUByteOrder->SetMinSize( wxSize( 200,-1 ) );
+	
 	bSizer35->Add( m_choiceECUByteOrder, 0, wxALL, 5 );
 	
 	bSizer14->Add( bSizer35, 1, wxEXPAND, 5 );
@@ -346,8 +348,10 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	m_staticText14->Wrap( -1 );
 	bSizer36->Add( m_staticText14, 0, wxALL, 5 );
 	
-	m_textCtrl2 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer36->Add( m_textCtrl2, 0, wxALL, 5 );
+	m_textECUStationAddress = new wxTextCtrl( this, wxID_ANY, wxT("unkown"), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	m_textECUStationAddress->SetMinSize( wxSize( 200,-1 ) );
+	
+	bSizer36->Add( m_textECUStationAddress, 0, wxALL, 5 );
 	
 	bSizer14->Add( bSizer36, 1, wxEXPAND, 5 );
 	
@@ -385,8 +389,13 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	m_staticText17->Wrap( -1 );
 	bSizer33->Add( m_staticText17, 0, wxALL, 5 );
 	
-	m_textCtrl3 = new wxTextCtrl( this, wxID_ANY, wxT("/tty/..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer33->Add( m_textCtrl3, 0, wxALL, 5 );
+	wxString m_choiceDeviceChoices[] = { wxT("/dev/ttyUSB0") };
+	int m_choiceDeviceNChoices = sizeof( m_choiceDeviceChoices ) / sizeof( wxString );
+	m_choiceDevice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceDeviceNChoices, m_choiceDeviceChoices, 0 );
+	m_choiceDevice->SetSelection( 0 );
+	m_choiceDevice->SetMinSize( wxSize( 200,-1 ) );
+	
+	bSizer33->Add( m_choiceDevice, 0, wxALL, 5 );
 	
 	bSizer14->Add( bSizer33, 1, wxEXPAND, 5 );
 	
@@ -406,17 +415,49 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	m_staticText18->Wrap( -1 );
 	bSizer37->Add( m_staticText18, 0, wxALL, 5 );
 	
-	m_textCtrl4 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer37->Add( m_textCtrl4, 0, wxALL, 5 );
+	wxString m_choiceStartByteChoices[] = { wxT("0xB0") };
+	int m_choiceStartByteNChoices = sizeof( m_choiceStartByteChoices ) / sizeof( wxString );
+	m_choiceStartByte = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceStartByteNChoices, m_choiceStartByteChoices, 0 );
+	m_choiceStartByte->SetSelection( 0 );
+	m_choiceStartByte->SetMinSize( wxSize( 200,-1 ) );
+	
+	bSizer37->Add( m_choiceStartByte, 0, wxALL, 5 );
 	
 	bSizer14->Add( bSizer37, 1, wxEXPAND, 5 );
+	
+	m_staticline6 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_staticline6->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90, false, wxEmptyString ) );
+	
+	bSizer14->Add( m_staticline6, 0, wxEXPAND | wxALL, 5 );
+	
+	wxBoxSizer* bSizer38;
+	bSizer38 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_button5 = new wxButton( this, wxID_ANY, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer38->Add( m_button5, 0, wxALIGN_RIGHT|wxALL|wxRIGHT, 5 );
+	
+	m_button6 = new wxButton( this, wxID_ANY, wxT("Apply"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer38->Add( m_button6, 0, wxALIGN_RIGHT|wxALL|wxRIGHT, 5 );
+	
+	bSizer14->Add( bSizer38, 1, wxEXPAND, 5 );
 	
 	bSizer11->Add( bSizer14, 3, wxEXPAND, 5 );
 	
 	this->SetSizer( bSizer11 );
 	this->Layout();
+	
+	// Connect Events
+	m_choiceECUByteOrder->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DialogSettings::event_ChangeByteOrder ), NULL, this );
+	m_textECUStationAddress->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeStationAddress ), NULL, this );
+	m_button5->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Cancel ), NULL, this );
+	m_button6->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Apply ), NULL, this );
 }
 
 DialogSettings::~DialogSettings()
 {
+	// Disconnect Events
+	m_choiceECUByteOrder->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DialogSettings::event_ChangeByteOrder ), NULL, this );
+	m_textECUStationAddress->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeStationAddress ), NULL, this );
+	m_button5->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Cancel ), NULL, this );
+	m_button6->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Apply ), NULL, this );
 }

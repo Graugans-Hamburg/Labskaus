@@ -104,8 +104,8 @@ enum CCP_driver_states
 
 enum endian
 {
-    big_endian,
-    little_endian,
+    big_endian  = 1,
+    little_endian = 0 ,
 };
 
 class CCP_driver
@@ -128,6 +128,7 @@ class CCP_driver
         void ECU_SetECU_MTA_Number1(uint32_t val){ECU_MTA_Number1 = val;}
         void ECU_SetECU_MTA_Number2(uint32_t val){ECU_MTA_Number2 = val;}
         void Set_ECU_station_address(uint16_t val){ECU_station_address = val;}
+        uint16_t Get_ECU_station_address(void){return ECU_station_address;}
         void Set_ECU_endianness(endian val){ECU_byte_order = val;}
         endian Get_ECU_endianness(void){return ECU_byte_order;}
         void CCP_drv_state_machine(void);
