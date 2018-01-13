@@ -129,7 +129,6 @@ class DialogSettings : public wxDialog
 		wxStaticLine* m_staticline3;
 		wxStaticText* m_staticText10;
 		wxStaticText* m_staticText13;
-		wxChoice* m_choice1;
 		wxStaticText* m_staticText14;
 		wxTextCtrl* m_textCtrl2;
 		wxStaticLine* m_staticline4;
@@ -144,8 +143,9 @@ class DialogSettings : public wxDialog
 		wxTextCtrl* m_textCtrl4;
 	
 	public:
+		wxChoice* m_choiceECUByteOrder;
 		
-		DialogSettings( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Communication Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 552,481 ), long style = wxDEFAULT_DIALOG_STYLE );
+		DialogSettings( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Communication Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 600,600 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~DialogSettings();
 	
 };

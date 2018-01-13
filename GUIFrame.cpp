@@ -331,11 +331,11 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	m_staticText13->Wrap( -1 );
 	bSizer35->Add( m_staticText13, 0, wxALL, 5 );
 	
-	wxString m_choice1Choices[] = { wxT("Little Endian (intel)"), wxT("Big Endian (motorola)") };
-	int m_choice1NChoices = sizeof( m_choice1Choices ) / sizeof( wxString );
-	m_choice1 = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choice1NChoices, m_choice1Choices, 0 );
-	m_choice1->SetSelection( 0 );
-	bSizer35->Add( m_choice1, 0, wxALL, 5 );
+	wxString m_choiceECUByteOrderChoices[] = { wxT("Little Endian (intel)"), wxT("Big Endian (motorola)") };
+	int m_choiceECUByteOrderNChoices = sizeof( m_choiceECUByteOrderChoices ) / sizeof( wxString );
+	m_choiceECUByteOrder = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceECUByteOrderNChoices, m_choiceECUByteOrderChoices, 0 );
+	m_choiceECUByteOrder->SetSelection( 0 );
+	bSizer35->Add( m_choiceECUByteOrder, 0, wxALL, 5 );
 	
 	bSizer14->Add( bSizer35, 1, wxEXPAND, 5 );
 	

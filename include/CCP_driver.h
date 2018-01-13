@@ -129,6 +129,7 @@ class CCP_driver
         void ECU_SetECU_MTA_Number2(uint32_t val){ECU_MTA_Number2 = val;}
         void Set_ECU_station_address(uint16_t val){ECU_station_address = val;}
         void Set_ECU_endianness(endian val){ECU_byte_order = val;}
+        endian Get_ECU_endianness(void){return ECU_byte_order;}
         void CCP_drv_state_machine(void);
         void CRO_check_time_out(void);
         void CRO_Tx(CCP_Frame& CCP_Tx_Frame);
@@ -196,11 +197,11 @@ class CCP_driver
         bool      SMT_read_variable; /*When this Transition is set to true and the information from
         the variables SMI_read_variable_type and SMI_read_variable_address will used. They define
         the datatype and the address. */
-        bool      SMT_calibrate_variable;
-        EnumDataType  SMI_read_variable_type;
-        uint32_t      SMI_read_variable_address;
-        uint8_t       SMI_read_address_extention;
-        bool          SMI_read_variable_successfull;
+        bool            SMT_calibrate_variable;
+        EnumDataType    SMI_read_variable_type;
+        uint32_t        SMI_read_variable_address;
+        uint8_t         SMI_read_address_extention;
+        bool            SMI_read_variable_successfull;
 
         uint8_t   SMI_read_variable_uint8;
         int8_t    SMI_read_variable_sint8;

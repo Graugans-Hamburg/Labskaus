@@ -251,7 +251,11 @@ void LabskausFrame::EventOpenComSettings( wxCommandEvent& event )
         wxMessageBox(_("The Settings can only be changed if the measurment is not active.\n\n First stop the Measurement"),_("Labskaus Information"));
         return;
     }
-    LabskausFrameSettings* Settings_dia = new LabskausFrameSettings(CCP_Master);
+    /* Show the current ECU Byte Order */
+        LabskausFrameSettings* Settings_dia = new LabskausFrameSettings(CCP_Master);
+        endian    ECU_byte_order = CCP_Master->Get_ECU_endianness();
+        if(ECU_byte_order == little_endian) Settings_dia->m_choiceECUByteOrder->SetSelection(0);
+        if(ECU_byte_order == big_endian)    Settings_dia->m_choiceECUByteOrder->SetSelection(1);
     Settings_dia->Show();
 }
 
