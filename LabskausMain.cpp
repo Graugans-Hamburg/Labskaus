@@ -244,6 +244,21 @@ void LabskausFrame::EventCloseSerial(wxCommandEvent &event)
     CCP_Master->Set_MessStatus2Stop();
 }
 
+void LabskausFrame::EventOpenComSettings( wxCommandEvent& event )
+{
+    LabskausFrameSettings* Settings_dia = new LabskausFrameSettings(CCP_Master);
+    Settings_dia->Show();
+}
+
+LabskausFrameSettings::LabskausFrameSettings(CCP_driver *ptr_ccp_driver) : DialogSettings(0L)
+{
+    CCP_Master = ptr_ccp_driver;
+}
+
+
+LabskausFrameSettings::~LabskausFrameSettings()
+{
+}
 
 void LabskausFrame::OnRecTimer(wxTimerEvent& event)
 {

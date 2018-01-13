@@ -54,6 +54,7 @@ class LabskausFrame: public GUIFrame
         virtual void VarListSelected(wxCommandEvent& event);
         virtual void EventOpenSerial(wxCommandEvent& event);
         virtual void EventCloseSerial(wxCommandEvent& event);
+        virtual void EventOpenComSettings( wxCommandEvent& event );
         virtual void OnRecTimer(wxTimerEvent& event);
         virtual void DA_List_Timer(wxTimerEvent& event);
         virtual void EventAddVar2List(wxCommandEvent &event);
@@ -91,6 +92,20 @@ class LabskausFrameSetCal: public Dialog_SetValue
         //virtual void OnQuit(wxCommandEvent& event);
         //virtual void OnAbout(wxCommandEvent& event);
         virtual void EventTakeOverVal(wxCommandEvent &event);
+};
+
+class LabskausFrameSettings: public DialogSettings
+{
+    public:
+        LabskausFrameSettings(CCP_driver *ptr_ccp_driver);
+        CCP_driver* CCP_Master;
+        ~LabskausFrameSettings();
+
+    private:
+        //virtual void OnClose(wxCloseEvent& event);
+        //virtual void OnQuit(wxCommandEvent& event);
+        //virtual void OnAbout(wxCommandEvent& event);
+        //virtual void EventTakeOverVal(wxCommandEvent &event);
 };
 
 #endif // LABSKAUSMAIN_H

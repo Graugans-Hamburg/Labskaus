@@ -62,6 +62,13 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_CloseSerial = new wxMenuItem( m_menu3, wxID_ANY, wxString( wxT("Stop Measurement") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu3->Append( m_CloseSerial );
 	
+	wxMenuItem* m_separator3;
+	m_separator3 = m_menu3->AppendSeparator();
+	
+	wxMenuItem* m_ComSettings;
+	m_ComSettings = new wxMenuItem( m_menu3, wxID_ANY, wxString( wxT("Settings") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu3->Append( m_ComSettings );
+	
 	mbar->Append( m_menu3, wxT("Communication") );
 	
 	helpMenu = new wxMenu();
@@ -172,6 +179,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	this->Connect( menuFileQuit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnQuit ) );
 	this->Connect( m_OpenSerial->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventOpenSerial ) );
 	this->Connect( m_CloseSerial->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventCloseSerial ) );
+	this->Connect( m_ComSettings->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventOpenComSettings ) );
 	this->Connect( menuIOpenDocumentation->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnOpenDocumentation ) );
 	this->Connect( menuHelpAbout->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnAbout ) );
 	m_listBox1->Connect( wxEVT_CHAR, wxKeyEventHandler( GUIFrame::VarListKeyPressed ), NULL, this );
@@ -195,6 +203,7 @@ GUIFrame::~GUIFrame()
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnQuit ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventOpenSerial ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventCloseSerial ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::EventOpenComSettings ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnOpenDocumentation ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnAbout ) );
 	m_listBox1->Disconnect( wxEVT_CHAR, wxKeyEventHandler( GUIFrame::VarListKeyPressed ), NULL, this );
@@ -286,4 +295,89 @@ Dialog_SetValue::~Dialog_SetValue()
 {
 	// Disconnect Events
 	m_BtnConfirm->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Dialog_SetValue::EventTakeOverVal ), NULL, this );
+}
+
+DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
+	
+	wxBoxSizer* bSizer12;
+	bSizer12 = new wxBoxSizer( wxVERTICAL );
+	
+	m_bitmap3 = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_bitmap3, 0, wxALL, 5 );
+	
+	bSizer11->Add( bSizer12, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer14;
+	bSizer14 = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer14->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
+	
+	m_staticText10 = new wxStaticText( this, wxID_ANY, wxT("ECU_Information"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText10->Wrap( -1 );
+	m_staticText10->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	bSizer14->Add( m_staticText10, 0, wxALL, 5 );
+	
+	wxBoxSizer* bSizer35;
+	bSizer35 = new wxBoxSizer( wxHORIZONTAL );
+	
+	bSizer14->Add( bSizer35, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer36;
+	bSizer36 = new wxBoxSizer( wxHORIZONTAL );
+	
+	bSizer14->Add( bSizer36, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer15;
+	bSizer15 = new wxBoxSizer( wxHORIZONTAL );
+	
+	bSizer14->Add( bSizer15, 1, wxEXPAND, 5 );
+	
+	m_staticline4 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer14->Add( m_staticline4, 0, wxEXPAND | wxALL, 5 );
+	
+	m_staticText11 = new wxStaticText( this, wxID_ANY, wxT("Interface"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText11->Wrap( -1 );
+	m_staticText11->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	bSizer14->Add( m_staticText11, 0, wxALL, 5 );
+	
+	wxBoxSizer* bSizer34;
+	bSizer34 = new wxBoxSizer( wxHORIZONTAL );
+	
+	bSizer14->Add( bSizer34, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer33;
+	bSizer33 = new wxBoxSizer( wxHORIZONTAL );
+	
+	bSizer14->Add( bSizer33, 1, wxEXPAND, 5 );
+	
+	m_staticline5 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer14->Add( m_staticline5, 0, wxEXPAND | wxALL, 5 );
+	
+	m_staticText12 = new wxStaticText( this, wxID_ANY, wxT("Protocol"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText12->Wrap( -1 );
+	m_staticText12->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	bSizer14->Add( m_staticText12, 0, wxALL, 5 );
+	
+	wxBoxSizer* bSizer37;
+	bSizer37 = new wxBoxSizer( wxHORIZONTAL );
+	
+	bSizer14->Add( bSizer37, 1, wxEXPAND, 5 );
+	
+	bSizer11->Add( bSizer14, 1, wxEXPAND, 5 );
+	
+	this->SetSizer( bSizer11 );
+	this->Layout();
+}
+
+DialogSettings::~DialogSettings()
+{
 }

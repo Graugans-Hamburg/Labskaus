@@ -27,6 +27,7 @@
 #include <wx/frame.h>
 #include <wx/textctrl.h>
 #include <wx/dialog.h>
+#include <wx/statbmp.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -65,6 +66,7 @@ class GUIFrame : public wxFrame
 		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventOpenSerial( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventCloseSerial( wxCommandEvent& event ) { event.Skip(); }
+		virtual void EventOpenComSettings( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOpenDocumentation( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAbout( wxCommandEvent& event ) { event.Skip(); }
 		virtual void VarListKeyPressed( wxKeyEvent& event ) { event.Skip(); }
@@ -111,6 +113,29 @@ class Dialog_SetValue : public wxDialog
 		
 		Dialog_SetValue( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Set value"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
 		~Dialog_SetValue();
+	
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class DialogSettings
+///////////////////////////////////////////////////////////////////////////////
+class DialogSettings : public wxDialog 
+{
+	private:
+	
+	protected:
+		wxStaticBitmap* m_bitmap3;
+		wxStaticLine* m_staticline3;
+		wxStaticText* m_staticText10;
+		wxStaticLine* m_staticline4;
+		wxStaticText* m_staticText11;
+		wxStaticLine* m_staticline5;
+		wxStaticText* m_staticText12;
+	
+	public:
+		
+		DialogSettings( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Communication Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 623,437 ), long style = wxDEFAULT_DIALOG_STYLE );
+		~DialogSettings();
 	
 };
 
