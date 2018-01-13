@@ -36,7 +36,7 @@ CCP_driver::~CCP_driver()
 
 void CCP_driver::open_communication_port(void)
 {
-    SerialPort.open_port(4); //TODO Number inside the code
+    SerialPort.open_port();
 }
 
 void CCP_driver::close_communication_port(void)

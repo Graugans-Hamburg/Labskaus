@@ -33,11 +33,22 @@ void LabskausFrame::EventOpenComSettings( wxCommandEvent& event )
     /**
      *   Show the current ECU Station Address
      **/
+    {
         uint16_t ECU_Station_Address = CCP_Master->Get_ECU_station_address();
         Settings_dia->newStationAddress = ECU_Station_Address;
         std::stringstream stream;
         stream << ECU_Station_Address;
         Settings_dia->m_textECUStationAddress->SetValue(stream.str());
+     }
+     /**
+     *   Show the device that is configure inside the serial objekt
+     **/
+     {
+        std::string name = CCP_Master->SerialPort.Get_device_name();
+        std::stringstream stream;
+        stream << name;
+        Settings_dia->m_textDevice->SetValue(stream.str());
+     }
     Settings_dia->Show();
 }
 
@@ -83,6 +94,7 @@ void LabskausFrameSettings::event_ChangeStationAddress( wxCommandEvent& event )
 {
     if( m_textECUStationAddress->IsEmpty())
     {
+        wxMessageBox(_("Please enter a integer in the range of [0 - 65535]."),_("What did you do?"));
         std::cerr << "No new value entered" << std::endl;
         return;
     }
@@ -124,12 +136,39 @@ void LabskausFrameSettings::event_Cancel( wxCommandEvent& event )
 }
 
 /*******************************************************************************************
+ * Function: This event is called when the user changes the device inside the Settings
+ *           Dialog. The value will be stored inside a temp variable which will be take over
+ *           if the new value is applied
+ ******************************************************************************************/
+void LabskausFrameSettings::event_ChangeDevice( wxCommandEvent& event )
+{
+    if( m_textECUStationAddress->IsEmpty())
+    {
+        std::cerr << "No new value entered" << std::endl;
+        return;
+    }
+    wxString user_input_as_string = m_textDevice->GetValue();
+    newDevice = user_input_as_string.ToStdString();
+    Device_changed = true;
+}
+
+/*******************************************************************************************
  * Function: This event is called when the user presses the Apply button. The dialog will be
  *           closed and all values will be taken over into the CCP-Master.
+ *
+ *           The events for evaluating the text fields are only triggered if the user presses
+ *           enter after editing the text field. If the user changes a text field and directly
+ *           presses the Apply button then the values will not be taken over there the events
+ *           for evalutation of the text fields are trigger again in this function.
  ******************************************************************************************/
 void LabskausFrameSettings::event_Apply( wxCommandEvent& event )
 {
+    wxCommandEvent apply_event;
+    event_ChangeDevice(apply_event);
+    event_ChangeStationAddress(apply_event);
+
     if(Station_Address_changed) CCP_Master->Set_ECU_station_address(newStationAddress);
     if(ByteOrder_changed)       CCP_Master->Set_ECU_endianness(newECUByteOrder);
+    if(Device_changed)          CCP_Master->SerialPort.Set_device_name(newDevice);
     this->Close(true);
 }

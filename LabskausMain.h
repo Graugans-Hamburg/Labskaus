@@ -102,14 +102,17 @@ class LabskausFrameSettings: public DialogSettings
         CCP_driver* CCP_Master;
         endian newECUByteOrder;
         uint16_t newStationAddress;
+        std::string newDevice;
         bool ByteOrder_changed;
         bool Station_Address_changed;
+        bool Device_changed;
 
     private:
 		virtual void event_ChangeByteOrder( wxCommandEvent& event );
 		virtual void event_ChangeStationAddress( wxCommandEvent& event );
 		virtual void event_Cancel( wxCommandEvent& event );
 		virtual void event_Apply( wxCommandEvent& event );
+		virtual void event_ChangeDevice( wxCommandEvent& event );
 };
 
 #endif // LABSKAUSMAIN_H

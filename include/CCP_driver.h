@@ -167,9 +167,10 @@ class CCP_driver
         bool Get_MessStatus (void){return m_MeasurementActive; };
         void Set_MessStatus2Run (void){m_MeasurementActive = true;};
         void Set_MessStatus2Stop(void){m_MeasurementActive = false;};
+        serial SerialPort;
+
     protected:
     private:
-        serial SerialPort;
         bool      m_MeasurementActive;
         bool      ECU_Connected; /*Connect Cmd, positive Antwort */
         uint8_t   ECU_CCP_Version_Main;

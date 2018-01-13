@@ -10,6 +10,7 @@ serial::serial()
     //ctor
     ptr_read_buffer = &serial_input_buffer[0];
     ptr_write_buffer = &serial_input_buffer[0];
+    device_name = "/dev/ttyUSB0";
     vec_input_buffer.clear();
 }
 
@@ -17,30 +18,25 @@ serial::~serial()
 {
     //dtor
 }
-
- void serial::open_port(int port)
+/*******************************************************************************************
+ * Function: This function opens the serial port. The device that is used is defined inside
+ *           the string device name. One example for the device name is /dev/ttyUSB0 which is
+ *           also the default device. This device can be changed inside the Settings.
+ *
+ *           The settings of the UART interface are currently hard coded inside this function.
+ *           They are:
+ *          - 115200 Baud
+ *          - 8 bits/byte
+ *          - no parity
+ *          - no handshake
+ *          - 1 stop bit
+ ******************************************************************************************/
+ void serial::open_port()
  {
-   /*Oeffnet den seiellen Port
-    *Gibt das Filehandel zurueck oder -1 bei Fehler
-    *der Parameter port muss 0,1,2oder 3 sein
-    *
-    *RS232
-    * - 115200 Baud
-    * - 8 bits/byte
-    * - no parity
-    * - no handshake
-    * - 1 stop bit
-    */
+
    struct termios options;
-   switch (port)
-   {
-     case 0: fd = open("/dev/ttyS0", O_RDWR | O_NOCTTY | O_NDELAY); break;
-     case 1: fd = open("/dev/ttyS1", O_RDWR | O_NOCTTY | O_NDELAY); break;
-     case 2: fd = open("/dev/ttyS2", O_RDWR | O_NOCTTY | O_NDELAY); break;
-     case 3: fd = open("/dev/ttyS3", O_RDWR | O_NOCTTY | O_NDELAY); break;
-     case 4: fd = open("/dev/ttyUSB0", O_RDWR | O_NOCTTY | O_NDELAY); break;
-     default: fd = -1;
-   }
+   fd = open(device_name.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+
    if (fd >= 0)
    {
      /*get current options */

@@ -389,13 +389,10 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	m_staticText17->Wrap( -1 );
 	bSizer33->Add( m_staticText17, 0, wxALL, 5 );
 	
-	wxString m_choiceDeviceChoices[] = { wxT("/dev/ttyUSB0") };
-	int m_choiceDeviceNChoices = sizeof( m_choiceDeviceChoices ) / sizeof( wxString );
-	m_choiceDevice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceDeviceNChoices, m_choiceDeviceChoices, 0 );
-	m_choiceDevice->SetSelection( 0 );
-	m_choiceDevice->SetMinSize( wxSize( 200,-1 ) );
+	m_textDevice = new wxTextCtrl( this, wxID_ANY, wxT("unkown"), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	m_textDevice->SetMinSize( wxSize( 200,-1 ) );
 	
-	bSizer33->Add( m_choiceDevice, 0, wxALL, 5 );
+	bSizer33->Add( m_textDevice, 0, wxALL, 5 );
 	
 	bSizer14->Add( bSizer33, 1, wxEXPAND, 5 );
 	
@@ -433,11 +430,11 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	wxBoxSizer* bSizer38;
 	bSizer38 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_button5 = new wxButton( this, wxID_ANY, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer38->Add( m_button5, 0, wxALIGN_RIGHT|wxALL|wxRIGHT, 5 );
+	m_buttonCancel = new wxButton( this, wxID_ANY, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer38->Add( m_buttonCancel, 0, wxALIGN_RIGHT|wxALL|wxRIGHT, 5 );
 	
-	m_button6 = new wxButton( this, wxID_ANY, wxT("Apply"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer38->Add( m_button6, 0, wxALIGN_RIGHT|wxALL|wxRIGHT, 5 );
+	m_buttonApply = new wxButton( this, wxID_ANY, wxT("Apply"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer38->Add( m_buttonApply, 0, wxALIGN_RIGHT|wxALL|wxRIGHT, 5 );
 	
 	bSizer14->Add( bSizer38, 1, wxEXPAND, 5 );
 	
@@ -449,8 +446,9 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	// Connect Events
 	m_choiceECUByteOrder->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DialogSettings::event_ChangeByteOrder ), NULL, this );
 	m_textECUStationAddress->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeStationAddress ), NULL, this );
-	m_button5->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Cancel ), NULL, this );
-	m_button6->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Apply ), NULL, this );
+	m_textDevice->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeDevice ), NULL, this );
+	m_buttonCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Cancel ), NULL, this );
+	m_buttonApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Apply ), NULL, this );
 }
 
 DialogSettings::~DialogSettings()
@@ -458,6 +456,7 @@ DialogSettings::~DialogSettings()
 	// Disconnect Events
 	m_choiceECUByteOrder->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DialogSettings::event_ChangeByteOrder ), NULL, this );
 	m_textECUStationAddress->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeStationAddress ), NULL, this );
-	m_button5->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Cancel ), NULL, this );
-	m_button6->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Apply ), NULL, this );
+	m_textDevice->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeDevice ), NULL, this );
+	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Cancel ), NULL, this );
+	m_buttonApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Apply ), NULL, this );
 }
