@@ -246,6 +246,11 @@ void LabskausFrame::EventCloseSerial(wxCommandEvent &event)
 
 void LabskausFrame::EventOpenComSettings( wxCommandEvent& event )
 {
+    if(CCP_Master->Get_MessStatus())
+    {
+        wxMessageBox(_("The Settings can only be changed if the measurment is not active.\n\n First stop the Measurement"),_("Labskaus Information"));
+        return;
+    }
     LabskausFrameSettings* Settings_dia = new LabskausFrameSettings(CCP_Master);
     Settings_dia->Show();
 }

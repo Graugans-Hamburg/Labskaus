@@ -307,8 +307,8 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxVERTICAL );
 	
-	m_bitmap3 = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer12->Add( m_bitmap3, 0, wxALL, 5 );
+	m_bitmap3 = new wxStaticBitmap( this, wxID_ANY, wxBitmap( wxT("pic/CommunicationSettings.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_bitmap3, 1, wxALL, 5 );
 	
 	bSizer11->Add( bSizer12, 1, wxEXPAND, 5 );
 	
@@ -327,10 +327,27 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	wxBoxSizer* bSizer35;
 	bSizer35 = new wxBoxSizer( wxHORIZONTAL );
 	
+	m_staticText13 = new wxStaticText( this, wxID_ANY, wxT("ECU Byte Order"), wxDefaultPosition, wxSize( 120,-1 ), 0 );
+	m_staticText13->Wrap( -1 );
+	bSizer35->Add( m_staticText13, 0, wxALL, 5 );
+	
+	wxString m_choice1Choices[] = { wxT("Little Endian (intel)"), wxT("Big Endian (motorola)") };
+	int m_choice1NChoices = sizeof( m_choice1Choices ) / sizeof( wxString );
+	m_choice1 = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choice1NChoices, m_choice1Choices, 0 );
+	m_choice1->SetSelection( 0 );
+	bSizer35->Add( m_choice1, 0, wxALL, 5 );
+	
 	bSizer14->Add( bSizer35, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer36;
 	bSizer36 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText14 = new wxStaticText( this, wxID_ANY, wxT("Station Address"), wxDefaultPosition, wxSize( 120,-1 ), 0 );
+	m_staticText14->Wrap( -1 );
+	bSizer36->Add( m_staticText14, 0, wxALL, 5 );
+	
+	m_textCtrl2 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer36->Add( m_textCtrl2, 0, wxALL, 5 );
 	
 	bSizer14->Add( bSizer36, 1, wxEXPAND, 5 );
 	
@@ -351,10 +368,25 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	wxBoxSizer* bSizer34;
 	bSizer34 = new wxBoxSizer( wxHORIZONTAL );
 	
+	m_staticText15 = new wxStaticText( this, wxID_ANY, wxT("Interface"), wxDefaultPosition, wxSize( 120,-1 ), 0 );
+	m_staticText15->Wrap( -1 );
+	bSizer34->Add( m_staticText15, 0, wxALL, 5 );
+	
+	m_staticText16 = new wxStaticText( this, wxID_ANY, wxT("UART"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText16->Wrap( -1 );
+	bSizer34->Add( m_staticText16, 0, wxALL, 5 );
+	
 	bSizer14->Add( bSizer34, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer33;
 	bSizer33 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText17 = new wxStaticText( this, wxID_ANY, wxT("Device"), wxDefaultPosition, wxSize( 120,-1 ), 0 );
+	m_staticText17->Wrap( -1 );
+	bSizer33->Add( m_staticText17, 0, wxALL, 5 );
+	
+	m_textCtrl3 = new wxTextCtrl( this, wxID_ANY, wxT("/tty/..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer33->Add( m_textCtrl3, 0, wxALL, 5 );
 	
 	bSizer14->Add( bSizer33, 1, wxEXPAND, 5 );
 	
@@ -370,9 +402,16 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	wxBoxSizer* bSizer37;
 	bSizer37 = new wxBoxSizer( wxHORIZONTAL );
 	
+	m_staticText18 = new wxStaticText( this, wxID_ANY, wxT("Startbyte"), wxDefaultPosition, wxSize( 120,-1 ), 0 );
+	m_staticText18->Wrap( -1 );
+	bSizer37->Add( m_staticText18, 0, wxALL, 5 );
+	
+	m_textCtrl4 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer37->Add( m_textCtrl4, 0, wxALL, 5 );
+	
 	bSizer14->Add( bSizer37, 1, wxEXPAND, 5 );
 	
-	bSizer11->Add( bSizer14, 1, wxEXPAND, 5 );
+	bSizer11->Add( bSizer14, 3, wxEXPAND, 5 );
 	
 	this->SetSizer( bSizer11 );
 	this->Layout();

@@ -28,6 +28,7 @@
 #include <wx/textctrl.h>
 #include <wx/dialog.h>
 #include <wx/statbmp.h>
+#include <wx/choice.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -127,14 +128,24 @@ class DialogSettings : public wxDialog
 		wxStaticBitmap* m_bitmap3;
 		wxStaticLine* m_staticline3;
 		wxStaticText* m_staticText10;
+		wxStaticText* m_staticText13;
+		wxChoice* m_choice1;
+		wxStaticText* m_staticText14;
+		wxTextCtrl* m_textCtrl2;
 		wxStaticLine* m_staticline4;
 		wxStaticText* m_staticText11;
+		wxStaticText* m_staticText15;
+		wxStaticText* m_staticText16;
+		wxStaticText* m_staticText17;
+		wxTextCtrl* m_textCtrl3;
 		wxStaticLine* m_staticline5;
 		wxStaticText* m_staticText12;
+		wxStaticText* m_staticText18;
+		wxTextCtrl* m_textCtrl4;
 	
 	public:
 		
-		DialogSettings( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Communication Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 623,437 ), long style = wxDEFAULT_DIALOG_STYLE );
+		DialogSettings( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Communication Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 552,481 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~DialogSettings();
 	
 };

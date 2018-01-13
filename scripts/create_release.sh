@@ -22,11 +22,15 @@ echo 'Step 4:Kopiere das Programm in den Zielordner'
 cp ../bin/Release/Labskaus "$Zielordner"
 
 ##
-echo 'Step 5: Kopiere das configure.sh in den Zielordner'
+echo 'Step 5:Kopiere die zusätzlichen Recourcen in den Zielordner' 
+cp -R ../pic $Zielordner
+
+##
+echo 'Step 6: Kopiere das configure.sh in den Zielordner'
 cp ./configure.sh $Zielordner
 
 ##
-echo 'Step 6: Das ganze Verzeichnis packen'
+echo 'Step 7: Das ganze Verzeichnis packen'
 cd $Zielordner
 cd ..
 zip -r "Labskaus_$version".zip "Labskaus_$version"
