@@ -355,12 +355,14 @@ Dialog_SetValue::Dialog_SetValue( wxWindow* parent, wxWindowID id, const wxStrin
 	this->Layout();
 	
 	// Connect Events
+	m_buttonCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Dialog_SetValue::event_CancelCalibration ), NULL, this );
 	m_BtnConfirm->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Dialog_SetValue::EventTakeOverVal ), NULL, this );
 }
 
 Dialog_SetValue::~Dialog_SetValue()
 {
 	// Disconnect Events
+	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Dialog_SetValue::event_CancelCalibration ), NULL, this );
 	m_BtnConfirm->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Dialog_SetValue::EventTakeOverVal ), NULL, this );
 }
 

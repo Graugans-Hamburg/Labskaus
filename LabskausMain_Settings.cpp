@@ -107,7 +107,7 @@ void LabskausFrameSettings::event_ChangeStationAddress( wxCommandEvent& event )
         std::stringstream stream;
         stream << ECU_Station_Address;
         m_textECUStationAddress->SetValue(stream.str());
-        wxMessageBox(_("Please enter a integer in the range of [0 - 65535]."),_("What did you do?"));
+        wxMessageBox(_("Please enter a integer in the range of [0 - 65535]."),_("Why?"));
         std::cerr << "New value could not be converted to long." << std::endl;
         return;
     }
@@ -118,7 +118,7 @@ void LabskausFrameSettings::event_ChangeStationAddress( wxCommandEvent& event )
         std::stringstream stream;
         stream << ECU_Station_Address;
         m_textECUStationAddress->SetValue(stream.str());
-        wxMessageBox(_("Please enter a integer in the range of [0 - 65535]."),_("What did you do?"));
+        wxMessageBox(_("Please enter a integer in the range of [0 - 65535]."),_("Why?"));
         std::cerr << "Value is out of range. The value need to be in the range of [0 65535]." << std::endl;
         return;
     }

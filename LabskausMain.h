@@ -90,7 +90,7 @@ class LabskausFrameSetCal: public Dialog_SetValue
     private:
         //virtual void OnClose(wxCloseEvent& event);
         //virtual void OnQuit(wxCommandEvent& event);
-        //virtual void OnAbout(wxCommandEvent& event);
+        virtual void event_CancelCalibration( wxCommandEvent& event );
         virtual void EventTakeOverVal(wxCommandEvent &event);
 };
 

@@ -110,6 +110,7 @@ class Dialog_SetValue : public wxDialog
 		wxButton* m_BtnConfirm;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void event_CancelCalibration( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventTakeOverVal( wxCommandEvent& event ) { event.Skip(); }
 		
 	

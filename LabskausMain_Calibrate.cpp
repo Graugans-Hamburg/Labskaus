@@ -21,6 +21,14 @@ LabskausFrameSetCal::LabskausFrameSetCal(CCP_driver *ptr_ccp_driver, ECU_VarInfo
 LabskausFrameSetCal::~LabskausFrameSetCal()
 {
 }
+/*******************************************************************************************
+ * Function: This event is called when the user presses the Cancel button. The dialog will be
+ *           closed and no variables will be calibrated.
+ ******************************************************************************************/
+void LabskausFrameSetCal::event_CancelCalibration( wxCommandEvent& event )
+{
+    this->Close(true);
+}
 
 
 void LabskausFrameSetCal::EventTakeOverVal(wxCommandEvent &event)
@@ -29,6 +37,7 @@ void LabskausFrameSetCal::EventTakeOverVal(wxCommandEvent &event)
 
     if( m_DL_NewVal->IsEmpty())
     {
+         wxMessageBox(_("A value can only be changed if you enter one, really."),_("Why?"));
         std::cerr << "No new value entered" << std::endl;
         return;
     }
@@ -48,6 +57,7 @@ void LabskausFrameSetCal::EventTakeOverVal(wxCommandEvent &event)
     {
          if(!number.ToLong(&long_value))
         {
+            wxMessageBox(_("Please enter a integer."),_("Why?"));
             std::cerr << "New value could not be converted to long." << std::endl;
             return;
         }
@@ -57,6 +67,7 @@ void LabskausFrameSetCal::EventTakeOverVal(wxCommandEvent &event)
     {
         if(!number.ToDouble(&double_value))
         {
+            wxMessageBox(_("Value could not be converted to float.\n\n Format example: 3.1415"),_("Why?"));
             std::cerr << "New value could not be converted to double." << std::endl;
             return;
         }
