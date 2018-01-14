@@ -223,24 +223,43 @@ Dialog_SetValue::Dialog_SetValue( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 	
+	wxBoxSizer* bSizer24;
+	bSizer24 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText25 = new wxStaticText( this, wxID_ANY, wxT("Variable:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText25->Wrap( -1 );
+	m_staticText25->SetMinSize( wxSize( 100,-1 ) );
+	
+	bSizer24->Add( m_staticText25, 0, wxALL, 5 );
+	
 	m_DLVarName = new wxStaticText( this, wxID_ANY, wxT("ECU Variablenname"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DLVarName->Wrap( -1 );
-	bSizer4->Add( m_DLVarName, 0, wxALL, 5 );
+	bSizer24->Add( m_DLVarName, 0, wxALL, 5 );
+	
+	bSizer4->Add( bSizer24, 1, wxEXPAND, 5 );
+	
+	m_staticline8 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer4->Add( m_staticline8, 0, wxEXPAND | wxALL, 5 );
+	
+	wxBoxSizer* bSizer21;
+	bSizer21 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText20 = new wxStaticText( this, wxID_ANY, wxT("Unit:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText20->Wrap( -1 );
+	m_staticText20->SetMinSize( wxSize( 100,-1 ) );
+	
+	bSizer21->Add( m_staticText20, 0, wxALL, 5 );
+	
+	m_staticUnit1 = new wxStaticText( this, wxID_ANY, wxT("???"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticUnit1->Wrap( -1 );
+	bSizer21->Add( m_staticUnit1, 0, wxALL, 5 );
+	
+	bSizer4->Add( bSizer21, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticText6 = new wxStaticText( this, wxID_ANY, wxT("Max:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText6->Wrap( -1 );
-	bSizer5->Add( m_staticText6, 0, wxALL, 5 );
-	
-	m_DL_max = new wxStaticText( this, wxID_ANY, wxT("???"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_DL_max->Wrap( -1 );
-	m_DL_max->SetMinSize( wxSize( 80,-1 ) );
-	
-	bSizer5->Add( m_DL_max, 0, wxALL, 5 );
-	
-	m_staticText8 = new wxStaticText( this, wxID_ANY, wxT("Min:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText8 = new wxStaticText( this, wxID_ANY, wxT("Min:"), wxDefaultPosition, wxSize( 100,-1 ), 0 );
 	m_staticText8->Wrap( -1 );
 	bSizer5->Add( m_staticText8, 0, wxALL, 5 );
 	
@@ -250,42 +269,90 @@ Dialog_SetValue::Dialog_SetValue( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	bSizer4->Add( bSizer5, 1, wxEXPAND, 5 );
 	
+	wxBoxSizer* bSizer22;
+	bSizer22 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText6 = new wxStaticText( this, wxID_ANY, wxT("Max:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6->Wrap( -1 );
+	m_staticText6->SetMinSize( wxSize( 100,-1 ) );
+	
+	bSizer22->Add( m_staticText6, 0, wxALL, 5 );
+	
+	m_DL_max = new wxStaticText( this, wxID_ANY, wxT("???"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DL_max->Wrap( -1 );
+	m_DL_max->SetMinSize( wxSize( 80,-1 ) );
+	
+	bSizer22->Add( m_DL_max, 0, wxALL, 5 );
+	
+	bSizer4->Add( bSizer22, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer23;
+	bSizer23 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText22 = new wxStaticText( this, wxID_ANY, wxT("Datatype:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText22->Wrap( -1 );
+	m_staticText22->SetMinSize( wxSize( 100,-1 ) );
+	
+	bSizer23->Add( m_staticText22, 0, wxALL, 5 );
+	
+	m_staticDataType = new wxStaticText( this, wxID_ANY, wxT("???"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticDataType->Wrap( -1 );
+	bSizer23->Add( m_staticDataType, 0, wxALL, 5 );
+	
+	bSizer4->Add( bSizer23, 1, wxEXPAND, 5 );
+	
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticText12 = new wxStaticText( this, wxID_ANY, wxT("Aktueller Wert:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText12 = new wxStaticText( this, wxID_ANY, wxT("Description:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
+	m_staticText12->SetMinSize( wxSize( 100,-1 ) );
+	
 	bSizer7->Add( m_staticText12, 0, wxALL, 5 );
 	
-	m_DL_Actl = new wxStaticText( this, wxID_ANY, wxT("???"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_DL_Actl->Wrap( -1 );
-	bSizer7->Add( m_DL_Actl, 0, wxALL, 5 );
+	m_staticDescription = new wxStaticText( this, wxID_ANY, wxT("???"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticDescription->Wrap( -1 );
+	bSizer7->Add( m_staticDescription, 0, wxALL, 5 );
 	
 	bSizer4->Add( bSizer7, 1, wxEXPAND, 5 );
+	
+	m_staticline10 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer4->Add( m_staticline10, 0, wxEXPAND | wxALL, 5 );
 	
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticText14 = new wxStaticText( this, wxID_ANY, wxT("Neuer Wert"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText14 = new wxStaticText( this, wxID_ANY, wxT("New Value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText14->Wrap( -1 );
+	m_staticText14->SetMinSize( wxSize( 100,-1 ) );
+	
 	bSizer8->Add( m_staticText14, 0, wxALL, 5 );
 	
 	m_DL_NewVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer8->Add( m_DL_NewVal, 0, wxALL, 5 );
 	
+	m_staticUnit = new wxStaticText( this, wxID_ANY, wxT("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticUnit->Wrap( -1 );
+	bSizer8->Add( m_staticUnit, 0, wxALL, 5 );
+	
 	bSizer4->Add( bSizer8, 1, wxEXPAND, 5 );
+	
+	m_staticline11 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer4->Add( m_staticline11, 0, wxEXPAND | wxALL, 5 );
 	
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_BtnConfirm = new wxButton( this, wxID_ANY, wxT("Wert übernehmen"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonCancel = new wxButton( this, wxID_ANY, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer9->Add( m_buttonCancel, 0, wxALL, 5 );
+	
+	m_BtnConfirm = new wxButton( this, wxID_ANY, wxT("Set"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer9->Add( m_BtnConfirm, 0, wxALL, 5 );
 	
-	bSizer4->Add( bSizer9, 1, wxALIGN_CENTER, 5 );
+	bSizer4->Add( bSizer9, 1, wxALIGN_CENTER|wxALIGN_RIGHT, 5 );
 	
 	this->SetSizer( bSizer4 );
 	this->Layout();
-	bSizer4->Fit( this );
 	
 	// Connect Events
 	m_BtnConfirm->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Dialog_SetValue::EventTakeOverVal ), NULL, this );
@@ -436,7 +503,7 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	m_buttonApply = new wxButton( this, wxID_ANY, wxT("Apply"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer38->Add( m_buttonApply, 0, wxALIGN_RIGHT|wxALL|wxRIGHT, 5 );
 	
-	bSizer14->Add( bSizer38, 1, wxEXPAND, 5 );
+	bSizer14->Add( bSizer38, 1, wxALIGN_RIGHT, 5 );
 	
 	bSizer11->Add( bSizer14, 3, wxEXPAND, 5 );
 	

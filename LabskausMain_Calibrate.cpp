@@ -1,0 +1,189 @@
+#include "LabskausMain.h"
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <wx/timer.h>
+#include <streambuf>
+#include <wx/wx.h>
+
+
+#include "tinyxml2.h"
+#include "CCP_driver.h"
+
+
+LabskausFrameSetCal::LabskausFrameSetCal(CCP_driver *ptr_ccp_driver, ECU_VarInfo *ptr_ECU_VarInfo) : Dialog_SetValue(0L)
+{
+    CCP_Master = ptr_ccp_driver;
+    m_ECU_Variable = ptr_ECU_VarInfo;
+}
+
+
+LabskausFrameSetCal::~LabskausFrameSetCal()
+{
+}
+
+
+void LabskausFrameSetCal::EventTakeOverVal(wxCommandEvent &event)
+{
+    // Überprüfe ob das Feld leer ist
+
+    if( m_DL_NewVal->IsEmpty())
+    {
+        std::cerr << "No new value entered" << std::endl;
+        return;
+    }
+    wxString number = m_DL_NewVal->GetValue();
+
+    // Überprüfe welcher Datentyp benötigt wird
+
+    std::cout << "Value entered:" << number << std::endl;
+    long long_value;
+    double double_value;
+    if(m_ECU_Variable->GetDataType() == type_u8  ||
+       m_ECU_Variable->GetDataType() == type_i8  ||
+       m_ECU_Variable->GetDataType() == type_u16 ||
+       m_ECU_Variable->GetDataType() == type_i16 ||
+       m_ECU_Variable->GetDataType() == type_i32 ||
+       m_ECU_Variable->GetDataType() == type_u32)
+    {
+         if(!number.ToLong(&long_value))
+        {
+            std::cerr << "New value could not be converted to long." << std::endl;
+            return;
+        }
+    }
+
+    if(m_ECU_Variable->GetDataType() == type_f32)
+    {
+        if(!number.ToDouble(&double_value))
+        {
+            std::cerr << "New value could not be converted to double." << std::endl;
+            return;
+        }
+    }
+
+    // Rufe die Funktion des CCP Treibers auf
+    CCP_Master->addCalibration2ActionPlan(*m_ECU_Variable,(int64_t)long_value,(float)double_value);
+}
+
+
+
+
+void LabskausFrame::EventAddCalVal2List(wxCommandEvent &event)
+{
+    if(!XML_list.empty())
+    {
+        ECU_VarInfo* Ptr2SelectedElement = &XML_list.at(m_listBox1->GetSelection());
+        if(!Ptr2SelectedElement)
+        {
+            std::cerr << "Error the Positon was not found inside the List" << std::endl;
+            return;
+        }
+
+        LabskausFrameSetCal* SetVar_dia = new LabskausFrameSetCal(CCP_Master,Ptr2SelectedElement);
+        SetVar_dia->Show();
+        // Define the name
+        {
+            std::stringstream stream;
+            stream << Ptr2SelectedElement->GetName() << std::endl;
+            SetVar_dia->m_DLVarName->SetLabel(stream.str());
+        }
+        // Define the min value
+        std::stringstream stream_min; // wird hier nur gemacht da stream nicht gelöscht werden kann
+        if(Ptr2SelectedElement->MinValueValid())
+        {
+            if((Ptr2SelectedElement->GetDataType() == type_f32) ||
+               (Ptr2SelectedElement->GetDataType() == type_f64) )
+            {
+                stream_min << Ptr2SelectedElement->GetMinValue_F();
+            }
+            else /* Falls keine Gleitkommazahl gelesen werden soll */
+            {
+                stream_min << Ptr2SelectedElement->GetMinValue_Int();
+            }
+        }
+        else
+        {
+            stream_min << "N/A";
+        }
+        SetVar_dia->m_DL_min->SetLabel(stream_min.str());
+
+        // Define the max value
+        std::stringstream stream_max; // wird hier nur gemacht da stream nicht gelöscht werden kann
+        if(Ptr2SelectedElement->MaxValueValid())
+        {
+            if((Ptr2SelectedElement->GetDataType() == type_f32) ||
+               (Ptr2SelectedElement->GetDataType() == type_f64) )
+            {
+                stream_max << Ptr2SelectedElement->GetMaxValue_F();
+            }
+            else /* Falls keine Gleitkommazahl gelesen werden soll */
+            {
+                stream_max << Ptr2SelectedElement->GetMaxValue_Int();
+            }
+
+        }
+        else
+        {
+            stream_max << "N/A";
+        }
+        SetVar_dia->m_DL_max->SetLabel(stream_max.str());
+
+        // Define the unit
+        {
+            std::stringstream stream;
+            stream << Ptr2SelectedElement->GetUnit() << std::endl;
+            std::string str_tmp;
+            str_tmp = Ptr2SelectedElement->GetUnit();
+
+            if(str_tmp.empty())
+            {
+                SetVar_dia->m_staticUnit1->SetLabel("N/A");
+            }
+            else
+            {
+                SetVar_dia->m_staticUnit1->SetLabel(stream.str());
+
+            }
+            SetVar_dia->m_staticUnit->SetLabel(stream.str());
+        }
+
+        // Define the datatype
+        {
+            std::stringstream stream;
+            switch(Ptr2SelectedElement->GetDataType())
+            {
+            case type_unknown : stream << "N/A"      << std::endl; break;
+            case type_u8      : stream << "uint8"    << std::endl; break;
+            case type_i8      : stream << "int8"     << std::endl; break;
+            case type_u16     : stream << "uint16"   << std::endl; break;
+            case type_i16     : stream << "int16"    << std::endl; break;
+            case type_u32     : stream << "uint32"   << std::endl; break;
+            case type_i32     : stream << "int32"    << std::endl; break;
+            case type_f32     : stream << "float32"  << std::endl; break;
+            case type_f64     : stream << "float64"  << std::endl; break;
+            default           : stream << "N/A"      << std::endl; break;
+            }
+
+            SetVar_dia->m_staticDataType->SetLabel(stream.str());
+        }
+        // Take over the description
+        // Define the unit
+        {
+            std::stringstream stream;
+            stream << Ptr2SelectedElement->GetDescription() << std::endl;
+            std::string str_tmp;
+            str_tmp = Ptr2SelectedElement->GetDescription();
+
+            if(str_tmp.empty())
+            {
+                SetVar_dia->m_staticDescription->SetLabel("N/A");
+            }
+            else
+            {
+                SetVar_dia->m_staticDescription->SetLabel(stream.str());
+
+            }
+        }
+    }
+}

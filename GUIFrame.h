@@ -95,11 +95,18 @@ class Dialog_SetValue : public wxDialog
 	private:
 	
 	protected:
-		wxStaticText* m_staticText6;
+		wxStaticText* m_staticText25;
+		wxStaticLine* m_staticline8;
+		wxStaticText* m_staticText20;
 		wxStaticText* m_staticText8;
+		wxStaticText* m_staticText6;
+		wxStaticText* m_staticText22;
 		wxStaticText* m_staticText12;
+		wxStaticLine* m_staticline10;
 		wxStaticText* m_staticText14;
 		wxTextCtrl* m_DL_NewVal;
+		wxStaticLine* m_staticline11;
+		wxButton* m_buttonCancel;
 		wxButton* m_BtnConfirm;
 		
 		// Virtual event handlers, overide them in your derived class
@@ -108,11 +115,14 @@ class Dialog_SetValue : public wxDialog
 	
 	public:
 		wxStaticText* m_DLVarName;
-		wxStaticText* m_DL_max;
+		wxStaticText* m_staticUnit1;
 		wxStaticText* m_DL_min;
-		wxStaticText* m_DL_Actl;
+		wxStaticText* m_DL_max;
+		wxStaticText* m_staticDataType;
+		wxStaticText* m_staticDescription;
+		wxStaticText* m_staticUnit;
 		
-		Dialog_SetValue( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Set value"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+		Dialog_SetValue( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Set value"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 374,370 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~Dialog_SetValue();
 	
 };

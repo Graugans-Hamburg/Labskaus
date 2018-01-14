@@ -44,6 +44,7 @@
 		<Unit filename="LabskausApp.h" />
 		<Unit filename="LabskausMain.cpp" />
 		<Unit filename="LabskausMain.h" />
+		<Unit filename="LabskausMain_Calibrate.cpp" />
 		<Unit filename="LabskausMain_Config.cpp" />
 		<Unit filename="LabskausMain_Settings.cpp" />
 		<Unit filename="LabskausMain_XMLList.cpp" />
