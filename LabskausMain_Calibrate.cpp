@@ -21,6 +21,7 @@ LabskausFrameSetCal::LabskausFrameSetCal(CCP_driver *ptr_ccp_driver, ECU_VarInfo
 LabskausFrameSetCal::~LabskausFrameSetCal()
 {
 }
+
 /*******************************************************************************************
  * Function: This event is called when the user presses the Cancel button. The dialog will be
  *           closed and no variables will be calibrated.
@@ -30,10 +31,14 @@ void LabskausFrameSetCal::event_CancelCalibration( wxCommandEvent& event )
     this->Close(true);
 }
 
-
+/*******************************************************************************************
+ * Function: This event is called when the user presses the Set button. The input will be checked
+ *           and if it is valid a calibration command will be send to the ECU to change the
+ *           requested value.
+ ******************************************************************************************/
 void LabskausFrameSetCal::EventTakeOverVal(wxCommandEvent &event)
 {
-    // Überprüfe ob das Feld leer ist
+    // Check if the value had been entered
 
     if( m_DL_NewVal->IsEmpty())
     {
@@ -77,9 +82,11 @@ void LabskausFrameSetCal::EventTakeOverVal(wxCommandEvent &event)
     CCP_Master->addCalibration2ActionPlan(*m_ECU_Variable,(int64_t)long_value,(float)double_value);
 }
 
-
-
-
+/*******************************************************************************************
+ * Function: This event is called when the user presses the Calibration button (o).
+ *           The function read out all properties of the variable that shall be changed and
+ *           display them in the new dialog.
+ ******************************************************************************************/
 void LabskausFrame::EventAddCalVal2List(wxCommandEvent &event)
 {
     if(!XML_list.empty())

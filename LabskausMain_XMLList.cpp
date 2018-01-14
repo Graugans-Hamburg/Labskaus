@@ -199,7 +199,4 @@ void LabskausFrame::Read_XML_file(std::string ECU_XML_file_full_path)
                 }
             }
     }
-
-
-
 }
