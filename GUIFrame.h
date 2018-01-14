@@ -123,7 +123,7 @@ class Dialog_SetValue : public wxDialog
 		wxStaticText* m_staticDescription;
 		wxStaticText* m_staticUnit;
 		
-		Dialog_SetValue( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Set value"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 374,370 ), long style = wxDEFAULT_DIALOG_STYLE );
+		Dialog_SetValue( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Set value"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 400,500 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~Dialog_SetValue();
 	
 };
