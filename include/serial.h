@@ -3,9 +3,6 @@
 
 #include <vector>
 #include "CCP_Frame.h"
-
-
-
 #define SERIAL_BUFFERSIZE 200
 
 

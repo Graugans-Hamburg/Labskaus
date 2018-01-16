@@ -1,76 +1,146 @@
 #include "serial.h"
-#include <termios.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <iostream>
 #include <stdio.h>
 
-serial::serial()
-{
-    //ctor
-    ptr_read_buffer = &serial_input_buffer[0];
-    ptr_write_buffer = &serial_input_buffer[0];
-    device_name = "/dev/ttyUSB0";
-    vec_input_buffer.clear();
-}
+
+/*******************************************************************************************
+ *  System dependent includes
+ ******************************************************************************************/
+#if defined(__WXMSW__)
+        wxbuild << _T("-Windows");
+#elif defined(__WXMAC__)
+        wxbuild << _T("-Mac");
+#elif defined(__UNIX__)
+        #include <termios.h>
+#endif
+
+
+
+
+
+
+#if defined(__WXMSW__)
+            /*******************************************************************************************
+             * Function: This function opens the serial port. The device that is used is defined inside
+             *           the string device name. One example for the device name is /dev/ttyUSB0 which is
+             *  WINDOOF  also the default device. This device can be changed inside the Settings.
+             *
+             *           The settings of the UART interface are currently hard coded inside this function.
+             *           They are:
+             *          - 115200 Baud
+             *          - 8 bits/byte
+             *          - no parity
+             *          - no handshake
+             *          - 1 stop bit
+             ******************************************************************************************/
+            void serial::open_port()
+             {
+
+               struct termios options;
+               fd = open(device_name.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+
+               if (fd >= 0)
+               {
+
+               }
+               else
+               {
+                    std::cerr << "Serial Port could not be opened" << std::endl;
+               }
+            }
+
+            serial::serial()
+            {
+                //ctor
+                ptr_read_buffer = &serial_input_buffer[0];
+                ptr_write_buffer = &serial_input_buffer[0];
+                device_name = "D:test.txt";
+                vec_input_buffer.clear();
+            }
+
+#elif defined(__WXMAC__)
+        wxbuild << _T("-Mac");
+#elif defined(__UNIX__)
+            /*******************************************************************************************
+             * Function: This function opens the serial port. The device that is used is defined inside
+             *           the string device name. One example for the device name is /dev/ttyUSB0 which is
+             *           also the default device. This device can be changed inside the Settings.
+             *
+             *           The settings of the UART interface are currently hard coded inside this function.
+             *           They are:
+             *          - 115200 Baud
+             *          - 8 bits/byte
+             *          - no parity
+             *          - no handshake
+             *          - 1 stop bit
+             *
+             * LINUX-SPECIFIC
+             ******************************************************************************************/
+             void serial::open_port()
+             {
+
+               struct termios options;
+               fd = open(device_name.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+
+               if (fd >= 0)
+               {
+                 /*get current options */
+                 fcntl(fd, F_SETFL,0);
+                 if(tcgetattr(fd, &options) != 0)
+                 {
+                    std::cerr << "Serial Problem, Couldn't get attributes" << std::endl;
+                 }
+
+                 cfsetspeed(&options,B115200);		/* setze 115200 bps */
+                 options.c_cflag &= ~PARENB;		/* kein paritybit */
+                 options.c_cflag &= ~CSTOPB;		/* 1 Stoppbit */
+                 options.c_cflag &= ~CSIZE;			/* 8 Datenbits */
+                 options.c_cflag |=CS8;
+                 options.c_cflag |= (CLOCAL |CREAD);	/* CD-Signal ignoriernen */
+                 options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);	/* kein echo keine steuerzeichen keine interrupts */
+                 options.c_oflag &= ~OPOST;
+                 options.c_cc[VMIN] =0;			/* warten auf mindestens 0 Zeichen */
+                 options.c_cc[VTIME] = 0;
+                 options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
+                 tcflush(fd,TCIOFLUSH);
+                 if (tcsetattr(fd, TCSAFLUSH, &options) != 0)
+                 {
+                    std::cerr << "Serial Problem, Couldn't set attributes" << std::endl;
+                 }
+                 fcntl(fd, F_SETFL, FNDELAY);
+                 fcntl(fd, F_SETFL, 0);
+               }
+               else
+               {
+                    std::cerr << "Serial Port could not be opened" << std::endl;
+               }
+             }
+
+             /*******************************************************************************************
+             * Function: Whith the constructor of the serial Objekt also the device which need to be
+             *           opened need to be defined.
+             * LINUX-SPECIFIC
+             ******************************************************************************************/
+
+             serial::serial()
+            {
+                //ctor
+                ptr_read_buffer = &serial_input_buffer[0];
+                ptr_write_buffer = &serial_input_buffer[0];
+                device_name = "/dev/ttyUSB0";
+                vec_input_buffer.clear();
+            }
+
+#endif
+
+
 
 serial::~serial()
 {
     //dtor
 }
-/*******************************************************************************************
- * Function: This function opens the serial port. The device that is used is defined inside
- *           the string device name. One example for the device name is /dev/ttyUSB0 which is
- *           also the default device. This device can be changed inside the Settings.
- *
- *           The settings of the UART interface are currently hard coded inside this function.
- *           They are:
- *          - 115200 Baud
- *          - 8 bits/byte
- *          - no parity
- *          - no handshake
- *          - 1 stop bit
- ******************************************************************************************/
- void serial::open_port()
- {
-
-   struct termios options;
-   fd = open(device_name.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
-
-   if (fd >= 0)
-   {
-     /*get current options */
-     fcntl(fd, F_SETFL,0);
-     if(tcgetattr(fd, &options) != 0)
-     {
-        std::cerr << "Serial Problem, Couldn't get attributes" << std::endl;
-     }
-
-     cfsetspeed(&options,B115200);		/* setze 115200 bps */
-     options.c_cflag &= ~PARENB;		/* kein paritybit */
-     options.c_cflag &= ~CSTOPB;		/* 1 Stoppbit */
-     options.c_cflag &= ~CSIZE;			/* 8 Datenbits */
-     options.c_cflag |=CS8;
-     options.c_cflag |= (CLOCAL |CREAD);	/* CD-Signal ignoriernen */
-     options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);	/* kein echo keine steuerzeichen keine interrupts */
-     options.c_oflag &= ~OPOST;
-     options.c_cc[VMIN] =0;			/* warten auf mindestens 0 Zeichen */
-     options.c_cc[VTIME] = 0;
-     options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
-     tcflush(fd,TCIOFLUSH);
-     if (tcsetattr(fd, TCSAFLUSH, &options) != 0)
-     {
-        std::cerr << "Serial Problem, Couldn't set attributes" << std::endl;
-     }
-     fcntl(fd, F_SETFL, FNDELAY);
-     fcntl(fd, F_SETFL, 0);
-   }
-   else
-   {
-        std::cerr << "Serial Port could not be opened" << std::endl;
-   }
- }
-
 
  void serial::close_port( void )
  {
@@ -117,12 +187,6 @@ void serial::transmit_CCP_Frame(CCP_Frame& CCP_Msg)
     CCP_Msg.SetCCPDirection_Tx();
     CCP_Msg.setCCPFrameTime();
     int results = write(fd, Serial_CCP_Frame, sizeof(Serial_CCP_Frame));
-    /*  DEBUGSHIT
-        stcd::cout << "somethings on" << std::endl;
-        time_t now = CCP_Msg->getCCPFrameTime();
-        std::cout << "Fucking Time"<<static_cast<long int> (now) << std::endl;
-        DEBUGSHIT
-    */
     if (results == -1)
     {
         std::cerr << "The requested Frame had not been written to the serial interface." << std::endl;

@@ -10,10 +10,22 @@
 #include "tinyxml2.h"
 #include "CCP_driver.h"
 
+#if defined(__WXMSW__)
+    #include <windows.h>
+    #include <Lmcons.h>
+#elif defined(__WXMAC__)
+        wxbuild << _T("-Mac");
+#elif defined(__UNIX__)
+    #include <unistd.h>
+    #include <sys/types.h>
+    #include <pwd.h>
+#endif
+
 // Required to get the user name and the name of the home directory
-#include <unistd.h>
-#include <sys/types.h>
-#include <pwd.h>
+
+
+
+
 
 
 /*******************************************************************************************
@@ -251,71 +263,150 @@ void LabskausFrame::open_save_config_dialog(wxCommandEvent &event)
     SaveConfiguration(tmp_config_file.append(".lcf"));
 }
 
-
-
 /*******************************************************************************************
- * Function check if the default folder structure is existing. If it is not existing, create
- * it.
- *
- * default folder structure: ~.Labskaus
- *                           ~.Labskaus/logs
- *
- * LINUX-SPECIFIC
+ * Function: Ask for the default directory and if it not exists, create it. Create as well
+ *           the sub folder inside the base folder with the name logs.
  ******************************************************************************************/
-
- void LabskausFrame::createDefaultDir(void)
+void LabskausFrame::createDefaultDir(void)
  {
-    struct passwd *pw = getpwuid(getuid());
-    const char *homedir = pw->pw_dir;
-    std::cout << "Name of the home directory: " << homedir << std::endl;
-    system("mkdir ~/.Labskaus");
-    system("mkdir ~/.Labskaus/logs");
+    std::string default_dir = getDefaultDir();
+    std::string default_log = getDefaultLogDir();
+
+    // Generate System Command
+    std::string create_default_dir = "mkdir ";
+    std::string create_default_log = "mkdir ";
+    create_default_dir.append(default_dir);
+    create_default_log.append(default_log);
+
+    // Fire System Commands
+    std::cout << "Create Default     dirctory : " << create_default_dir << std::endl;
+    std::cout << "Create Default log dirctory : " << create_default_log << std::endl;
+
+    system(create_default_dir.c_str());
+    system(create_default_log.c_str());
+    return;
  }
 
-/*******************************************************************************************
- * Function to find out the home path of the user. The default directory for logs is in this
- * user directory/.Labskaus/logs .
- *
- * LINUX-SPECIFIC
- ******************************************************************************************/
 
+
+/*******************************************************************************************
+* Function: Set the default log directory
+******************************************************************************************/
  void LabskausFrame::setLogDir2Default(void)
  {
-    struct passwd *pw = getpwuid(getuid());
-    const char *homedir = pw->pw_dir;
-    std::string default_dir_log = homedir;
-    default_dir_log.append("/.Labskaus/logs");
-    std::cout << "Name of the home directory for logs: " << default_dir_log << std::endl;
-    CCP_Master->SetLogFolder(default_dir_log);
+    // This is what need to be supported
+    std::cout << "Set default log path. Path: " << getDefaultLogDir() << std::endl;
+    CCP_Master->SetLogFolder(getDefaultLogDir());
  }
 
- /*******************************************************************************************
- * Function load the config file of the latest run. This config file is always stored inside
- * default directory of Labskaus which is
- *
- * LINUX-SPECIFIC
- ******************************************************************************************/
-
+/*******************************************************************************************
+* Function: Load the last configuration
+******************************************************************************************/
  void LabskausFrame::LoadLastConfig(void)
  {
-    struct passwd *pw = getpwuid(getuid());
-    const char *homedir = pw->pw_dir;
-    std::string last_config = homedir;
-    last_config.append("/.Labskaus/base.lcf");
-    apply_config_file(last_config);
+    // This is what need to be supported
+    std::cout << "Open the last configuration. File: " << getFileNameLastConfig() << std::endl;
+    apply_config_file(getFileNameLastConfig());
  }
 
-  /*******************************************************************************************
- * Function load the config file of the latest run. This config file is always stored inside
- * default directory of Labskaus which is
+/*******************************************************************************************
+* Function: Save the last configuration
+******************************************************************************************/
+void LabskausFrame::SaveLastConfig(void)
+ {
+    // This is what need to be supported
+    std::cout << "Save the last configuration. File: " << getFileNameLastConfig() << std::endl;
+    SaveConfiguration(getFileNameLastConfig());
+ }
+#if defined(__WXMSW__)
+/*******************************************************************************************
+ * Function: This Functions are returning the pathes the default configuration and the logs
+ *            On a windows system this shall be:
  *
- * LINUX-SPECIFIC
+ *           default     :c:\Users\<username>\AppData\Local\Labskaus
+ *           log         :c:\Users\<username>\AppData\Local\Labskaus\Logs
+ *           last config :c:\Users\<username>\AppData\Local\Labskaus\base.lcf
+ *
+ * Windows-SPECIFIC
  ******************************************************************************************/
-  void LabskausFrame::SaveLastConfig(void)
+
+ std::string LabskausFrame::getDefaultDir(void)
+ {
+    char username[UNLEN+1];
+    DWORD username_len = UNLEN+1;
+    GetUserName(username, &username_len);
+
+    std::string default_dir;
+    std::string default_log;
+    default_dir = "c:\\Users\\";
+    default_dir.append(username);
+    default_dir.append("\\AppData\\Local\\Labskaus");
+
+    return default_dir;
+ }
+
+std::string LabskausFrame::getDefaultLogDir(void)
+ {
+    std::string default_log;
+    default_log = getDefaultDir();
+    default_log.append("\\Logs");
+
+    return default_log;
+ }
+
+  std::string LabskausFrame::getFileNameLastConfig(void)
+ {
+    std::string filenamelastconfig = getDefaultDir();
+    filenamelastconfig.append("\\base.lcf");
+
+    return filenamelastconfig;
+ }
+
+#elif defined(__WXMAC__)
+        // not defined by now.
+#elif defined(__UNIX__)
+ /*******************************************************************************************
+ * Function: This Functions are returning the pathes the default configuration and the logs
+ *           On a windows system this shall be:
+ *
+ *           default     :/home/<Users>./Labskaus
+ *           log         :/home/<Users>./Labskaus/Logs
+ *           last config :/home/<Users>./Labskaus/base.lcf
+ *
+ * Linux-SPECIFIC
+ ******************************************************************************************/
+
+ std::string LabskausFrame::getDefaultDir(void)
  {
     struct passwd *pw = getpwuid(getuid());
     const char *homedir = pw->pw_dir;
-    std::string last_config = homedir;
-    last_config.append("/.Labskaus/base.lcf");
-    SaveConfiguration(last_config);
+    std::string default_dir = homedir;
+    default_dir.append("/.Labskaus");
+    SaveConfiguration(default_dir);
+
+    return default_dir;
  }
+
+std::string LabskausFrame::getDefaultLogDir(void)
+ {
+    std::string default_log;
+    default_log = getDefaultDir();
+    default_log.append("/logs");
+
+    return default_log;
+ }
+
+  std::string LabskausFrame::getFileNameLastConfig(void)
+ {
+    std::string filenamelastconfig = getDefaultDir();
+    filenamelastconfig.append("/base.lcf");
+
+    return filenamelastconfig;
+ }
+#endif
+
+
+
+
+
+

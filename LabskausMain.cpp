@@ -30,7 +30,6 @@
 
 
 #include "tinyxml2.h"
-#include "serial.h"
 #include "CCP_driver.h"
 
 //helper functions
@@ -61,9 +60,7 @@ wxString wxbuildinfo(wxbuildinfoformat format)
     return wxbuild;
 }
 
-
-LabskausFrame::LabskausFrame(wxFrame *frame)
-    : GUIFrame(frame)
+LabskausFrame::LabskausFrame(wxFrame *frame): GUIFrame(frame)
 {
     CCP_Master = new CCP_driver();
     recTimer = NULL;
@@ -129,8 +126,6 @@ void LabskausFrame::open_load_dialog(wxCommandEvent &event)
 	OpenDialog->Destroy();
     Read_XML_file(ECU_XML_full_Path);
 }
-
-
 
 void LabskausFrame::open_log_dialog(wxCommandEvent &event)
 {
@@ -244,12 +239,10 @@ void LabskausFrame::EventCloseSerial(wxCommandEvent &event)
     CCP_Master->Set_MessStatus2Stop();
 }
 
-
 void LabskausFrame::OnRecTimer(wxTimerEvent& event)
 {
     CCP_Master->periodic_check();
 }
-
 
 void LabskausFrame::DA_List_Timer(wxTimerEvent& event)
 {
@@ -262,7 +255,6 @@ void LabskausFrame::DA_List_Timer(wxTimerEvent& event)
     statusBar->SetStatusText(wxbuildinfo(short_f), 1);
     updateMeasListValues();
 }
-
 
 void LabskausFrame::updateMeasListValues(void)
 {
@@ -277,8 +269,6 @@ void LabskausFrame::updateMeasListValues(void)
     }
 
 }
-
-
 
 void LabskausFrame::EventAddVar2List(wxCommandEvent &event)
 {
@@ -331,7 +321,6 @@ void LabskausFrame::AddVar2List(void)
     }
 }
 
-
 void LabskausFrame::EventMeaListKeyPres( wxKeyEvent& event )
 {
     RmVarElementActiontable();
@@ -372,7 +361,6 @@ void LabskausFrame::RmVarElementActiontable( void)
         CCP_Master->rmVariableFromActionPlan(var2rm_str);
     }
 }
-
 
 void LabskausFrame::determine_next_free_row()
 {

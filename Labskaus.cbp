@@ -32,8 +32,9 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="`wx-config --cflags`" />
 			<Add option="-Wall" />
+			<Add option="`wx-config --cflags`" />
+			<Add option="-D__UNIX__" />
 		</Compiler>
 		<Linker>
 			<Add option="`wx-config --libs`" />

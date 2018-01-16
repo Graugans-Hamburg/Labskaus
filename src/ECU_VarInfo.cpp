@@ -1,5 +1,4 @@
 #include "ECU_VarInfo.h"
-#include <cstring>
 
 ECU_VarInfo::ECU_VarInfo()
 {

@@ -4,7 +4,7 @@
 #include <string>
 #include "type_definition.h"
 #include <stdint.h>
-
+#include <cstring>
 
 class ECU_VarInfo
 {

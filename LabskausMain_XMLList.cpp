@@ -6,7 +6,6 @@
 #include <streambuf>
 #include <wx/wx.h>
 
-
 #include "tinyxml2.h"
 #include "CCP_driver.h"
 
@@ -33,9 +32,6 @@ ECU_VarInfo* LabskausFrame::find_ECUVarByName(std::string VarName)
     // If the variable had not been found
     return nullptr;
 }
-
-
-
 
 /*******************************************************************************************
  * Function: Extract all information from a ECU-XML file and place then inside a vector. This
