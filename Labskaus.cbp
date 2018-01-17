@@ -16,6 +16,7 @@
 				<Compiler>
 					<Add option="-std=c++11" />
 					<Add option="-g" />
+					<Add option="-D__linux__" />
 					<Add directory="include" />
 				</Compiler>
 			</Target>
@@ -56,6 +57,7 @@
 		<Unit filename="include/ECU_VarInfo.h" />
 		<Unit filename="include/ECU_VarLog.h" />
 		<Unit filename="include/LOG_Container.h" />
+		<Unit filename="include/rs232.h" />
 		<Unit filename="include/serial.h" />
 		<Unit filename="include/type_definition.h" />
 		<Unit filename="include/xmlECUfile.h" />
@@ -65,6 +67,9 @@
 		<Unit filename="src/ECU_VarInfo.cpp" />
 		<Unit filename="src/ECU_VarLog.cpp" />
 		<Unit filename="src/LOG_Container.cpp" />
+		<Unit filename="src/rs232.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/serial.cpp" />
 		<Unit filename="src/xmlECUfile.cpp" />
 		<Unit filename="tinyxml2.cpp" />

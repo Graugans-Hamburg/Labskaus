@@ -22,15 +22,20 @@
 
 	<h2>Kommunikation aus Sicht des Programms Labskaus</h2>
 
-	Wird eine Messung gestartet so öffnet Labskaus einen seriellen Port. Dieser ist hart im Programm
-	einkodiert (/dev/ttyUSB0). Dieser Port wird mit den folgenden Eigenschaften geöffnet:
+	Wird eine Messung gestartet so öffnet Labskaus einen seriellen Port. Welcher Port geöffenet wird hängt von der Konfiguration von 
+   Labskaus ab. Wie diese Konfiguration verändert werden kann ist auf der folgenden <a href="../com_settings/com_settings.html"> Seite</a>
+ 	beschrieben. Das Programm startet immer 
+   mit der folgenden Standardkonfiguration:
 
 	<ul>
+		<li>/dev/ttyUSB0 (Portnummer 16)
 		<li>115200 bps</li>
 		<li>kein paritybit</li>
 		<li>1 Stopbit</li>
 		<li>8 Datenbits</li>
 	</ul>
+
+
 	<h3>Senden von CCP-Botschaften</h3>
 	<br>
 	Jede Anfrage die von Labskaus an den µC gesendet wird hat die gleiche Form. Sie besteht jeweils aus 

@@ -17,11 +17,21 @@ class serial
         CCP_Frame* AnalyzeBytesRead(void);
         void transmit_CCP_Frame(CCP_Frame& CCP_Msg);
         void set_ptr_CCPDriver(void);
-        void Set_device_name(std::string tmp){device_name = tmp;}
-        std::string Get_device_name(void){return device_name;}
+        void Set_device_name(std::string tmp){device_name = tmp;} // TODO removed later
+        std::string Get_device_name(void){return device_name;}  // TODO remove later
+        void Set_port_number(int tmp){port_number = tmp;}
+        int Get_port_number(void){return port_number;}
+        int Get_baud_rate(void){return baud_rate;}
+        void Set_baud_rate(int tmp){baud_rate = tmp;}
+        void Set_serial_mode(std::string tmp){serial_mode = tmp;} // TODO removed later
+        std::string Get_serial_mode(void){return serial_mode;}  // TODO remove later
+
     protected:
     private:
-        int fd;
+        int fd; // TODO removed later
+        int port_number;
+        int baud_rate;
+        std::string serial_mode;
         std::string device_name;
         std::vector<unsigned char> vec_input_buffer;
         void cleanVector2FirstCCPSign(void);
@@ -31,6 +41,7 @@ class serial
         unsigned char * ptr_read_buffer;
         unsigned char * ptr_write_buffer;
         serial* SerialPort;
+
 };
 
 #endif // SERIAL_H

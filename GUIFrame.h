@@ -146,6 +146,8 @@ class DialogSettings : public wxDialog
 		wxStaticText* m_staticText15;
 		wxStaticText* m_staticText16;
 		wxStaticText* m_staticText17;
+		wxStaticText* m_staticText151;
+		wxStaticText* m_staticText152;
 		wxStaticLine* m_staticline5;
 		wxStaticText* m_staticText12;
 		wxStaticText* m_staticText18;
@@ -156,7 +158,9 @@ class DialogSettings : public wxDialog
 		// Virtual event handlers, overide them in your derived class
 		virtual void event_ChangeByteOrder( wxCommandEvent& event ) { event.Skip(); }
 		virtual void event_ChangeStationAddress( wxCommandEvent& event ) { event.Skip(); }
-		virtual void event_ChangeDevice( wxCommandEvent& event ) { event.Skip(); }
+		virtual void event_ChangeSerialDevice( wxCommandEvent& event ) { event.Skip(); }
+		virtual void event_ChangeSerialBaudRate( wxCommandEvent& event ) { event.Skip(); }
+		virtual void event_ChangeSerialMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void event_Cancel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void event_Apply( wxCommandEvent& event ) { event.Skip(); }
 		
@@ -165,6 +169,8 @@ class DialogSettings : public wxDialog
 		wxChoice* m_choiceECUByteOrder;
 		wxTextCtrl* m_textECUStationAddress;
 		wxTextCtrl* m_textDevice;
+		wxTextCtrl* m_textBaudRate;
+		wxTextCtrl* m_textSerialMode;
 		wxChoice* m_choiceStartByte;
 		
 		DialogSettings( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Communication Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 600,600 ), long style = wxDEFAULT_DIALOG_STYLE );

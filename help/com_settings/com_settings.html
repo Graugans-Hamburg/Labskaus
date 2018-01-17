@@ -1,0 +1,465 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" type="text/css" href="../layout/graugans.css" />
+</head>
+
+<body>
+	<h1>Kommunikationsschnittstelle einstellen</h1>
+
+	Die Schnittstelle die Labskaus verwendet kann über das Dialogfenster eingestellt werden welches
+	über die Menüleiste (Settings) geöffnet werden kann. Eingestellt werden kann:
+
+	<br><br>
+
+	<ul>
+		<li><b>Port Number</b> (z.B. COM1, /dev/ttyUSB0). In dem entsprechenden Eingabefeld kann kein Nummer einge
+          gegeben werden. Jede Nummer entspricht immer einer Schnittstelle welche noch von dem 
+          verwendeten Betriebssystem abhängt. 
+			 Als Beispiel: Wenn die Nummer 1 eingegeben wird so würde, wenn das Programm auf einem Windows 
+          PC ausgeführt wird, die Schnittstelle COM 1 verwendet. Auf einem Linux System entspricht diese
+          Nummer dem Port /dev/ttyS0. Ein Auflistung aller Portnummern und deren Ports kann in der folgenden Tabelle 
+          eingesehen werden.</li>
+		<br><br>
+		<li><b>Baudrate</b> - ich denke hier ist kein weiteres Wort notwendig</li>
+		<br><br> 	
+		<li><b>Mode</b> bestimmt die weiteren Eigenschaften der seriellen Schnittstelle wie z.B. die 
+          Verwendung von Stopbits oder eine Paritybits. Die möglichen eingaben sind in der Tabelle
+          weiter unten aufgelistet.  </li>
+
+	</ul>
+
+	<h2> Tabellen mit möglichen Konfiguration </h2>
+
+	Die folgenden Tabellen stammen von der Webseite https://www.teuniz.net/RS-232/index.html vom 17.1.2018.
+	Sie sind auf dieser Webseite genau so dargestellt wie auch auf der ursprunglichen Webseite da die 
+   Quellcodedateien die die serielle Verbindung aufbauen auch von dieser Webseite entnommen wurden. 
+   <br><br> 
+	<div>
+	<table style="vertical-align:top; display:inline-table; empty-cells: hide; margin-left: 75px; border-collapse: collapse;">
+	  <tbody>
+		 <tr>
+		   <th>port nr.</th>
+		   <th>Linux</th>
+		   <th>windows</th>
+		 </tr>
+		 <tr>
+		   <td>0</td>
+		   <td>ttyS0</td>
+		   <td>COM1</td>
+		 </tr>
+		 <tr>
+		   <td>1</td>
+		   <td>ttyS1</td>
+		   <td>COM2</td>
+		 </tr>
+		 <tr>
+		   <td>2</td>
+		   <td>ttyS2</td>
+		   <td>COM3</td>
+		 </tr>
+		 <tr>
+		   <td>3</td>
+		   <td>ttyS3</td>
+		   <td>COM4</td>
+		 </tr>
+		 <tr>
+		   <td>4</td>
+		   <td>ttyS4</td>
+		   <td>COM5</td>
+		 </tr>
+		 <tr>
+		   <td>5</td>
+		   <td>ttyS5</td>
+		   <td>COM6</td>
+		 </tr>
+		 <tr>
+		   <td>6</td>
+		   <td>ttyS6</td>
+		   <td>COM7</td>
+		 </tr>
+		 <tr>
+		   <td>7</td>
+		   <td>ttyS7</td>
+		   <td>COM8</td>
+		 </tr>
+		 <tr>
+		   <td>8</td>
+		   <td>ttyS8</td>
+		   <td>COM9</td>
+		 </tr>
+		 <tr>
+		   <td>9</td>
+		   <td>ttyS9</td>
+		   <td>COM10</td>
+		 </tr>
+		 <tr>
+		   <td>10</td>
+		   <td>ttyS10</td>
+		   <td>COM11</td>
+		 </tr>
+		 <tr>
+		   <td>11</td>
+		   <td>ttyS11</td>
+		   <td>COM12</td>
+		 </tr>
+		 <tr>
+		   <td>12</td>
+		   <td>ttyS12</td>
+		   <td>COM13</td>
+		 </tr>
+		 <tr>
+		   <td>13</td>
+		   <td>ttyS13</td>
+		   <td>COM14</td>
+		 </tr>
+		 <tr>
+		   <td>14</td>
+		   <td>ttyS14</td>
+		   <td>COM15</td>
+		 </tr>
+		 <tr>
+		   <td>15</td>
+		   <td>ttyS15</td>
+		   <td>COM16</td>
+		 </tr>
+		 <tr>
+		   <td>16</td>
+		   <td>ttyUSB0</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>17</td>
+		   <td>ttyUSB1</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>18</td>
+		   <td>ttyUSB2</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>19</td>
+		   <td>ttyUSB3</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>20</td>
+		   <td>ttyUSB4</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>21</td>
+		   <td>ttyUSB5</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>22</td>
+		   <td>ttyAMA0</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>23</td>
+		   <td>ttyAMA1</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>24</td>
+		   <td>ttyACM0</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>25</td>
+		   <td>ttyACM1</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>26</td>
+		   <td>rfcomm0</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>27</td>
+		   <td>rfcomm1</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>28</td>
+		   <td>ircomm0</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>29</td>
+		   <td>ircomm1</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>30</td>
+		   <td>cuau0</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>31</td>
+		   <td>cuau1</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>32</td>
+		   <td>cuau2</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>33</td>
+		   <td>cuau3</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>34</td>
+		   <td>cuaU0</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>35</td>
+		   <td>cuaU1</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>36</td>
+		   <td>cuaU2</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>37</td>
+		   <td>cuaU3</td>
+		   <td>n.a.</td>
+		 </tr>
+	  </tbody>
+	</table>
+
+	<table style="vertical-align:top; display:inline-table; empty-cells: hide; margin-left: 75px; border-collapse: collapse;">
+	  <tbody>
+		 <tr>
+		   <th>Linux</th>
+		   <th>windows</th>
+		 </tr>
+		 <tr>
+		   <td>50</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>75</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>110</td>
+		   <td>110</td>
+		 </tr>
+		 <tr>
+		   <td>134</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>150</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>200</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>300</td>
+		   <td>300</td>
+		 </tr>
+		 <tr>
+		   <td>600</td>
+		   <td>600</td>
+		 </tr>
+		 <tr>
+		   <td>1200</td>
+		   <td>1200</td>
+		 </tr>
+		 <tr>
+		   <td>1800</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>2400</td>
+		   <td>2400</td>
+		 </tr>
+		 <tr>
+		   <td>4800</td>
+		   <td>4800</td>
+		 </tr>
+		 <tr>
+		   <td>9600</td>
+		   <td>9600</td>
+		 </tr>
+		 <tr>
+		   <td>19200</td>
+		   <td>19200</td>
+		 </tr>
+		 <tr>
+		   <td>38400</td>
+		   <td>38400</td>
+		 </tr>
+		 <tr>
+		   <td>57600</td>
+		   <td>57600</td>
+		 </tr>
+		 <tr>
+		   <td>115200</td>
+		   <td>115200</td>
+		 </tr>
+		 <tr>
+		   <td>230400</td>
+		   <td>128000</td>
+		 </tr>
+		 <tr>
+		   <td>460800</td>
+		   <td>256000</td>
+		 </tr>
+		 <tr>
+		   <td>500000</td>
+		   <td>500000</td>
+		 </tr>
+		 <tr>
+		   <td>576000</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>921600</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>1000000</td>
+		   <td>1000000</td>
+		 </tr>
+		 <tr>
+		   <td>1152000</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>1500000</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>2000000</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>2500000</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>3000000</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>3500000</td>
+		   <td>n.a.</td>
+		 </tr>
+		 <tr>
+		   <td>4000000</td>
+		   <td>n.a.</td>
+		 </tr>
+	  </tbody>
+	</table>
+
+	<table style="vertical-align:top; display:inline-table; empty-cells: hide; margin-left: 75px; border-collapse: collapse;">
+	  <tbody>
+		 <tr>
+		   <th>Mode</th>
+		 </tr>
+		 <tr>
+		   <td>8N1</td>
+		 </tr>
+		 <tr>
+		   <td>8O1</td>
+		 </tr>
+		 <tr>
+		   <td>8E1</td>
+		 </tr>
+		 <tr>
+		   <td>8N2</td>
+		 </tr>
+		 <tr>
+		   <td>8O2</td>
+		 </tr>
+		 <tr>
+		   <td>8E2</td>
+		 </tr>
+		 <tr>
+		   <td>7N1</td>
+		 </tr>
+		 <tr>
+		   <td>7O1</td>
+		 </tr>
+		 <tr>
+		   <td>7E1</td>
+		 </tr>
+		 <tr>
+		   <td>7N2</td>
+		 </tr>
+		 <tr>
+		   <td>7O2</td>
+		 </tr>
+		 <tr>
+		   <td>7E2</td>
+		 </tr>
+		 <tr>
+		   <td>6N1</td>
+		 </tr>
+		 <tr>
+		   <td>6O1</td>
+		 </tr>
+		 <tr>
+		   <td>6E1</td>
+		 </tr>
+		 <tr>
+		   <td>6N2</td>
+		 </tr>
+		 <tr>
+		   <td>6O2</td>
+		 </tr>
+		 <tr>
+		   <td>6E2</td>
+		 </tr>
+		 <tr>
+		   <td>5N1</td>
+		 </tr>
+		 <tr>
+		   <td>5O1</td>
+		 </tr>
+		 <tr>
+		   <td>5E1</td>
+		 </tr>
+		 <tr>
+		   <td>5N2</td>
+		 </tr>
+		 <tr>
+		   <td>5O2</td>
+		 </tr>
+		 <tr>
+		   <td>5E2</td>
+		 </tr>
+	  </tbody>
+	</table>
+	</div>
+
+
+<!-- AUTOGENERATED FOOTER POSITION -->
+<!-- AUTOGENERATED FOOTER START --> 
+<hr><hr>
+<div id="FooterLogo">
+	<img src="../layout/GraugansLogo.png">
+</div>
+<div id="FooterText">
+  <br>
+  Program:  Labskaus<br>
+  Version:  v1.2<br><br>
+  Graugans, created 2018 by Matthias Baumann
+</div>
+<!-- AUTOGENERATED FOOTER STOP -->
+</body>
+</html>

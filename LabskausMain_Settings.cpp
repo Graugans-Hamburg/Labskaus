@@ -44,10 +44,31 @@ void LabskausFrame::EventOpenComSettings( wxCommandEvent& event )
      *   Show the device that is configure inside the serial objekt
      **/
      {
-        std::string name = CCP_Master->SerialPort.Get_device_name();
+        int Serial_Port = CCP_Master->SerialPort.Get_port_number();
+        Settings_dia->newSerialPort = Serial_Port;
         std::stringstream stream;
-        stream << name;
+        stream << Serial_Port;
         Settings_dia->m_textDevice->SetValue(stream.str());
+     }
+    /**
+     *   Show the Baud Rate that is configure inside the serial objekt
+     **/
+     {
+        int BaudRate = CCP_Master->SerialPort.Get_baud_rate();
+        Settings_dia->newSerialBaudRate = BaudRate;
+        std::stringstream stream;
+        stream << BaudRate;
+        Settings_dia->m_textBaudRate->SetValue(stream.str());
+     }
+    /**
+     *   Show the Baud Rate that is configure inside the serial objekt
+     **/
+     {
+        std::string SerialMode = CCP_Master->SerialPort.Get_serial_mode();
+        Settings_dia->newSerialMode = SerialMode;
+        std::stringstream stream;
+        stream << SerialMode;
+        Settings_dia->m_textSerialMode->SetValue(stream.str());
      }
     Settings_dia->Show();
 }
@@ -140,16 +161,104 @@ void LabskausFrameSettings::event_Cancel( wxCommandEvent& event )
  *           Dialog. The value will be stored inside a temp variable which will be take over
  *           if the new value is applied
  ******************************************************************************************/
-void LabskausFrameSettings::event_ChangeDevice( wxCommandEvent& event )
+void LabskausFrameSettings::event_ChangeSerialDevice( wxCommandEvent& event )
 {
-    if( m_textECUStationAddress->IsEmpty())
+    if( m_textDevice->IsEmpty())
     {
+        wxMessageBox(_("Please enter a integer in the range of [0 - 37]."),_("What did you do?"));
         std::cerr << "No new value entered" << std::endl;
         return;
     }
     wxString user_input_as_string = m_textDevice->GetValue();
-    newDevice = user_input_as_string.ToStdString();
-    Device_changed = true;
+    long entered_port_number;
+    if(!user_input_as_string.ToLong(&entered_port_number))
+    {
+        int last_SerialPortNumber = CCP_Master->SerialPort.Get_port_number();
+        newSerialPort = last_SerialPortNumber;
+        std::stringstream stream;
+        stream << newStationAddress;
+        m_textECUStationAddress->SetValue(stream.str());
+        wxMessageBox(_("Please enter a integer in the range of [0 - 37]."),_("Why?"));
+        std::cerr << "New value could not be converted to long." << std::endl;
+        return;
+    }
+    if(entered_port_number < 0 || entered_port_number > 37)
+    {
+        int last_SerialPortNumber = CCP_Master->SerialPort.Get_port_number();
+        newSerialPort = last_SerialPortNumber;
+        std::stringstream stream;
+        stream << last_SerialPortNumber;
+        m_textECUStationAddress->SetValue(stream.str());
+        wxMessageBox(_("Please enter a integer in the range of [0 - 37]."),_("Why?"));
+        std::cerr << "Value is out of range. The value need to be in the range of [0 65535]." << std::endl;
+        return;
+    }
+
+    newSerialPort = int(entered_port_number);
+    changed_SerialDevice = true;
+}
+
+/*******************************************************************************************
+ * Function: This event is called when the user changes the baud rate inside the Settings
+ *           Dialog. The value will be stored inside a temp variable which will be take over
+ *           if the new value is applied
+ ******************************************************************************************/
+void LabskausFrameSettings::event_ChangeSerialBaudRate( wxCommandEvent& event )
+{
+    if( m_textBaudRate->IsEmpty())
+    {
+        wxMessageBox(_("Please enter a integer."),_("What did you do?"));
+        std::cerr << "No new value entered" << std::endl;
+        return;
+    }
+    wxString user_input_as_string = m_textBaudRate->GetValue();
+    long entered_number;
+    if(!user_input_as_string.ToLong(&entered_number))
+    {
+        int last_SerialBaudRate = CCP_Master->SerialPort.Get_baud_rate();
+        newSerialBaudRate = last_SerialBaudRate;
+        std::stringstream stream;
+        stream << newStationAddress;
+        m_textBaudRate->SetValue(stream.str());
+        wxMessageBox(_("Please enter a integer > 0."),_("Why?"));
+        std::cerr << "New value could not be converted to long." << std::endl;
+        return;
+    }
+    if(entered_number < 0 )
+    {
+        int last_SerialBaudRate = CCP_Master->SerialPort.Get_baud_rate();
+        newSerialBaudRate = last_SerialBaudRate;
+        std::stringstream stream;
+        stream << newStationAddress;
+        m_textBaudRate->SetValue(stream.str());
+        wxMessageBox(_("Please enter a integer > 0."),_("Why?"));
+        std::cerr << "New value could not be converted to long." << std::endl;
+        return;
+    }
+
+    newSerialBaudRate = int(entered_number);
+    changed_SerialBaudRate = true;
+}
+
+/*******************************************************************************************
+ * Function: This event is called when the user changes the serial mode inside the Settings
+ *           Dialog. The value will be stored inside a temp variable which will be take over
+ *           if the new value is applied
+ ******************************************************************************************/
+void LabskausFrameSettings::event_ChangeSerialMode( wxCommandEvent& event )
+{
+
+    if( m_textSerialMode->IsEmpty())
+    {
+        wxMessageBox(_("Please enter string defining the serial mode."),_("What did you do?"));
+        std::cerr << "No new value entered" << std::endl;
+        return;
+    }
+    wxString user_input_as_string = m_textSerialMode->GetValue();
+    newSerialMode = user_input_as_string.ToStdString();
+    changed_SerialMode = true;
+    return;
+
 }
 
 /*******************************************************************************************
@@ -164,11 +273,12 @@ void LabskausFrameSettings::event_ChangeDevice( wxCommandEvent& event )
 void LabskausFrameSettings::event_Apply( wxCommandEvent& event )
 {
     wxCommandEvent apply_event;
-    event_ChangeDevice(apply_event);
+    event_ChangeSerialDevice(apply_event);
     event_ChangeStationAddress(apply_event);
 
-    if(Station_Address_changed) CCP_Master->Set_ECU_station_address(newStationAddress);
-    if(ByteOrder_changed)       CCP_Master->Set_ECU_endianness(newECUByteOrder);
-    if(Device_changed)          CCP_Master->SerialPort.Set_device_name(newDevice);
+    if(Station_Address_changed)   CCP_Master->Set_ECU_station_address(newStationAddress);
+    if(ByteOrder_changed)         CCP_Master->Set_ECU_endianness(newECUByteOrder);
+    if(changed_SerialDevice)      CCP_Master->SerialPort.Set_port_number(newSerialPort);
+    if(changed_SerialBaudRate)    CCP_Master->SerialPort.Set_baud_rate(newSerialBaudRate);
     this->Close(true);
 }

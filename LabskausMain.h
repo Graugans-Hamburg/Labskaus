@@ -105,17 +105,23 @@ class LabskausFrameSettings: public DialogSettings
         CCP_driver* CCP_Master;
         endian newECUByteOrder;
         uint16_t newStationAddress;
-        std::string newDevice;
+        int newSerialPort;
+        int newSerialBaudRate;
+        std::string newSerialMode;
         bool ByteOrder_changed;
         bool Station_Address_changed;
-        bool Device_changed;
+        bool changed_SerialDevice;
+        bool changed_SerialBaudRate;
+        bool changed_SerialMode;
 
     private:
 		virtual void event_ChangeByteOrder( wxCommandEvent& event );
 		virtual void event_ChangeStationAddress( wxCommandEvent& event );
 		virtual void event_Cancel( wxCommandEvent& event );
 		virtual void event_Apply( wxCommandEvent& event );
-		virtual void event_ChangeDevice( wxCommandEvent& event );
+		virtual void event_ChangeSerialDevice( wxCommandEvent& event );
+		virtual void event_ChangeSerialBaudRate( wxCommandEvent& event );
+		virtual void event_ChangeSerialMode( wxCommandEvent& event );
 };
 
 #endif // LABSKAUSMAIN_H

@@ -455,7 +455,7 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	wxBoxSizer* bSizer33;
 	bSizer33 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticText17 = new wxStaticText( this, wxID_ANY, wxT("Device"), wxDefaultPosition, wxSize( 120,-1 ), 0 );
+	m_staticText17 = new wxStaticText( this, wxID_ANY, wxT("Port Number"), wxDefaultPosition, wxSize( 120,-1 ), 0 );
 	m_staticText17->Wrap( -1 );
 	bSizer33->Add( m_staticText17, 0, wxALL, 5 );
 	
@@ -465,6 +465,34 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	bSizer33->Add( m_textDevice, 0, wxALL, 5 );
 	
 	bSizer14->Add( bSizer33, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer341;
+	bSizer341 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText151 = new wxStaticText( this, wxID_ANY, wxT("Baudrate"), wxDefaultPosition, wxSize( 120,-1 ), 0 );
+	m_staticText151->Wrap( -1 );
+	bSizer341->Add( m_staticText151, 0, wxALL, 5 );
+	
+	m_textBaudRate = new wxTextCtrl( this, wxID_ANY, wxT("unkown"), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	m_textBaudRate->SetMinSize( wxSize( 200,-1 ) );
+	
+	bSizer341->Add( m_textBaudRate, 0, wxALL, 5 );
+	
+	bSizer14->Add( bSizer341, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer342;
+	bSizer342 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText152 = new wxStaticText( this, wxID_ANY, wxT("Mode"), wxDefaultPosition, wxSize( 120,-1 ), 0 );
+	m_staticText152->Wrap( -1 );
+	bSizer342->Add( m_staticText152, 0, wxALL, 5 );
+	
+	m_textSerialMode = new wxTextCtrl( this, wxID_ANY, wxT("unkown"), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	m_textSerialMode->SetMinSize( wxSize( 200,-1 ) );
+	
+	bSizer342->Add( m_textSerialMode, 0, wxALL, 5 );
+	
+	bSizer14->Add( bSizer342, 1, wxEXPAND, 5 );
 	
 	m_staticline5 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer14->Add( m_staticline5, 0, wxEXPAND | wxALL, 5 );
@@ -516,7 +544,9 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	// Connect Events
 	m_choiceECUByteOrder->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DialogSettings::event_ChangeByteOrder ), NULL, this );
 	m_textECUStationAddress->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeStationAddress ), NULL, this );
-	m_textDevice->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeDevice ), NULL, this );
+	m_textDevice->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeSerialDevice ), NULL, this );
+	m_textBaudRate->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeSerialBaudRate ), NULL, this );
+	m_textSerialMode->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeSerialMode ), NULL, this );
 	m_buttonCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Cancel ), NULL, this );
 	m_buttonApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Apply ), NULL, this );
 }
@@ -526,7 +556,9 @@ DialogSettings::~DialogSettings()
 	// Disconnect Events
 	m_choiceECUByteOrder->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DialogSettings::event_ChangeByteOrder ), NULL, this );
 	m_textECUStationAddress->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeStationAddress ), NULL, this );
-	m_textDevice->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeDevice ), NULL, this );
+	m_textDevice->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeSerialDevice ), NULL, this );
+	m_textBaudRate->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeSerialBaudRate ), NULL, this );
+	m_textSerialMode->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeSerialMode ), NULL, this );
 	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Cancel ), NULL, this );
 	m_buttonApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Apply ), NULL, this );
 }
