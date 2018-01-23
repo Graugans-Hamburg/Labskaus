@@ -9,7 +9,7 @@
 #include <string>
 #include "serial.h"
 #include "CCP_Frame.h"
-#include "CCP_Drive_List_Element.h"
+//#include "CCP_Drive_List_Element.h"
 #include "type_definition.h"
 #include "LOG_Container.h"
 #include "CCP_Schedular_List_Element.h"

@@ -12,7 +12,6 @@
 
 #if defined(__WXMSW__)
     #include <windows.h>
-    #include <Lmcons.h>
 #elif defined(__WXMAC__)
         wxbuild << _T("-Mac");
 #elif defined(__UNIX__)
@@ -36,7 +35,7 @@ void LabskausFrame::SaveConfiguration(std::string file_full_path)
 {
     using namespace tinyxml2;
 
-    XMLDocument xmlDoc;
+    tinyxml2::XMLDocument xmlDoc;
     // Declaration
     XMLDeclaration * pdec = xmlDoc.NewDeclaration( "xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"");
     xmlDoc.InsertFirstChild(pdec);
@@ -332,9 +331,9 @@ void LabskausFrame::SaveLastConfig(void)
 
  std::string LabskausFrame::getDefaultDir(void)
  {
-    char username[UNLEN+1];
-    DWORD username_len = UNLEN+1;
-    GetUserName(username, &username_len);
+    char username[256+1];
+    DWORD username_len = 256+1;
+    GetUserNameA(username, &username_len);
 
     std::string default_dir;
     std::string default_log;
