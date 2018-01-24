@@ -24,3 +24,14 @@ table, th, td{
 	margin-left: 20px;
 	margin-right: 20px;
 }
+
+.terminal {
+	font-family:monospace;
+	font-size: 12px;
+	background-color: #424242;
+	color:white;
+	margin-left: 20px;
+	margin-right: 20px;
+	padding: 20px;	
+	border:2px dotted black;
+}
