@@ -103,7 +103,7 @@ void LabskausFrame::EventAddCalVal2List(wxCommandEvent &event)
         // Define the name
         {
             std::stringstream stream;
-            stream << Ptr2SelectedElement->GetName() << std::endl;
+            stream << Ptr2SelectedElement->GetName();
             SetVar_dia->m_DLVarName->SetLabel(stream.str());
         }
         // Define the min value
