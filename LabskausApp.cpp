@@ -24,6 +24,7 @@ bool LabskausApp::OnInit()
 {
     LabskausFrame* frame = new LabskausFrame(0L);
     frame->Show();
+    wxInitAllImageHandlers();
     return true;
 }
 
