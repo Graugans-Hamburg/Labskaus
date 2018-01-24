@@ -171,16 +171,16 @@ void LabskausFrame::EventAddCalVal2List(wxCommandEvent &event)
             std::stringstream stream;
             switch(Ptr2SelectedElement->GetDataType())
             {
-            case type_unknown : stream << "N/A"      << std::endl; break;
-            case type_u8      : stream << "uint8"    << std::endl; break;
-            case type_i8      : stream << "int8"     << std::endl; break;
-            case type_u16     : stream << "uint16"   << std::endl; break;
-            case type_i16     : stream << "int16"    << std::endl; break;
-            case type_u32     : stream << "uint32"   << std::endl; break;
-            case type_i32     : stream << "int32"    << std::endl; break;
-            case type_f32     : stream << "float32"  << std::endl; break;
-            case type_f64     : stream << "float64"  << std::endl; break;
-            default           : stream << "N/A"      << std::endl; break;
+            case type_unknown : stream << "N/A"    ; break;
+            case type_u8      : stream << "uint8"  ; break;
+            case type_i8      : stream << "int8"   ; break;
+            case type_u16     : stream << "uint16" ; break;
+            case type_i16     : stream << "int16"  ; break;
+            case type_u32     : stream << "uint32" ; break;
+            case type_i32     : stream << "int32"  ; break;
+            case type_f32     : stream << "float32"; break;
+            case type_f64     : stream << "float64"; break;
+            default           : stream << "N/A"    ; break;
             }
 
             SetVar_dia->m_staticDataType->SetLabel(stream.str());
@@ -199,8 +199,7 @@ void LabskausFrame::EventAddCalVal2List(wxCommandEvent &event)
             }
             else
             {
-                SetVar_dia->m_staticDescription->SetLabel(stream.str());
-
+                SetVar_dia->m_staticDescription->SetValue(stream.str());
             }
         }
     }

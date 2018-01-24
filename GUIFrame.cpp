@@ -218,7 +218,7 @@ GUIFrame::~GUIFrame()
 
 Dialog_SetValue::Dialog_SetValue( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 300,230 ), wxSize( 500,-1 ) );
+	this->SetSizeHints( wxSize( 400,400 ), wxSize( -1,-1 ) );
 	
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
@@ -234,6 +234,8 @@ Dialog_SetValue::Dialog_SetValue( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	m_DLVarName = new wxStaticText( this, wxID_ANY, wxT("ECU Variablenname"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DLVarName->Wrap( -1 );
+	m_DLVarName->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
 	bSizer24->Add( m_DLVarName, 0, wxALL, 5 );
 	
 	bSizer4->Add( bSizer24, 0, wxEXPAND, 5 );
@@ -304,20 +306,20 @@ Dialog_SetValue::Dialog_SetValue( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
 	
-	bSizer7->SetMinSize( wxSize( 300,200 ) ); 
 	m_staticText12 = new wxStaticText( this, wxID_ANY, wxT("Description:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
 	m_staticText12->SetMinSize( wxSize( 100,-1 ) );
 	
 	bSizer7->Add( m_staticText12, 0, wxALL, 5 );
 	
-	m_staticDescription = new wxStaticText( this, wxID_ANY, wxT("???"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticDescription->Wrap( -1 );
-	bSizer7->Add( m_staticDescription, 0, wxALL|wxEXPAND, 5 );
+	m_staticDescription = new wxTextCtrl( this, wxID_ANY, wxT("???"), wxDefaultPosition, wxSize( 350,210 ), wxTE_CHARWRAP|wxTE_MULTILINE|wxTE_READONLY );
+	bSizer7->Add( m_staticDescription, 0, wxALIGN_TOP|wxALL|wxEXPAND, 5 );
 	
 	bSizer4->Add( bSizer7, 0, wxEXPAND, 5 );
 	
 	m_staticline10 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_staticline10->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90, false, wxEmptyString ) );
+	
 	bSizer4->Add( m_staticline10, 0, wxEXPAND | wxALL, 5 );
 	
 	wxBoxSizer* bSizer8;
