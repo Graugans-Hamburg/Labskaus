@@ -12,7 +12,7 @@ class serial
         serial();
         virtual ~serial();
         int GetFileDes() { return fd; }
-        void open_port();
+        bool open_port();
         void close_port();
         CCP_Frame* AnalyzeBytesRead(void);
         void transmit_CCP_Frame(CCP_Frame& CCP_Msg);

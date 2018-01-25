@@ -185,7 +185,18 @@ void LabskausFrame::VarListSelected(wxCommandEvent &event)
 
 void LabskausFrame::EventOpenSerial(wxCommandEvent &event)
 {
-    CCP_Master->open_communication_port();
+    if(CCP_Master->Get_MessStatus())
+    {
+        wxMessageBox(_("Measurement is already running."),_("Why?"));
+        return;
+    }
+
+    if(!CCP_Master->open_communication_port())
+    {
+        wxMessageBox(_("Serial Port could not be opened. Measurement has not been started.\n Did you select the correct interface?"),_("Why?"));
+        return;
+    }
+
 
     if(recTimer)
     {
@@ -216,6 +227,13 @@ void LabskausFrame::EventOpenSerial(wxCommandEvent &event)
 
 void LabskausFrame::EventCloseSerial(wxCommandEvent &event)
 {
+
+    if(!CCP_Master->Get_MessStatus())
+    {
+        wxMessageBox(_("No measurement is running which could be stopped."),_("Why?"));
+        return;
+    }
+
     CCP_Master->close_communication_port();
 
     if(recTimer)

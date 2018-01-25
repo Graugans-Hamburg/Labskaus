@@ -134,7 +134,7 @@ class CCP_driver
         void CCP_drv_state_machine(void);
         void CRO_check_time_out(void);
         void CRO_Tx(CCP_Frame& CCP_Tx_Frame);
-        void open_communication_port(void);
+        bool open_communication_port(void);
         void close_communication_port(void);
         void periodic_check(void);
         void Set_SMT_req_establish_connection(void){SMT_req_establish_connection = true;}

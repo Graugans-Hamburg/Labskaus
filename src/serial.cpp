@@ -39,13 +39,16 @@ serial::~serial()
 /*******************************************************************************************
  * Function: This function opens the serial port.
  ******************************************************************************************/
-void serial::open_port()
+bool serial::open_port()
 {
 
    if (RS232_OpenComport(port_number, baud_rate,serial_mode.c_str()) != 0)
-   {
+    {
         std::cerr << "Serial Port could not be opened" << std::endl;
+        return false;
    }
+
+   return true;
 }
 
  /*******************************************************************************************

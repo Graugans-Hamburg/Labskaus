@@ -34,9 +34,9 @@ CCP_driver::~CCP_driver()
     //dtor
 }
 
-void CCP_driver::open_communication_port(void)
+bool CCP_driver::open_communication_port(void)
 {
-    SerialPort.open_port();
+    return SerialPort.open_port();
 }
 
 void CCP_driver::close_communication_port(void)
