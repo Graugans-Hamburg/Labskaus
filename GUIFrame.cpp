@@ -91,6 +91,12 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
 	
+	m_staticText26 = new wxStaticText( this, wxID_ANY, wxT("Variable List"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
+	m_staticText26->Wrap( -1 );
+	m_staticText26->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	bSizer2->Add( m_staticText26, 0, wxALL|wxEXPAND, 5 );
+	
 	m_listBox1 = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0|wxHSCROLL|wxVSCROLL );
 	m_listBox1->Append( wxT("first load the xml file") );
 	m_listBox1->SetMinSize( wxSize( -1,100 ) );
@@ -100,12 +106,27 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer2->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
-	m_VarInfoField = new wxStaticText( this, wxID_ANY, wxT("Name \nAddress \nDatatype"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText261 = new wxStaticText( this, wxID_ANY, wxT("Variable Information"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
+	m_staticText261->Wrap( -1 );
+	m_staticText261->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	bSizer2->Add( m_staticText261, 0, wxALL, 5 );
+	
+	m_VarInfoField = new wxStaticText( this, wxID_ANY, wxT("Name: \nAddress: \nDatatype:\nDescription:"), wxDefaultPosition, wxSize( -1,68 ), 0 );
 	m_VarInfoField->Wrap( -1 );
-	bSizer2->Add( m_VarInfoField, 2, wxALL|wxEXPAND, 5 );
+	bSizer2->Add( m_VarInfoField, 0, wxALL|wxEXPAND, 5 );
+	
+	m_staticDescription = new wxTextCtrl( this, wxID_ANY, wxT("select a variable to see the description"), wxDefaultPosition, wxSize( -1,-1 ), wxTE_CHARWRAP|wxTE_MULTILINE|wxTE_READONLY );
+	bSizer2->Add( m_staticDescription, 4, wxALL|wxEXPAND, 5 );
 	
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer2->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
+	
+	m_staticText2611 = new wxStaticText( this, wxID_ANY, wxT("Actions "), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
+	m_staticText2611->Wrap( -1 );
+	m_staticText2611->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	bSizer2->Add( m_staticText2611, 0, wxALL, 5 );
 	
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
@@ -126,10 +147,19 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	bSizer2->Add( bSizer31, 0, wxEXPAND, 5 );
 	
-	bSizer1->Add( bSizer2, 1, wxEXPAND, 5 );
+	bSizer1->Add( bSizer2, 2, wxEXPAND, 5 );
+	
+	m_staticline10 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer1->Add( m_staticline10, 0, wxEXPAND | wxALL, 5 );
 	
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
+	
+	m_VarInfoField11 = new wxStaticText( this, wxID_ANY, wxT("Measurement List"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_VarInfoField11->Wrap( -1 );
+	m_VarInfoField11->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	bSizer9->Add( m_VarInfoField11, 0, wxALL, 5 );
 	
 	m_MeasList = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
@@ -167,7 +197,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_MeasList->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	bSizer9->Add( m_MeasList, 5, wxALL|wxEXPAND, 5 );
 	
-	bSizer1->Add( bSizer9, 3, wxEXPAND, 5 );
+	bSizer1->Add( bSizer9, 4, wxEXPAND, 5 );
 	
 	this->SetSizer( bSizer1 );
 	this->Layout();

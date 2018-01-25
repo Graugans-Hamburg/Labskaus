@@ -170,15 +170,25 @@ void LabskausFrame::VarListSelected(wxCommandEvent &event)
         stream << "Name: " << Ptr2SelectedElement->GetName() << std::endl;
         stream << "Addr: 0x" << std::uppercase << std::hex << Ptr2SelectedElement->GetAddress() << std::endl;
         stream << "Type: " << Ptr2SelectedElement->GetDatatypAsString() << std::endl;
-        /* TODO clean up Die Beschreibung wird nicht mit in der GUI angezeigt.
-        tmp_string = Ptr2SelectedElement->GetDescription();
-        std::cout << tmp_string << std::endl;
-        if(!tmp_string.empty())
-        {
-            stream << "Desc: " << Ptr2SelectedElement->GetDescription() << std::endl;
-        }
-        */
+        stream << "Description:";
+
         m_VarInfoField->SetLabel(stream.str());
+
+        {
+            std::stringstream stream;
+            stream << Ptr2SelectedElement->GetDescription() << std::endl;
+            std::string str_tmp;
+            str_tmp = Ptr2SelectedElement->GetDescription();
+
+            if(str_tmp.empty())
+            {
+                m_staticDescription->SetLabel("N/A");
+            }
+            else
+            {
+                m_staticDescription->SetValue(stream.str());
+            }
+        }
 
     }
 }

@@ -18,14 +18,14 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/statusbr.h>
+#include <wx/stattext.h>
 #include <wx/listbox.h>
 #include <wx/statline.h>
-#include <wx/stattext.h>
+#include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/grid.h>
 #include <wx/frame.h>
-#include <wx/textctrl.h>
 #include <wx/dialog.h>
 #include <wx/statbmp.h>
 #include <wx/choice.h>
@@ -49,13 +49,18 @@ class GUIFrame : public wxFrame
 		wxMenu* m_menu3;
 		wxMenu* helpMenu;
 		wxStatusBar* statusBar;
+		wxStaticText* m_staticText26;
 		wxListBox* m_listBox1;
 		wxStaticLine* m_staticline1;
+		wxStaticText* m_staticText261;
 		wxStaticText* m_VarInfoField;
 		wxStaticLine* m_staticline2;
+		wxStaticText* m_staticText2611;
 		wxButton* m_Add_var2list;
 		wxButton* m_Del_var2list;
 		wxButton* m_Add_Cal2List;
+		wxStaticLine* m_staticline10;
+		wxStaticText* m_VarInfoField11;
 		wxGrid* m_MeasList;
 		
 		// Virtual event handlers, overide them in your derived class
@@ -81,8 +86,9 @@ class GUIFrame : public wxFrame
 		
 	
 	public:
+		wxTextCtrl* m_staticDescription;
 		
-		GUIFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Labskaus"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 850,600 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		GUIFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Labskaus"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 850,700 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~GUIFrame();
 	
 };
