@@ -93,12 +93,14 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	m_listBox1 = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0|wxHSCROLL|wxVSCROLL );
 	m_listBox1->Append( wxT("first load the xml file") );
+	m_listBox1->SetMinSize( wxSize( -1,100 ) );
+	
 	bSizer2->Add( m_listBox1, 10, wxALL|wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer2->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
-	m_VarInfoField = new wxStaticText( this, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_VarInfoField = new wxStaticText( this, wxID_ANY, wxT("Name \nAddress \nDatatype"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_VarInfoField->Wrap( -1 );
 	bSizer2->Add( m_VarInfoField, 2, wxALL|wxEXPAND, 5 );
 	
@@ -114,7 +116,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_Del_var2list = new wxButton( this, wxID_ANY, wxT("Variable -"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer3->Add( m_Del_var2list, 0, wxALL, 5 );
 	
-	bSizer2->Add( bSizer3, 1, wxEXPAND, 5 );
+	bSizer2->Add( bSizer3, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer31;
 	bSizer31 = new wxBoxSizer( wxHORIZONTAL );
@@ -122,7 +124,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_Add_Cal2List = new wxButton( this, wxID_ANY, wxT("Variable o"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer31->Add( m_Add_Cal2List, 0, wxALL, 5 );
 	
-	bSizer2->Add( bSizer31, 1, wxEXPAND, 5 );
+	bSizer2->Add( bSizer31, 0, wxEXPAND, 5 );
 	
 	bSizer1->Add( bSizer2, 1, wxEXPAND, 5 );
 	
