@@ -464,6 +464,7 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	bSizer33->Add( m_staticText17, 0, wxALL, 5 );
 	
 	m_textDevice = new wxTextCtrl( this, wxID_ANY, wxT("unkown"), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	m_textDevice->SetToolTip( wxT("0: ttyS0 or COM1\n1: ttyS1 or COM2\nfor everything else:\ntake a look at the documentation") );
 	m_textDevice->SetMinSize( wxSize( 200,-1 ) );
 	
 	bSizer33->Add( m_textDevice, 0, wxALL, 5 );
