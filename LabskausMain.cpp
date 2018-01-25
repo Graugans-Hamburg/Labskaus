@@ -88,7 +88,7 @@ void LabskausFrame::OnQuit(wxCommandEvent &event)
 
 void LabskausFrame::OnAbout(wxCommandEvent &event)
 {
-    wxString msg = _("Version: Only known for a Release \nGit-Checksum: Only known for a release\n\n Main-developer: Matthias Baumann");
+    wxString msg = _("Version: Only known for a Release \nGit-Checksum: Only known for a release\n\n For license & warranty informations take a look at the Dcoumentation.");
 
     wxMessageBox(msg, _("Labskaus version information"));
 }
