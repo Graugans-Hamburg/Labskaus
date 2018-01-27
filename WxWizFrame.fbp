@@ -20,7 +20,7 @@
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Frame" expanded="1">
-            <property name="bg"></property>
+            <property name="bg">248,248,248</property>
             <property name="center"></property>
             <property name="context_help"></property>
             <property name="enabled">1</property>
@@ -302,7 +302,7 @@
                 </object>
             </object>
             <object class="wxStatusBar" expanded="1">
-                <property name="bg"></property>
+                <property name="bg">229,229,229</property>
                 <property name="context_help"></property>
                 <property name="enabled">1</property>
                 <property name="fg"></property>
@@ -366,14 +366,14 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALL|wxEXPAND</property>
+                            <property name="flag">wxALL</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticText" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
-                                <property name="font">,90,92,-1,70,0</property>
+                                <property name="font">,90,92,12,70,0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
                                 <property name="label">Variable List</property>
@@ -537,7 +537,7 @@
                                 <property name="context_help"></property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
-                                <property name="font">,90,92,-1,70,0</property>
+                                <property name="font">,90,92,12,70,0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
                                 <property name="label">Variable Information</property>
@@ -643,7 +643,7 @@
                             <property name="flag">wxALL|wxEXPAND</property>
                             <property name="proportion">4</property>
                             <object class="wxTextCtrl" expanded="1">
-                                <property name="bg"></property>
+                                <property name="bg">248,248,248</property>
                                 <property name="context_help"></property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
@@ -759,7 +759,7 @@
                                 <property name="context_help"></property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
-                                <property name="font">,90,92,-1,70,0</property>
+                                <property name="font">,90,92,12,70,0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
                                 <property name="label">Actions </property>
@@ -1068,7 +1068,7 @@
                                 <property name="context_help"></property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
-                                <property name="font">,90,92,-1,70,0</property>
+                                <property name="font">,90,92,12,70,0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
                                 <property name="label">Measurement List</property>
@@ -1146,9 +1146,9 @@
                                 <property name="grid_lines">1</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label_bg"></property>
+                                <property name="label_bg">248,248,248</property>
                                 <property name="label_font">,90,90,-1,70,0</property>
-                                <property name="label_text">wxSYS_COLOUR_CAPTIONTEXT</property>
+                                <property name="label_text">64,64,64</property>
                                 <property name="margin_height">0</property>
                                 <property name="margin_width">0</property>
                                 <property name="maximum_size"></property>
@@ -1234,7 +1234,7 @@
             </object>
         </object>
         <object class="Dialog" expanded="1">
-            <property name="bg"></property>
+            <property name="bg">248,248,248</property>
             <property name="center"></property>
             <property name="context_help"></property>
             <property name="enabled">1</property>
@@ -2489,7 +2489,7 @@
             </object>
         </object>
         <object class="Dialog" expanded="0">
-            <property name="bg"></property>
+            <property name="bg">248,248,248</property>
             <property name="center"></property>
             <property name="context_help"></property>
             <property name="enabled">1</property>

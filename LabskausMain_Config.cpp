@@ -381,8 +381,6 @@ std::string LabskausFrame::getDefaultLogDir(void)
     const char *homedir = pw->pw_dir;
     std::string default_dir = homedir;
     default_dir.append("/.Labskaus");
-    SaveConfiguration(default_dir);
-
     return default_dir;
  }
 

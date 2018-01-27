@@ -22,6 +22,7 @@
 GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	this->SetBackgroundColour( wxColour( 248, 248, 248 ) );
 	
 	mbar = new wxMenuBar( 0 );
 	fileMenu = new wxMenu();
@@ -85,6 +86,8 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	this->SetMenuBar( mbar );
 	
 	statusBar = this->CreateStatusBar( 2, wxST_SIZEGRIP, wxID_ANY );
+	statusBar->SetBackgroundColour( wxColour( 229, 229, 229 ) );
+	
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxHORIZONTAL );
 	
@@ -93,9 +96,9 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	m_staticText26 = new wxStaticText( this, wxID_ANY, wxT("Variable List"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
 	m_staticText26->Wrap( -1 );
-	m_staticText26->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText26->SetFont( wxFont( 12, 70, 90, 92, false, wxEmptyString ) );
 	
-	bSizer2->Add( m_staticText26, 0, wxALL|wxEXPAND, 5 );
+	bSizer2->Add( m_staticText26, 0, wxALL, 5 );
 	
 	m_listBox1 = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0|wxHSCROLL|wxVSCROLL );
 	m_listBox1->Append( wxT("first load the xml file") );
@@ -108,7 +111,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	m_staticText261 = new wxStaticText( this, wxID_ANY, wxT("Variable Information"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
 	m_staticText261->Wrap( -1 );
-	m_staticText261->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText261->SetFont( wxFont( 12, 70, 90, 92, false, wxEmptyString ) );
 	
 	bSizer2->Add( m_staticText261, 0, wxALL, 5 );
 	
@@ -117,6 +120,8 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	bSizer2->Add( m_VarInfoField, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticDescription = new wxTextCtrl( this, wxID_ANY, wxT("select a variable to see the description"), wxDefaultPosition, wxSize( -1,-1 ), wxTE_CHARWRAP|wxTE_MULTILINE|wxTE_READONLY );
+	m_staticDescription->SetBackgroundColour( wxColour( 248, 248, 248 ) );
+	
 	bSizer2->Add( m_staticDescription, 4, wxALL|wxEXPAND, 5 );
 	
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
@@ -124,7 +129,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	m_staticText2611 = new wxStaticText( this, wxID_ANY, wxT("Actions "), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
 	m_staticText2611->Wrap( -1 );
-	m_staticText2611->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText2611->SetFont( wxFont( 12, 70, 90, 92, false, wxEmptyString ) );
 	
 	bSizer2->Add( m_staticText2611, 0, wxALL, 5 );
 	
@@ -157,7 +162,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	m_VarInfoField11 = new wxStaticText( this, wxID_ANY, wxT("Measurement List"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_VarInfoField11->Wrap( -1 );
-	m_VarInfoField11->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_VarInfoField11->SetFont( wxFont( 12, 70, 90, 92, false, wxEmptyString ) );
 	
 	bSizer9->Add( m_VarInfoField11, 0, wxALL, 5 );
 	
@@ -189,8 +194,9 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_MeasList->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Label Appearance
+	m_MeasList->SetLabelBackgroundColour( wxColour( 248, 248, 248 ) );
 	m_MeasList->SetLabelFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90, false, wxEmptyString ) );
-	m_MeasList->SetLabelTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_CAPTIONTEXT ) );
+	m_MeasList->SetLabelTextColour( wxColour( 64, 64, 64 ) );
 	
 	// Cell Defaults
 	m_MeasList->SetDefaultCellFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90, false, wxT("Caladea") ) );
@@ -251,6 +257,7 @@ GUIFrame::~GUIFrame()
 Dialog_SetValue::Dialog_SetValue( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( 400,400 ), wxSize( -1,-1 ) );
+	this->SetBackgroundColour( wxColour( 248, 248, 248 ) );
 	
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
@@ -404,6 +411,7 @@ Dialog_SetValue::~Dialog_SetValue()
 DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( 700,-1 ), wxDefaultSize );
+	this->SetBackgroundColour( wxColour( 248, 248, 248 ) );
 	
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxHORIZONTAL );

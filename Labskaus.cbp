@@ -78,6 +78,9 @@
 		<Unit filename="include/serial.h" />
 		<Unit filename="include/type_definition.h" />
 		<Unit filename="include/xmlECUfile.h" />
+		<Unit filename="resources.rc">
+			<Option target="Release_Windows" />
+		</Unit>
 		<Unit filename="src/CCP_Frame.cpp" />
 		<Unit filename="src/CCP_Schedular_List_Element.cpp" />
 		<Unit filename="src/CCP_driver.cpp" />

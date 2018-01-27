@@ -29,6 +29,7 @@
 #include <streambuf>
 
 
+
 #include "tinyxml2.h"
 #include "CCP_driver.h"
 
@@ -72,6 +73,7 @@ LabskausFrame::LabskausFrame(wxFrame *frame): GUIFrame(frame)
 
 LabskausFrame::~LabskausFrame()
 {
+
 }
 
 void LabskausFrame::OnClose(wxCloseEvent &event)
