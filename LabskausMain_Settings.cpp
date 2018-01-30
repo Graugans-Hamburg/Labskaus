@@ -61,7 +61,7 @@ void LabskausFrame::EventOpenComSettings( wxCommandEvent& event )
         Settings_dia->m_textBaudRate->SetValue(stream.str());
      }
     /**
-     *   Show the Baud Rate that is configure inside the serial objekt
+     *   Show the SerialMode that is configure inside the serial objekt
      **/
      {
         std::string SerialMode = CCP_Master->SerialPort.Get_serial_mode();
@@ -69,6 +69,15 @@ void LabskausFrame::EventOpenComSettings( wxCommandEvent& event )
         std::stringstream stream;
         stream << SerialMode;
         Settings_dia->m_textSerialMode->SetValue(stream.str());
+     }
+     /**
+     *   Show the StartByte that is configure inside the serial objekt
+     **/
+     {
+        StartByteEnum ConfiguredStartByte = CCP_Master->SerialPort.Get_StartByte();
+        Settings_dia->newStartByte = ConfiguredStartByte;
+        if(ConfiguredStartByte == no_startbyte) Settings_dia->m_choiceStartByte->SetSelection(0);
+        if(ConfiguredStartByte == Char0xB0)     Settings_dia->m_choiceStartByte->SetSelection(1);
      }
     Settings_dia->Show();
 }
@@ -94,6 +103,20 @@ void LabskausFrameSettings::event_ChangeByteOrder( wxCommandEvent& event )
     newECUByteOrder = (endian)m_choiceECUByteOrder->GetSelection();
     std::cout << "Value changed to " << newECUByteOrder << std::endl;
     ByteOrder_changed = true;
+}
+
+/*******************************************************************************************
+ * Function: This event is called when the user changes the Start Byte inside the Settings
+ *           Dialog. The value will be stored inside a temp variable which will be take over
+ *           if the new value is applied
+ *
+ *           The changed flag need to be set if a valid change had been entered.
+ ******************************************************************************************/
+void LabskausFrameSettings::event_ChangeStartByte( wxCommandEvent& event )
+{
+    newStartByte = (StartByteEnum)m_choiceStartByte->GetSelection();
+    std::cout << "Value changed to " << newStartByte << std::endl;
+    StartByte_changed = true;
 }
 /*******************************************************************************************
  * Function: This event is called when the user changes the ecu address inside the Settings
@@ -278,6 +301,7 @@ void LabskausFrameSettings::event_Apply( wxCommandEvent& event )
 
     if(Station_Address_changed)   CCP_Master->Set_ECU_station_address(newStationAddress);
     if(ByteOrder_changed)         CCP_Master->Set_ECU_endianness(newECUByteOrder);
+    if(StartByte_changed)         CCP_Master->SerialPort.Set_StartByte(newStartByte);
     if(changed_SerialDevice)      CCP_Master->SerialPort.Set_port_number(newSerialPort);
     if(changed_SerialBaudRate)    CCP_Master->SerialPort.Set_baud_rate(newSerialBaudRate);
     this->Close(true);

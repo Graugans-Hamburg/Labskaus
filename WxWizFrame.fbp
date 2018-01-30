@@ -19,7 +19,7 @@
         <property name="relative_path">1</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
-        <object class="Frame" expanded="1">
+        <object class="Frame" expanded="0">
             <property name="bg">248,248,248</property>
             <property name="center"></property>
             <property name="context_help"></property>
@@ -1233,7 +1233,7 @@
                 </object>
             </object>
         </object>
-        <object class="Dialog" expanded="1">
+        <object class="Dialog" expanded="0">
             <property name="bg">248,248,248</property>
             <property name="center"></property>
             <property name="context_help"></property>
@@ -3720,7 +3720,7 @@
                                         <property name="font"></property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Startbyte</property>
+                                        <property name="label">Startbyte&#x0A;CCP-Frame</property>
                                         <property name="maximum_size"></property>
                                         <property name="minimum_size"></property>
                                         <property name="name">m_staticText18</property>
@@ -3769,7 +3769,7 @@
                                     <property name="proportion">0</property>
                                     <object class="wxChoice" expanded="1">
                                         <property name="bg"></property>
-                                        <property name="choices">&quot;0xB0&quot;</property>
+                                        <property name="choices">&quot;none&quot; &quot;0xB0&quot;</property>
                                         <property name="context_help"></property>
                                         <property name="enabled">1</property>
                                         <property name="fg"></property>
@@ -3793,7 +3793,7 @@
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
                                         <event name="OnChar"></event>
-                                        <event name="OnChoice"></event>
+                                        <event name="OnChoice">event_ChangeStartByte</event>
                                         <event name="OnEnterWindow"></event>
                                         <event name="OnEraseBackground"></event>
                                         <event name="OnKeyDown"></event>

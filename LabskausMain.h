@@ -104,6 +104,7 @@ class LabskausFrameSettings: public DialogSettings
         ~LabskausFrameSettings();
         CCP_driver* CCP_Master;
         endian newECUByteOrder;
+        StartByteEnum newStartByte;
         uint16_t newStationAddress;
         int newSerialPort;
         int newSerialBaudRate;
@@ -113,6 +114,7 @@ class LabskausFrameSettings: public DialogSettings
         bool changed_SerialDevice;
         bool changed_SerialBaudRate;
         bool changed_SerialMode;
+        bool StartByte_changed;
 
     private:
 		virtual void event_ChangeByteOrder( wxCommandEvent& event );
@@ -122,6 +124,7 @@ class LabskausFrameSettings: public DialogSettings
 		virtual void event_ChangeSerialDevice( wxCommandEvent& event );
 		virtual void event_ChangeSerialBaudRate( wxCommandEvent& event );
 		virtual void event_ChangeSerialMode( wxCommandEvent& event );
+		virtual void event_ChangeStartByte( wxCommandEvent& event );
 };
 
 #endif // LABSKAUSMAIN_H

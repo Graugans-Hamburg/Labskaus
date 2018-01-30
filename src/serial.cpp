@@ -26,6 +26,7 @@
     port_number = 16;
     baud_rate = 115200;
     serial_mode = "8N1";
+    ConfiguredStartByte = Char0xB0;
     vec_input_buffer.clear();
 }
  /*******************************************************************************************
@@ -72,29 +73,56 @@ CCP_Frame* serial::AnalyzeBytesRead(void)
             vec_input_buffer.push_back(tmp_input_buffer[index]);
         }
     }
-
-    //Lösche alles bis auf das erst B0
-    cleanVector2FirstCCPSign();
+    if(ConfiguredStartByte == Char0xB0)
+    {
+        //Lösche alles bis auf das erst B0
+        cleanVector2FirstCCPSign();
+    }
     return createReceivedCCPFrame();
 }
 
 void serial::transmit_CCP_Frame(CCP_Frame& CCP_Msg)
 {
-    unsigned char Serial_CCP_Frame[9];
-
-    Serial_CCP_Frame[0] = 0xB0;
-    Serial_CCP_Frame[1] = CCP_Msg.GetByte1();
-    Serial_CCP_Frame[2] = CCP_Msg.GetByte2();
-    Serial_CCP_Frame[3] = CCP_Msg.GetByte3();
-    Serial_CCP_Frame[4] = CCP_Msg.GetByte4();
-    Serial_CCP_Frame[5] = CCP_Msg.GetByte5();
-    Serial_CCP_Frame[6] = CCP_Msg.GetByte6();
-    Serial_CCP_Frame[7] = CCP_Msg.GetByte7();
-    Serial_CCP_Frame[8] = CCP_Msg.GetByte8();
-    CCP_Msg.SetCCPDirection_Tx();
-    CCP_Msg.setCCPFrameTime();
-
-    int results = RS232_SendBuf(port_number, Serial_CCP_Frame, sizeof(Serial_CCP_Frame));
+    int results;
+    switch(ConfiguredStartByte)
+    {
+        case Char0xB0:
+            {
+            unsigned char Serial_CCP_Frame[9];
+            Serial_CCP_Frame[0] = 0xB0;
+            Serial_CCP_Frame[1] = CCP_Msg.GetByte1();
+            Serial_CCP_Frame[2] = CCP_Msg.GetByte2();
+            Serial_CCP_Frame[3] = CCP_Msg.GetByte3();
+            Serial_CCP_Frame[4] = CCP_Msg.GetByte4();
+            Serial_CCP_Frame[5] = CCP_Msg.GetByte5();
+            Serial_CCP_Frame[6] = CCP_Msg.GetByte6();
+            Serial_CCP_Frame[7] = CCP_Msg.GetByte7();
+            Serial_CCP_Frame[8] = CCP_Msg.GetByte8();
+            CCP_Msg.SetCCPDirection_Tx();
+            CCP_Msg.setCCPFrameTime();
+            results = RS232_SendBuf(port_number, Serial_CCP_Frame, sizeof(Serial_CCP_Frame));
+            break;
+            }
+        case no_startbyte:
+            {
+            unsigned char Serial_CCP_Frame[0];
+            Serial_CCP_Frame[0] = CCP_Msg.GetByte1();
+            Serial_CCP_Frame[1] = CCP_Msg.GetByte2();
+            Serial_CCP_Frame[2] = CCP_Msg.GetByte3();
+            Serial_CCP_Frame[3] = CCP_Msg.GetByte4();
+            Serial_CCP_Frame[4] = CCP_Msg.GetByte5();
+            Serial_CCP_Frame[5] = CCP_Msg.GetByte6();
+            Serial_CCP_Frame[6] = CCP_Msg.GetByte7();
+            Serial_CCP_Frame[7] = CCP_Msg.GetByte8();
+            CCP_Msg.SetCCPDirection_Tx();
+            CCP_Msg.setCCPFrameTime();
+            results = RS232_SendBuf(port_number, Serial_CCP_Frame, sizeof(Serial_CCP_Frame));
+            break;
+            }
+        default:
+            results = -1;
+            break;
+    }
 
     if (results == -1)
     {
@@ -122,28 +150,57 @@ void serial::cleanVector2FirstCCPSign(void)
 
 CCP_Frame* serial::createReceivedCCPFrame(void)
 {
-    // Erstelle einen CCP Frame und schicke ihn auf die Reise
-    if(vec_input_buffer.size() > 8 )
+
+    switch(ConfiguredStartByte)
     {
-        CCP_Frame* ReceivedCCP = new CCP_Frame;
-
-        ReceivedCCP->SetByte1(vec_input_buffer[1]);
-        ReceivedCCP->SetByte2(vec_input_buffer[2]);
-        ReceivedCCP->SetByte3(vec_input_buffer[3]);
-        ReceivedCCP->SetByte4(vec_input_buffer[4]);
-        ReceivedCCP->SetByte5(vec_input_buffer[5]);
-        ReceivedCCP->SetByte6(vec_input_buffer[6]);
-        ReceivedCCP->SetByte7(vec_input_buffer[7]);
-        ReceivedCCP->SetByte8(vec_input_buffer[8]);
-        ReceivedCCP->setCCPFrameTime();
-        ReceivedCCP->SetCCPDirection_Rx();
-
-        // Lösche den aktuellen Frame aus dem in buffer
-        vec_input_buffer.erase(vec_input_buffer.begin(),vec_input_buffer.begin()+9);
-
-        return ReceivedCCP;
+        case Char0xB0:
+        {
+            if(vec_input_buffer.size() > 8 )
+            {
+                // Erstelle einen CCP Frame und schicke ihn auf die Reise
+                CCP_Frame* ReceivedCCP = new CCP_Frame;
+                ReceivedCCP->SetByte1(vec_input_buffer[1]);
+                ReceivedCCP->SetByte2(vec_input_buffer[2]);
+                ReceivedCCP->SetByte3(vec_input_buffer[3]);
+                ReceivedCCP->SetByte4(vec_input_buffer[4]);
+                ReceivedCCP->SetByte5(vec_input_buffer[5]);
+                ReceivedCCP->SetByte6(vec_input_buffer[6]);
+                ReceivedCCP->SetByte7(vec_input_buffer[7]);
+                ReceivedCCP->SetByte8(vec_input_buffer[8]);
+                ReceivedCCP->setCCPFrameTime();
+                ReceivedCCP->SetCCPDirection_Rx();
+                //Delete the last frame from the buffer;
+                vec_input_buffer.erase(vec_input_buffer.begin(),vec_input_buffer.begin()+9);
+                return ReceivedCCP;
+            }
+            break;
+        }
+        case no_startbyte:
+        {
+            if(vec_input_buffer.size() > 7 )
+            {
+                // Erstelle einen CCP Frame und schicke ihn auf die Reise
+                CCP_Frame* ReceivedCCP = new CCP_Frame;
+                ReceivedCCP->SetByte1(vec_input_buffer[0]);
+                ReceivedCCP->SetByte2(vec_input_buffer[1]);
+                ReceivedCCP->SetByte3(vec_input_buffer[2]);
+                ReceivedCCP->SetByte4(vec_input_buffer[3]);
+                ReceivedCCP->SetByte5(vec_input_buffer[4]);
+                ReceivedCCP->SetByte6(vec_input_buffer[5]);
+                ReceivedCCP->SetByte7(vec_input_buffer[6]);
+                ReceivedCCP->SetByte8(vec_input_buffer[7]);
+                ReceivedCCP->setCCPFrameTime();
+                ReceivedCCP->SetCCPDirection_Rx();
+                //Delete the last frame from the buffer;
+                vec_input_buffer.erase(vec_input_buffer.begin(),vec_input_buffer.begin()+8);
+                return ReceivedCCP;
+            }
+            break;
+        }
+        default:
+            return NULL;
+            break;
     }
-
     return NULL;
 }
 

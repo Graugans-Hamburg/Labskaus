@@ -167,6 +167,7 @@ class DialogSettings : public wxDialog
 		virtual void event_ChangeSerialDevice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void event_ChangeSerialBaudRate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void event_ChangeSerialMode( wxCommandEvent& event ) { event.Skip(); }
+		virtual void event_ChangeStartByte( wxCommandEvent& event ) { event.Skip(); }
 		virtual void event_Cancel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void event_Apply( wxCommandEvent& event ) { event.Skip(); }
 		

@@ -5,6 +5,12 @@
 #include "CCP_Frame.h"
 #define SERIAL_BUFFERSIZE 200
 
+enum StartByteEnum
+{
+    no_startbyte = 0,
+    Char0xB0 = 1
+};
+
 
 class serial
 {
@@ -25,12 +31,15 @@ class serial
         void Set_baud_rate(int tmp){baud_rate = tmp;}
         void Set_serial_mode(std::string tmp){serial_mode = tmp;} // TODO removed later
         std::string Get_serial_mode(void){return serial_mode;}  // TODO remove later
+        void Set_StartByte(StartByteEnum tmp){ConfiguredStartByte = tmp;} // TODO removed later
+        StartByteEnum Get_StartByte(void){return ConfiguredStartByte;}  // TODO remove later
 
     protected:
     private:
         int fd; // TODO removed later
         int port_number;
         int baud_rate;
+        StartByteEnum ConfiguredStartByte;
         std::string serial_mode;
         std::string device_name;
         std::vector<unsigned char> vec_input_buffer;

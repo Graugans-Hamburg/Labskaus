@@ -22,10 +22,7 @@
 
 	<h2>Kommunikation aus Sicht des Programms Labskaus</h2>
 
-	Wird eine Messung gestartet so öffnet Labskaus einen seriellen Port. Welcher Port geöffenet wird hängt von der Konfiguration von 
-   Labskaus ab. Wie diese Konfiguration verändert werden kann ist auf der folgenden <a href="../com_settings/com_settings.html"> Seite</a>
- 	beschrieben. Das Programm startet immer 
-   mit der folgenden Standardkonfiguration:
+	Wird eine Messung gestartet so öffnet Labskaus einen seriellen Port. Welcher Port geöffenet wird hängt von der Konfiguration von Labskaus ab. Wie diese Konfiguration verändert werden kann ist auf der folgenden <a href="../com_settings/com_settings.html"> Seite</a> beschrieben. Das Programm startet immer mit der folgenden Standardkonfiguration:
 
 	<ul>
 		<li>/dev/ttyUSB0 (Portnummer 16)
@@ -37,32 +34,25 @@
 
 
 	<h3>Senden von CCP-Botschaften</h3>
-	<br>
-	Jede Anfrage die von Labskaus an den µC gesendet wird hat die gleiche Form. Sie besteht jeweils aus 
-	aus 8 Byte und einem Startzeichen (hex: 0xB0). Nach dem Startzeichen folgen die 8 Byte in welchen 
+	<p>
+	Jede Anfrage die von Labskaus an den µC gesendet wird hat die gleiche Form. Sie besteht jeweils aus aus 8 Byte und einem optionalen Startzeichen (hex: 0xB0). Das Startzeichen kann je nach Wunsch weg konfiguriert werden indem in dem Settings Diaglog die Auswahlbox auf 'Startbyte CCP Frame' auf 'none' gestellt wird. Danach folgen die 8 Byte in welchen 
 	die verschiedenen Anfragen codiert. 
-	<br>
-	<br>
+	</p>
+	
 	<img src="pic_frame.png" width="400">
-	<br>
-	<br>
-	Das zustäzliche Startzeichen muss bei der Implementierung auf dem µC berücksichtigt da der CCP-Treiber nur
-	die 8 Byte der CCP-Botschaft benötigt. Auf dieses wird hier jedoch nicht weiter eingegangen da die Labskaushilfe 
-	keine Implementierungshinweise für den µC enthalten soll. 
-
+	
+	<p>
+	Hinweis: Das zustäzliche optionale Startzeichen muss bei der Implementierung auf dem µC berücksichtigt da der CCP-Treiber selbst nur die 8 Byte der CCP-Botschaft benötigt. Auf die Integration des CCP-Treibers soll hier jedoch nicht weiter drauf eingegangen werden.
+	</p>
 	<h3>Empfangen von CCP-Botschaften</h3>
 
-	Was fürs Senden gilt gilt auch für das Empfangen. Das heißt das jede CCP-Botschaft die vom µC gesendet wird das 
-	Byte mit dem Wert 0xB0 als Startzeichen haben muss. Alle CCP-Botschaften die Empfangen werden landen in einem 
+	Was fürs Senden gilt gilt auch für das Empfangen. Das heißt das jede CCP-Botschaft die vom µC gesendet wird das optionale Startbyte mit dem Wert 0xB0 als Startzeichen haben kann wenn es konfiguriert wurde. Alle CCP-Botschaften die Empfangen werden landen in einem 
 	Bufferspeicher der alle 10ms analysiert wird. </br>
 	Die Analyse des Speichers durchläuft die folgenden Phasen:
 	<ul>
-		<li>Lösche alle Daten des Bufferspeichers bis auf das erste Startzeichen (0xB0).</li>
-		<li>Analysiere ob der Speicher mehr als 8 Byte enthält. Wenn dieses der Fall ist dann befindet sich im 
-		Speicher mindestens eine CCP-Botschaft (Startzeichen + 8Byte).</li>
-		<li>Wenn eine komplette CCP-Botschaft im Speicher ist, dann wird diese weiter zur dekodierung geschickt 
-		und gleichzeitig aus dem Pufferspeicher entfernt.</li>
-
+		<li>Lösche alle Daten des Bufferspeichers bis auf das erste Startzeichen (0xB0) . Diese Option is nur aktiv wenn ein Startbyte konfiguriert wurde. Hier wird auch einer der Vorteile des Startbytes sichtbar. Sollte sich der Treiber oder der CCP-Master mal verschlucken so wird er sich irgendwann wieder an dem Startzeichen fangen.</li>
+		<li>Analysiere ob der Speicher mehr als 8 Byte enthält (nur wenn auch das Startbyte konfiguriert ist, sonst nur 7). Wenn dieses der Fall ist dann befindet sich im Speicher mindestens eine CCP-Botschaft (Startzeichen + 8Byte).</li>
+		<li>Wenn eine komplette CCP-Botschaft im Speicher ist, dann wird diese weiter zur dekodierung geschickt und gleichzeitig aus dem Pufferspeicher entfernt.</li>
 	</ul>
 	<br>
 

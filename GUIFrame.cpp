@@ -549,11 +549,11 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	wxBoxSizer* bSizer37;
 	bSizer37 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticText18 = new wxStaticText( this, wxID_ANY, wxT("Startbyte"), wxDefaultPosition, wxSize( 120,-1 ), 0 );
+	m_staticText18 = new wxStaticText( this, wxID_ANY, wxT("Startbyte\nCCP-Frame"), wxDefaultPosition, wxSize( 120,-1 ), 0 );
 	m_staticText18->Wrap( -1 );
 	bSizer37->Add( m_staticText18, 0, wxALL, 5 );
 	
-	wxString m_choiceStartByteChoices[] = { wxT("0xB0") };
+	wxString m_choiceStartByteChoices[] = { wxT("none"), wxT("0xB0") };
 	int m_choiceStartByteNChoices = sizeof( m_choiceStartByteChoices ) / sizeof( wxString );
 	m_choiceStartByte = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceStartByteNChoices, m_choiceStartByteChoices, 0 );
 	m_choiceStartByte->SetSelection( 0 );
@@ -590,6 +590,7 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	m_textDevice->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeSerialDevice ), NULL, this );
 	m_textBaudRate->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeSerialBaudRate ), NULL, this );
 	m_textSerialMode->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeSerialMode ), NULL, this );
+	m_choiceStartByte->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DialogSettings::event_ChangeStartByte ), NULL, this );
 	m_buttonCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Cancel ), NULL, this );
 	m_buttonApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Apply ), NULL, this );
 }
@@ -602,6 +603,7 @@ DialogSettings::~DialogSettings()
 	m_textDevice->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeSerialDevice ), NULL, this );
 	m_textBaudRate->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeSerialBaudRate ), NULL, this );
 	m_textSerialMode->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeSerialMode ), NULL, this );
+	m_choiceStartByte->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DialogSettings::event_ChangeStartByte ), NULL, this );
 	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Cancel ), NULL, this );
 	m_buttonApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogSettings::event_Apply ), NULL, this );
 }
