@@ -133,6 +133,8 @@ void LabskausFrame::open_load_dialog(wxCommandEvent &event)
 	// Clean up after ourselves
 	OpenDialog->Destroy();
     Read_XML_file(ECU_XML_full_Path);
+
+    wxMessageBox(_("ECU-XML Loaded.\n\n Updated:\n - Station Address\n - Endianness (ECU)\n - Variable List "),_("Information"));
 }
 
 void LabskausFrame::open_log_dialog(wxCommandEvent &event)
