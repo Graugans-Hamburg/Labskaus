@@ -54,6 +54,17 @@ void LabskausFrame::SaveConfiguration(std::string file_full_path)
     XMLElement * p_LOGlocation = xmlDoc.NewElement("log_folder_location");
     pRoot->InsertEndChild(p_LOGlocation);
     p_LOGlocation->SetText(LOG_dir.c_str());
+    // Save the lastest Portnumber that had been used
+    XMLElement * p_Portnumber = xmlDoc.NewElement("Portnumber");
+    pRoot->InsertEndChild(p_Portnumber);
+    std::string tmp1 = std::to_string(CCP_Master->SerialPort.Get_port_number());
+    p_Portnumber->SetText(tmp1.c_str());
+    // Save the lastest Startbyte that had been used
+    XMLElement * p_Startbyte = xmlDoc.NewElement("Startbyte");
+    pRoot->InsertEndChild(p_Startbyte);
+    std::string tmp2 = std::to_string(CCP_Master->SerialPort.Get_StartByte());
+    p_Startbyte->SetText(tmp2.c_str());
+
     // measurement setup
     XMLElement * p_measuremet_setup = xmlDoc.NewElement("measurement_setup");
     pRoot->InsertEndChild(p_measuremet_setup);
@@ -163,7 +174,49 @@ void LabskausFrame::apply_config_file(std::string config_file)
         CCP_Master->SetLogFolder(LOG_dir);
     }
     /*******************************************************************************************
-     * Part 5: Load the lastest variables into the ActionTable. This can only be done with the
+     * Part 5: Check if the next root element has the value portnumber an if this XML-
+     *         element does has a value. If all is correct the location for the log files should
+     *         should be set. If no log folder is defined by the configuration file, a warning
+     *         shall inform the user about it and a base location shall be defined.
+     ******************************************************************************************/
+    n_conf = n_conf->NextSiblingElement();
+    /* Information about the log folder is expected */
+    if(n_conf != nullptr)
+    {
+        if (    (strcmp(n_conf->Value( ), "Portnumber") != 0)
+             || ( n_conf->GetText() == nullptr                       )  )
+        {
+            wxMessageBox(_("Portnumber was not found inside the configuration file.\n\n Portnumber will be set to default value"),_("Configuration Load Warning"));
+        }
+        else
+        {
+            std::string tmp = n_conf->GetText();
+            CCP_Master->SerialPort.Set_port_number(std::stoi(tmp));
+        }
+    }
+    /*******************************************************************************************
+     * Part 6: Check if the next root element has the value startbyte an if this XML-
+     *         element does has a value. If all is correct the location for the log files should
+     *         should be set. If no log folder is defined by the configuration file, a warning
+     *         shall inform the user about it and a base location shall be defined.
+     ******************************************************************************************/
+    n_conf = n_conf->NextSiblingElement();
+    /* Information about the log folder is expected */
+    if(n_conf != nullptr)
+    {
+        if (    (strcmp(n_conf->Value( ), "Startbyte") != 0)
+             || ( n_conf->GetText() == nullptr                       )  )
+        {
+            wxMessageBox(_("Start was not found inside the configuration file.\n\n Startbyte will be set to default value"),_("Configuration Load Warning"));
+        }
+        else
+        {
+            std::string tmp = n_conf->GetText();
+            CCP_Master->SerialPort.Set_StartByte((StartByteEnum)std::stoi(tmp));
+        }
+    }
+    /*******************************************************************************************
+     * Part 7: Load the lastest variables into the ActionTable. This can only be done with the
      *         if the ECU-XML file has been successfully loaded (see Part1 of this function).
      ******************************************************************************************/
     if(ECU_XML_file_found == true)
