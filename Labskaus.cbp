@@ -42,10 +42,12 @@
 				<Compiler>
 					<Add option="-std=c++11" />
 					<Add option="-static -lpthread" />
+					<Add option="`/usr/local/i686-w64-mingw32/bin/wx-config --cxxflags`" />
 					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-static -lpthread" />
+					<Add option="`/usr/local/i686-w64-mingw32/bin/wx-config --libs`" />
 				</Linker>
 			</Target>
 		</Build>
