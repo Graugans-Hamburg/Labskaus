@@ -98,7 +98,7 @@ void LabskausFrame::OnAbout(wxCommandEvent &event)
 void LabskausFrame::OnOpenDocumentation(wxCommandEvent &event)
 {
 #if defined(__WXMSW__)
-    ShellExecute(0, 0, L"overview\\index.html", 0, 0 , SW_SHOW );
+    ShellExecute(0, 0, L"help\\overview\\index.html", 0, 0 , SW_SHOW );
 #elif defined(__WXMAC__)
         // not defined by now.
 #elif defined(__UNIX__)
