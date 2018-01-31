@@ -64,7 +64,16 @@ void LabskausFrame::SaveConfiguration(std::string file_full_path)
     pRoot->InsertEndChild(p_Startbyte);
     std::string tmp2 = std::to_string(CCP_Master->SerialPort.Get_StartByte());
     p_Startbyte->SetText(tmp2.c_str());
-
+    // Save the lastest Baudrate that had been used
+    XMLElement * p_Baudrate = xmlDoc.NewElement("Baudrate");
+    pRoot->InsertEndChild(p_Baudrate);
+    std::string tmp3 = std::to_string(CCP_Master->SerialPort.Get_baud_rate());
+    p_Baudrate->SetText(tmp3.c_str());
+    // Save the lastest Serial Mode that had been used
+    XMLElement * p_SerialMode = xmlDoc.NewElement("SerialMode");
+    pRoot->InsertEndChild(p_SerialMode);
+    std::string tmp4 = CCP_Master->SerialPort.Get_serial_mode();
+    p_SerialMode->SetText(tmp4.c_str());
     // measurement setup
     XMLElement * p_measuremet_setup = xmlDoc.NewElement("measurement_setup");
     pRoot->InsertEndChild(p_measuremet_setup);
@@ -133,6 +142,7 @@ void LabskausFrame::apply_config_file(std::string config_file)
      * Part 3: Check if the next root element has the value ecu_xml_location an if this XML-
      *         element does has a value. If all is correct the XML file should be loaded.
      ******************************************************************************************/
+    if(n_conf == NULL) return;
     n_conf = n_conf->NextSiblingElement();
     /* Information about the full path of the xml file is expected */
     if(n_conf != nullptr)
@@ -156,6 +166,7 @@ void LabskausFrame::apply_config_file(std::string config_file)
      *         should be set. If no log folder is defined by the configuration file, a warning
      *         shall inform the user about it and a base location shall be defined.
      ******************************************************************************************/
+    if(n_conf == NULL) return;
     n_conf = n_conf->NextSiblingElement();
     /* Information about the log folder is expected */
     if(n_conf != nullptr)
@@ -179,6 +190,7 @@ void LabskausFrame::apply_config_file(std::string config_file)
      *         should be set. If no log folder is defined by the configuration file, a warning
      *         shall inform the user about it and a base location shall be defined.
      ******************************************************************************************/
+    if(n_conf == NULL) return;
     n_conf = n_conf->NextSiblingElement();
     /* Information about the log folder is expected */
     if(n_conf != nullptr)
@@ -200,6 +212,7 @@ void LabskausFrame::apply_config_file(std::string config_file)
      *         should be set. If no log folder is defined by the configuration file, a warning
      *         shall inform the user about it and a base location shall be defined.
      ******************************************************************************************/
+    if(n_conf == NULL) return;
     n_conf = n_conf->NextSiblingElement();
     /* Information about the log folder is expected */
     if(n_conf != nullptr)
@@ -216,14 +229,60 @@ void LabskausFrame::apply_config_file(std::string config_file)
         }
     }
     /*******************************************************************************************
-     * Part 7: Load the lastest variables into the ActionTable. This can only be done with the
+     * Part 7: Check if the next root element has the value portnumber an if this XML-
+     *         element does has a value. If all is correct the location for the log files should
+     *         should be set. If no log folder is defined by the configuration file, a warning
+     *         shall inform the user about it and a base location shall be defined.
+     ******************************************************************************************/
+    if(n_conf == NULL) return;
+    n_conf = n_conf->NextSiblingElement();
+    /* Information about the log folder is expected */
+    if(n_conf != nullptr)
+    {
+        if (    (strcmp(n_conf->Value( ), "Baudrate") != 0)
+             || ( n_conf->GetText() == nullptr                       )  )
+        {
+            wxMessageBox(_("Baudrate was not found inside the configuration file.\n\n Baudrate will be set to default value"),_("Configuration Load Warning"));
+        }
+        else
+        {
+            std::string tmp = n_conf->GetText();
+            CCP_Master->SerialPort.Set_baud_rate(std::stoi(tmp));
+        }
+    }
+    /*******************************************************************************************
+     * Part 8: Check if the next root element has the value startbyte an if this XML-
+     *         element does has a value. If all is correct the location for the log files should
+     *         should be set. If no log folder is defined by the configuration file, a warning
+     *         shall inform the user about it and a base location shall be defined.
+     ******************************************************************************************/
+    if(n_conf == NULL) return;
+    n_conf = n_conf->NextSiblingElement();
+    /* Information about the log folder is expected */
+    if(n_conf != nullptr)
+    {
+        if (    (strcmp(n_conf->Value( ), "SerialMode") != 0)
+             || ( n_conf->GetText() == nullptr                       )  )
+        {
+            wxMessageBox(_("SerialMode was not found inside the configuration file.\n\n SerialMode will be set to default value"),_("Configuration Load Warning"));
+        }
+        else
+        {
+            std::string tmp = n_conf->GetText();
+            CCP_Master->SerialPort.Set_serial_mode(tmp);
+        }
+    }
+    /*******************************************************************************************
+     * Part 9: Load the lastest variables into the ActionTable. This can only be done with the
      *         if the ECU-XML file has been successfully loaded (see Part1 of this function).
      ******************************************************************************************/
     if(ECU_XML_file_found == true)
     {
+        if(n_conf == NULL) return;
         n_conf = n_conf->NextSiblingElement();
+        if(n_conf == NULL) return;
         n_measurement_setup = n_conf->FirstChildElement();
-        /* Information about the log folder is expected */
+        /* Information about the log variables is expected */
         if (    (strcmp(n_conf->Value(), "measurement_setup") != 0)
              || ( n_measurement_setup == nullptr                  )  )
         {

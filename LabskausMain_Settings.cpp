@@ -298,11 +298,14 @@ void LabskausFrameSettings::event_Apply( wxCommandEvent& event )
     wxCommandEvent apply_event;
     event_ChangeSerialDevice(apply_event);
     event_ChangeStationAddress(apply_event);
+    event_ChangeSerialBaudRate(apply_event);
+    event_ChangeSerialMode(apply_event);
 
     if(Station_Address_changed)   CCP_Master->Set_ECU_station_address(newStationAddress);
     if(ByteOrder_changed)         CCP_Master->Set_ECU_endianness(newECUByteOrder);
     if(StartByte_changed)         CCP_Master->SerialPort.Set_StartByte(newStartByte);
     if(changed_SerialDevice)      CCP_Master->SerialPort.Set_port_number(newSerialPort);
     if(changed_SerialBaudRate)    CCP_Master->SerialPort.Set_baud_rate(newSerialBaudRate);
+    if(changed_SerialMode)        CCP_Master->SerialPort.Set_serial_mode(newSerialMode);
     this->Close(true);
 }
