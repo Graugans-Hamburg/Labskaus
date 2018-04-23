@@ -116,6 +116,7 @@ class Dialog_SetValue : public wxDialog
 		wxButton* m_BtnConfirm;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
 		virtual void event_CancelCalibration( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EventTakeOverVal( wxCommandEvent& event ) { event.Skip(); }
 		
@@ -162,6 +163,7 @@ class DialogSettings : public wxDialog
 		wxButton* m_buttonApply;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
 		virtual void event_ChangeByteOrder( wxCommandEvent& event ) { event.Skip(); }
 		virtual void event_ChangeStationAddress( wxCommandEvent& event ) { event.Skip(); }
 		virtual void event_ChangeSerialDevice( wxCommandEvent& event ) { event.Skip(); }

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Labskaus" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Labskaus" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-g" />
+					<Add option="-D__linux__" />
+					<Add directory="include" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Labskaus" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add directory="include" />
+				</Compiler>
+			</Target>
+			<Target title="Release_Windows">
+				<Option output="bin/Release_Windows/Labskaus.exe" prefix_auto="1" extension_auto="0" />
+				<Option object_output="obj/Release_Windows/" />
+				<Option type="0" />
+				<Option compiler="mingw-w64" />
+				<Option projectCompilerOptionsRelation="1" />
+				<Option projectLinkerOptionsRelation="1" />
+				<Option projectIncludeDirsRelation="1" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-static -lpthread" />
+					<Add option="`/usr/local/i686-w64-mingw32/bin/wx-config --cxxflags`" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-static -lpthread" />
+					<Add option="`/usr/local/i686-w64-mingw32/bin/wx-config --libs`" />
+				</Linker>
+			</Target>
+			<Target title="Release_static">
+				<Option output="bin/Release/Labskaus" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectCompilerOptionsRelation="1" />
+				<Option projectLinkerOptionsRelation="1" />
+				<Option projectIncludeDirsRelation="1" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-static" />
+					<Add option="`/usr/local/i686-gcc/bin/wx-config --cxxflags`" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-static" />
+					<Add option="`/usr/local/i686-gcc/bin/wx-config --libs`" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="`wx-config --cflags`" />
+			<Add option="-D__UNIX__" />
+		</Compiler>
+		<Linker>
+			<Add option="`wx-config --libs`" />
+		</Linker>
+		<Unit filename="src/ccp_driver/CCP_Frame.cpp" />
+		<Unit filename="src/ccp_driver/CCP_Frame.h" />
+		<Unit filename="src/ccp_driver/CCP_Schedular_List_Element.cpp" />
+		<Unit filename="src/ccp_driver/CCP_Schedular_List_Element.h" />
+		<Unit filename="src/ccp_driver/CCP_driver.cpp" />
+		<Unit filename="src/ccp_driver/CCP_driver.h" />
+		<Unit filename="src/ccp_driver/ECU_VarInfo.cpp" />
+		<Unit filename="src/ccp_driver/ECU_VarInfo.h" />
+		<Unit filename="src/ccp_driver/ECU_VarLog.cpp" />
+		<Unit filename="src/ccp_driver/ECU_VarLog.h" />
+		<Unit filename="src/ccp_driver/LOG_Container.cpp" />
+		<Unit filename="src/ccp_driver/LOG_Container.h" />
+		<Unit filename="src/ccp_driver/type_definition.h" />
+		<Unit filename="src/ccp_driver/xmlECUfile.h" />
+		<Unit filename="src/guiframe/GUIFrame.cpp" />
+		<Unit filename="src/guiframe/GUIFrame.h" />
+		<Unit filename="src/guiframe/WxWizFrame.fbp" />
+		<Unit filename="src/main/LabskausApp.cpp" />
+		<Unit filename="src/main/LabskausApp.h" />
+		<Unit filename="src/main/LabskausMain.cpp" />
+		<Unit filename="src/main/LabskausMain.h" />
+		<Unit filename="src/main/LabskausMain_Calibrate.cpp" />
+		<Unit filename="src/main/LabskausMain_Config.cpp" />
+		<Unit filename="src/main/LabskausMain_Settings.cpp" />
+		<Unit filename="src/main/LabskausMain_XMLList.cpp" />
+		<Unit filename="src/resources.rc">
+			<Option target="Release_Windows" />
+		</Unit>
+		<Unit filename="src/rs232/rs232.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/rs232/rs232.h" />
+		<Unit filename="src/serial/serial.cpp" />
+		<Unit filename="src/serial/serial.h" />
+		<Unit filename="src/tinyxml2/tinyxml2.cpp" />
+		<Unit filename="src/tinyxml2/tinyxml2.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

@@ -30,8 +30,8 @@
 
 
 
-#include "tinyxml2.h"
-#include "CCP_driver.h"
+#include "../tinyxml2/tinyxml2.h"
+#include "../ccp_driver/CCP_driver.h"
 
 //helper functions
 enum wxbuildinfoformat {
@@ -79,6 +79,16 @@ LabskausFrame::~LabskausFrame()
 void LabskausFrame::OnClose(wxCloseEvent &event)
 {
     SaveLastConfig();
+
+    if(CCP_Master->Get_MessStatus() == true )
+    {
+     int answer = wxMessageBox("Measurement is do you really want to quit?", "Confirm",
+                               wxYES_NO);
+     if (answer == wxNO)
+     {
+        return;
+     }
+    }
     Destroy();
 }
 
@@ -186,7 +196,7 @@ void LabskausFrame::VarListSelected(wxCommandEvent &event)
 
             if(str_tmp.empty())
             {
-                m_staticDescription->SetLabel("N/A");
+                m_staticDescription->SetValue("N/A");
             }
             else
             {

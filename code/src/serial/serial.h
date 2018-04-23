@@ -2,7 +2,7 @@
 #define SERIAL_H
 
 #include <vector>
-#include "CCP_Frame.h"
+#include "../ccp_driver/CCP_Frame.h"
 #define SERIAL_BUFFERSIZE 200
 
 enum StartByteEnum

@@ -22,12 +22,12 @@ cp -R ../help $Zielordner_Windows
 
 ##
 echo 'Step 4:Kopiere das Programm in den Zielordner'
-cp ../bin/Release/Labskaus "$Zielordner"
-cp ../bin/Release_Windows/Labskaus.exe "$Zielordner_Windows"
+cp ../code/bin/Release/Labskaus "$Zielordner"
+cp ../code/bin/Release_Windows/Labskaus.exe "$Zielordner_Windows"
 ##
 echo 'Step 5:Kopiere die zusätzlichen Recourcen in den Zielordner' 
-cp -R ../pic $Zielordner
-cp -R ../pic $Zielordner_Windows
+cp -R ../code/pic $Zielordner
+cp -R ../code/pic $Zielordner_Windows
 
 ##
 echo 'Step 6: Kopiere das configure.sh in den Zielordner'

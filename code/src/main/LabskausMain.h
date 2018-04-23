@@ -13,10 +13,10 @@
 #include <streambuf>
 #include <vector>
 #include "LabskausApp.h"
-#include "ECU_VarInfo.h"
-#include "CCP_driver.h"
+#include "../ccp_driver/ECU_VarInfo.h"
+#include "../ccp_driver/CCP_driver.h"
 #include "wx/timer.h"
-#include "GUIFrame.h"
+#include "../guiframe/GUIFrame.h"
 
 enum // Timer events IDs
 {
@@ -25,7 +25,7 @@ enum // Timer events IDs
 };
 
 const int interval_state_machine_ms = 10;
-const int data_acq_list_timer_ms = 500;
+const int data_acq_list_timer_ms = 100;
 
 class LabskausFrame: public GUIFrame
 {
@@ -91,7 +91,7 @@ class LabskausFrameSetCal: public Dialog_SetValue
         ~LabskausFrameSetCal();
 
     private:
-        //virtual void OnClose(wxCloseEvent& event);
+        virtual void OnClose(wxCloseEvent& event);
         //virtual void OnQuit(wxCommandEvent& event);
         virtual void event_CancelCalibration( wxCommandEvent& event );
         virtual void EventTakeOverVal(wxCommandEvent &event);
@@ -125,6 +125,7 @@ class LabskausFrameSettings: public DialogSettings
 		virtual void event_ChangeSerialBaudRate( wxCommandEvent& event );
 		virtual void event_ChangeSerialMode( wxCommandEvent& event );
 		virtual void event_ChangeStartByte( wxCommandEvent& event );
+		virtual void OnCloseWindow(wxCloseEvent& event);
 };
 
 #endif // LABSKAUSMAIN_H

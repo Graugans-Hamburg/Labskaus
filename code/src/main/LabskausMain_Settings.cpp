@@ -7,8 +7,8 @@
 #include <wx/wx.h>
 
 
-#include "tinyxml2.h"
-#include "CCP_driver.h"
+#include "../tinyxml2/tinyxml2.h"
+#include "../ccp_driver/CCP_driver.h"
 /*******************************************************************************************
  * Function: This event is called when the user clicks on the menu settings. Function will
  *           create the new Diaglog and initial the values and text fields used inside the
@@ -180,6 +180,15 @@ void LabskausFrameSettings::event_Cancel( wxCommandEvent& event )
 }
 
 /*******************************************************************************************
+ * Function: This event is called when the user presses the button to close the window.
+ *           The dialog will be closed and no variables will be calibrated.
+ ******************************************************************************************/
+void LabskausFrameSettings::OnCloseWindow(wxCloseEvent& event)
+{
+    this->Destroy();
+}
+
+/*******************************************************************************************
  * Function: This event is called when the user changes the device inside the Settings
  *           Dialog. The value will be stored inside a temp variable which will be take over
  *           if the new value is applied
@@ -308,4 +317,5 @@ void LabskausFrameSettings::event_Apply( wxCommandEvent& event )
     if(changed_SerialBaudRate)    CCP_Master->SerialPort.Set_baud_rate(newSerialBaudRate);
     if(changed_SerialMode)        CCP_Master->SerialPort.Set_serial_mode(newSerialMode);
     this->Close(true);
+    this->Destroy();
 }

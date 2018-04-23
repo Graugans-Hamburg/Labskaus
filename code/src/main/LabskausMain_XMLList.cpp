@@ -6,8 +6,8 @@
 #include <streambuf>
 #include <wx/wx.h>
 
-#include "tinyxml2.h"
-#include "CCP_driver.h"
+#include "../tinyxml2/tinyxml2.h"
+#include "../ccp_driver/CCP_driver.h"
 
 /*******************************************************************************************
  * Function: All variables information are listed inside the ECU-XML file. This need to be

@@ -7,12 +7,11 @@
 #include <time.h>
 #include <cstdint>
 #include <string>
-#include "serial.h"
-#include "CCP_Frame.h"
-//#include "CCP_Drive_List_Element.h"
-#include "type_definition.h"
-#include "LOG_Container.h"
-#include "CCP_Schedular_List_Element.h"
+#include "../serial/serial.h"
+#include "../ccp_driver/CCP_Frame.h"
+#include "../ccp_driver/type_definition.h"
+#include "../ccp_driver/LOG_Container.h"
+#include "../ccp_driver/CCP_Schedular_List_Element.h"
 
 
 #define NOT_CONNECTED				 0x00

@@ -101,7 +101,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	bSizer2->Add( m_staticText26, 0, wxALL, 5 );
 	
 	m_listBox1 = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0|wxHSCROLL|wxVSCROLL );
-	m_listBox1->Append( wxT("first load the xml file") );
+	m_listBox1->Append( wxT("No ECU xml file loaded") );
 	m_listBox1->SetMinSize( wxSize( -1,100 ) );
 	
 	bSizer2->Add( m_listBox1, 10, wxALL|wxEXPAND, 5 );
@@ -160,7 +160,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
 	
-	m_VarInfoField11 = new wxStaticText( this, wxID_ANY, wxT("Measurement List"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_VarInfoField11 = new wxStaticText( this, wxID_ANY, wxT("Measurement List (100ms)"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_VarInfoField11->Wrap( -1 );
 	m_VarInfoField11->SetFont( wxFont( 12, 70, 90, 92, false, wxEmptyString ) );
 	
@@ -397,6 +397,7 @@ Dialog_SetValue::Dialog_SetValue( wxWindow* parent, wxWindowID id, const wxStrin
 	this->Layout();
 	
 	// Connect Events
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( Dialog_SetValue::OnCloseWindow ) );
 	m_buttonCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Dialog_SetValue::event_CancelCalibration ), NULL, this );
 	m_BtnConfirm->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Dialog_SetValue::EventTakeOverVal ), NULL, this );
 }
@@ -404,6 +405,7 @@ Dialog_SetValue::Dialog_SetValue( wxWindow* parent, wxWindowID id, const wxStrin
 Dialog_SetValue::~Dialog_SetValue()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( Dialog_SetValue::OnCloseWindow ) );
 	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Dialog_SetValue::event_CancelCalibration ), NULL, this );
 	m_BtnConfirm->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Dialog_SetValue::EventTakeOverVal ), NULL, this );
 }
@@ -585,6 +587,7 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 	this->Layout();
 	
 	// Connect Events
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DialogSettings::OnCloseWindow ) );
 	m_choiceECUByteOrder->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DialogSettings::event_ChangeByteOrder ), NULL, this );
 	m_textECUStationAddress->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeStationAddress ), NULL, this );
 	m_textDevice->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeSerialDevice ), NULL, this );
@@ -598,6 +601,7 @@ DialogSettings::DialogSettings( wxWindow* parent, wxWindowID id, const wxString&
 DialogSettings::~DialogSettings()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DialogSettings::OnCloseWindow ) );
 	m_choiceECUByteOrder->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DialogSettings::event_ChangeByteOrder ), NULL, this );
 	m_textECUStationAddress->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeStationAddress ), NULL, this );
 	m_textDevice->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogSettings::event_ChangeSerialDevice ), NULL, this );

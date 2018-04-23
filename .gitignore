@@ -8,6 +8,6 @@ Labskaus.layout
 *.ods
 
 /logs
-/bin
-/obj
+/code/bin
+/code/obj
 

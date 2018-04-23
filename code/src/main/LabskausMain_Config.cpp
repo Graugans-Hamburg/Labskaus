@@ -7,8 +7,8 @@
 #include <wx/wx.h>
 
 
-#include "tinyxml2.h"
-#include "CCP_driver.h"
+#include "../tinyxml2/tinyxml2.h"
+#include "../ccp_driver/CCP_driver.h"
 
 #if defined(__WXMSW__)
     #include <windows.h>

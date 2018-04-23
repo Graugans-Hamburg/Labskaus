@@ -7,8 +7,8 @@
 #include <wx/wx.h>
 
 
-#include "tinyxml2.h"
-#include "CCP_driver.h"
+#include "../tinyxml2/tinyxml2.h"
+#include "../ccp_driver/CCP_driver.h"
 
 
 LabskausFrameSetCal::LabskausFrameSetCal(CCP_driver *ptr_ccp_driver, ECU_VarInfo *ptr_ECU_VarInfo) : Dialog_SetValue(0L)
@@ -29,6 +29,15 @@ LabskausFrameSetCal::~LabskausFrameSetCal()
 void LabskausFrameSetCal::event_CancelCalibration( wxCommandEvent& event )
 {
     this->Close(true);
+}
+
+/*******************************************************************************************
+ * Function: This event is called when the user presses the button to close the window.
+ *           The dialog will be closed and no variables will be calibrated.
+ ******************************************************************************************/
+void LabskausFrameSetCal::OnClose(wxCloseEvent& event)
+{
+    this->Destroy();
 }
 
 /*******************************************************************************************
@@ -91,9 +100,16 @@ void LabskausFrame::EventAddCalVal2List(wxCommandEvent &event)
 {
     if(!XML_list.empty())
     {
+        if(m_listBox1->GetSelection() == wxNOT_FOUND)
+        {
+            wxMessageBox(_("Select a variable from the left table."),_("What did you do?"));
+            std::cerr << "No element from the variable list was selected" << std::endl;
+            return;
+        }
         ECU_VarInfo* Ptr2SelectedElement = &XML_list.at(m_listBox1->GetSelection());
         if(!Ptr2SelectedElement)
         {
+            wxMessageBox(_("Error the Positon was not found inside the List."),_("Error"));
             std::cerr << "Error the Positon was not found inside the List" << std::endl;
             return;
         }
